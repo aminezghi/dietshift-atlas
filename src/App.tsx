@@ -639,7 +639,7 @@ export function App() {
         <div className="flex flex-wrap items-baseline justify-between gap-4 pb-3 rule-firm">
           <div className="flex items-center gap-3.5">
             <img
-              src="/brand/kit/dietshift-symbol-color.svg"
+              src={assetUrl('brand/kit/dietshift-symbol-color.svg')}
               alt="DietShift Atlas — Meridian Plate Logo"
               className="w-11 h-11 shrink-0"
             />
@@ -1584,13 +1584,19 @@ export function App() {
       {/* Hallmark Almanac Colophon & Institutional Acknowledgment Ledger */}
       <footer className="almanac-sheet p-6 mt-8 space-y-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 rule-firm">
-          <div>
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="font-display-head text-base font-semibold text-[var(--color-ink)]">
-                DietShift Atlas — Colophon & Acknowledgments
-              </span>
-              <span className="almanac-pill text-[10px] tracking-wide uppercase">Open Science Edition</span>
-            </div>
+          <div className="flex items-center gap-3">
+            <img
+              src={assetUrl('brand/kit/dietshift-symbol-color.svg')}
+              alt="DietShift Atlas Logo"
+              className="w-9 h-9 shrink-0"
+            />
+            <div>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="font-display-head text-base font-semibold text-[var(--color-ink)]">
+                  DietShift Atlas — Colophon & Acknowledgments
+                </span>
+                <span className="almanac-pill text-[10px] tracking-wide uppercase">Open Science Edition</span>
+              </div>
             <p className="almanac-label text-xs mt-1">
               Conceptualized, architected, and authored by{' '}
               <a
@@ -1631,6 +1637,7 @@ export function App() {
               (100% Local-First Academic Literature & Systematic Review Studio).
             </p>
           </div>
+        </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <a
