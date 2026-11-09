@@ -30,6 +30,7 @@ import { ResearcherSandbox } from './components/ResearcherSandbox';
 import { NSIMLObservatory } from './components/NSIMLObservatory';
 import { ConsumerBehaviorPulse } from './components/ConsumerBehaviorPulse';
 import { GS1ImmaginoObservatory } from './components/GS1ImmaginoObservatory';
+import { DietShiftLogo } from './components/DietShiftLogo';
 import { assetUrl } from './utils/assetPath';
 import {
   COUNTRY_PROFILES,
@@ -638,11 +639,7 @@ export function App() {
       <header className="almanac-sheet px-5 py-4 mb-5">
         <div className="flex flex-wrap items-baseline justify-between gap-4 pb-3 rule-firm">
           <div className="flex items-center gap-3.5">
-            <img
-              src={assetUrl('brand/kit/dietshift-symbol-color.svg')}
-              alt="DietShift Atlas — Meridian Plate Logo"
-              className="w-11 h-11 shrink-0"
-            />
+            <DietShiftLogo className="w-11 h-11 shrink-0" size={44} />
             <div>
               <div className="flex flex-wrap items-baseline gap-2.5">
                 <h1 className="text-2xl font-semibold tracking-tight">
@@ -1585,11 +1582,7 @@ export function App() {
       <footer className="almanac-sheet p-6 mt-8 space-y-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 rule-firm">
           <div className="flex items-center gap-3">
-            <img
-              src={assetUrl('brand/kit/dietshift-symbol-color.svg')}
-              alt="DietShift Atlas Logo"
-              className="w-9 h-9 shrink-0"
-            />
+            <DietShiftLogo className="w-9 h-9 shrink-0" size={36} />
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="font-display-head text-base font-semibold text-[var(--color-ink)]">

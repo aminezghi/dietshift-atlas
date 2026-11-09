@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/brand/kit/exports/dietshift-symbol-color.svg" width="95" height="95" alt="DietShift Atlas Logo" />
+  <img src="public/brand/kit/dietshift-symbol-color.svg" width="95" height="95" alt="DietShift Atlas Logo" />
   <h1 align="center">DietShift Atlas</h1>
   <p align="center">
     <strong>European & Global Food Systems Computational Almanac</strong><br/>
