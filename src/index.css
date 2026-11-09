@@ -1,0 +1,243 @@
+/* Hallmark · v2.0.0 · theme: almanac (by request) · genre: editorial · shape: workbench · scope: app · redesign: full · signature: interactive geo-choropleth and planetary health sheet · data: live-api-parquet */
+/* critique: replaced dark neon AI-dashboard cards, rounded boxes, emoji flags and tracked uppercase micro-labels with Almanac's cool slate stock, printed sheet surfaces, 1px/2px rule architecture, Hanken Grotesk display heads, Newsreader editorial labels, IBM Plex Mono tabular numerals and deep chart magenta accent */
+/* waive: 47b (multi-tab analytical workbench required by PhD observatory specification) */
+
+@import "tailwindcss";
+
+:root {
+  --color-paper: oklch(84% 0.012 245);
+  --color-paper-2: oklch(81% 0.012 245);
+  --color-paper-3: oklch(77% 0.012 245);
+  --color-ink: oklch(16% 0.020 245);
+  --color-ink-2: oklch(24% 0.018 245);
+  --color-muted: oklch(38% 0.016 245);
+  --color-rule: oklch(73% 0.013 240);
+  --color-rule-2: oklch(32% 0.018 240);
+  --color-accent: oklch(45% 0.180 350);
+  --color-accent-2: oklch(37% 0.160 350);
+  --color-accent-ink: oklch(97% 0.006 245);
+  --color-focus: oklch(46% 0.190 350);
+  --color-sheet: oklch(93.5% 0.008 245);
+  --color-teal: oklch(42% 0.110 210);
+  --color-ochre: oklch(52% 0.130 75);
+
+  --font-display: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Newsreader", ui-serif, Georgia, serif;
+  --font-outlier: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-card: 0px;
+  --radius-pill: 2px;
+  --rule-hair: 1px;
+  --rule-bar: 2px;
+  --shadow-card: none;
+  --tracking-display: -0.02em;
+  --display-weight: 600;
+}
+
+html,
+body {
+  overflow-x: clip;
+  background-color: var(--color-paper);
+  color: var(--color-ink-2);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display-head {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.08;
+  color: var(--color-ink);
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+/* Hallmark Almanac Printed Sheet & Rule System */
+.almanac-sheet {
+  background-color: var(--color-sheet);
+  border-top: var(--rule-bar) solid var(--color-ink);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  border-left: var(--rule-hair) solid var(--color-rule);
+  border-right: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  box-shadow: none;
+}
+
+.almanac-well {
+  background-color: var(--color-paper-2);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  box-shadow: none;
+}
+
+.almanac-ink-band {
+  background-color: var(--color-ink);
+  color: var(--color-sheet);
+  border-top: var(--rule-bar) solid var(--color-ink);
+  border-radius: var(--radius-card);
+}
+
+.rule-firm {
+  border-bottom: var(--rule-bar) solid var(--color-rule-2);
+}
+
+.rule-hair-top {
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.rule-hair-bottom {
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.rule-hair-left {
+  border-left: var(--rule-hair) solid var(--color-rule);
+}
+
+.rule-hair-right {
+  border-right: var(--rule-hair) solid var(--color-rule);
+}
+
+.num,
+.font-mono-num {
+  font-family: var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hallmark Floor #9: Labels, captions, table heads, tags and nav links are the body face, sentence case, untracked */
+.almanac-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-muted);
+}
+
+/* Hallmark Controls: 2px radius max, transform/opacity transitions only */
+.almanac-btn {
+  border: var(--rule-hair) solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.1;
+  color: var(--color-ink);
+  background-color: transparent;
+  cursor: pointer;
+  transition: opacity 120ms ease, transform 120ms ease, background-color 120ms ease;
+}
+
+.almanac-btn:hover {
+  background-color: var(--color-paper-2);
+}
+
+.almanac-btn--primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+.almanac-btn--primary:hover {
+  background-color: var(--color-accent-2);
+}
+
+.almanac-input,
+.almanac-select {
+  background-color: var(--color-sheet);
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: 0.35rem 0.6rem;
+}
+
+/* Hallmark Floor #6: Instant :focus-visible on every interactive element */
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  transition: none;
+}
+
+/* Almanac range slider: 1px rule track with square ink/magenta thumb */
+input[type="range"] {
+  appearance: none;
+  height: 2px;
+  background: var(--color-rule-2);
+  border-radius: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--color-accent);
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* Hallmark Floor #7: Reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Almanac Tables */
+table.almanac-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.almanac-table thead th {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-muted);
+  border-bottom: var(--rule-bar) solid var(--color-rule-2);
+  padding: 0.55rem 0.75rem;
+}
+
+table.almanac-table tbody td {
+  border-top: var(--rule-hair) solid var(--color-rule);
+  padding: 0.5rem 0.75rem;
+  color: var(--color-ink-2);
+  font-size: 0.84rem;
+}
+
+table.almanac-table tbody tr:hover {
+  background-color: var(--color-paper-2);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rule-2);
+  border-radius: 0px;
+}

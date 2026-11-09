@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietShift Atlas — A Friendly Guide for the Curious Citizen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #eaedf2;
+      --card-bg: #ffffff;
+      --ink: #163d4a;
+      --ink-muted: #52606d;
+      --rule: #d8dde6;
+      --accent-coral: #8a1253; /* Hallmark Tyrian Berry */
+      --accent-teal: #163d4a;  /* Hallmark Deep Teal */
+      --accent-emerald: #059669; /* Sostenibilità Green */
+      --accent-amber: #d97706;  /* Terroir Ochre */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+      padding: 32px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 980px;
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(22, 61, 74, 0.04);
+    }
+
+    header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--rule);
+    }
+
+    .badge-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-primary { background: var(--accent-coral); color: #fff; }
+    .badge-secondary { background: var(--ink); color: #fff; }
+    .badge-emerald { background: var(--accent-emerald); color: #fff; }
+
+    h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-top: 8px;
+    }
+
+    .author-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--rule);
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+    .author-bar a {
+      color: var(--accent-coral);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .author-bar a:hover { text-decoration: underline; }
+
+    h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 36px 0 14px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 20px 0 8px 0;
+    }
+
+    p { margin-bottom: 14px; color: #2d3748; font-size: 14.5px; }
+
+    ul, ol { margin: 12px 0 18px 24px; font-size: 14px; color: #2d3748; }
+    li { margin-bottom: 6px; }
+
+    .callout {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent-coral);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 13.5px;
+    }
+    .callout-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--accent-coral);
+      margin-bottom: 6px;
+    }
+
+    .cascade-box {
+      background: #f4f6f8;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 24px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+    }
+
+    .observatory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .observatory-card {
+      background: #fdfdfd;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 16px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .observatory-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(22, 61, 74, 0.06);
+    }
+    .card-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+    }
+    .card-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 4px 0 6px 0;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    .nav-bar {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1.5px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-primary { background: var(--accent-coral); color: #fff; }
+    .btn-primary:hover { background: #700e43; }
+    .btn-secondary { background: var(--ink); color: #fff; }
+    .btn-secondary:hover { background: #0f2b34; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge-strip">
+      <span class="badge badge-primary">Open Science</span>
+      <span class="badge badge-secondary">Public Guide</span>
+      <span class="badge badge-emerald">Egonex-AI Methodology</span>
+    </div>
+    <h1>DietShift Atlas — A Friendly Guide for the Curious Citizen</h1>
+    <div class="subtitle">
+      "An open-science digital almanac connecting what we buy at the supermarket, the land where it grows, and the future of our health and planet."
+    </div>
+    <div class="author-bar">
+      <div>
+        Architected by <b>Amine</b> (<a href="https://github.com/aminezghi/vellum" target="_blank">GitHub</a> · <a href="https://www.linkedin.com/in/zouaghi-amine/" target="_blank">LinkedIn</a>)
+      </div>
+      <div>
+        Inspired by pedagogical knowledge-graph standards from <a href="https://github.com/Egonex-AI/Understand-Anything" target="_blank">Egonex-AI / Understand-Anything</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <h2>1. What is DietShift Atlas? (In Plain English)</h2>
+    <p>
+      Have you ever stood in a grocery store aisle wondering why an ultra-processed snack packed with additives is cheaper than a punnet of fresh strawberries? Or whether a package stamped <i>"Rich in Protein"</i> or <i>"100% Plant-Based"</i> is genuinely wholesome or just clever marketing?
+    </p>
+    <p>
+      <b>DietShift Atlas</b> is a public, open-access digital almanac that lets you explore these questions using hard, transparent data. Instead of relying on corporate marketing claims or generic opinions, it unifies <b>8 major European scientific and statistical databases</b>:
+    </p>
+    <ul>
+      <li><b>EFSA FoodEx2:</b> The official European dietary surveys tracking what families across Europe actually eat.</li>
+      <li><b>ADEME Agribalyse 3.1:</b> Detailed environmental audits measuring greenhouse gases, water usage, and land footprint for 2,451 foods.</li>
+      <li><b>Open Food Facts:</b> Real barcode nutritional labels from grocery stores across the globe.</li>
+      <li><b>EUIPO & Qualigeo:</b> The complete register of 6,029 European protected agricultural traditions (DOP, IGP, DOC).</li>
+      <li><b>National Statistical Institutes:</b> Official household food spending from ISTAT (Italy), INE (Spain), INSEE (France), CBS (Netherlands), Destatis (Germany), and ONS (UK).</li>
+      <li><b>GS1 Italy Immagino & NielsenIQ:</b> Scanner data on 151,203 products and 84,817 digitized nutritional panels across €57.3 Billion in supermarket sales.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>2. The Core Mystery: The "Intention-to-Plate" Paradox</h2>
+    <p>
+      Surveys show that <b>72% of European citizens</b> actively want to buy healthier, more sustainable groceries. Yet, when we examine cash-register scanner receipts, healthy and sustainable items represent less than <b>28% of grocery baskets</b>.
+    </p>
+    <div class="callout">
+      <div class="callout-title">The Attrition Waterfall</div>
+      DietShift Atlas maps this 82% drop-off across a <b>5-stage behavioral cascade</b>:
+    </div>
+
+    <div class="cascade-box">
+[Stage 1: Cultural Awareness] 100% of citizens hear about health & climate in news and media
+         │
+         ▼ (Drop -28%: Information overload, conflicting diets & claims)
+[Stage 2: Stated Intention] 72% actively want to buy cleaner, less-processed groceries
+         │
+         ▼ (Drop -31%: The "Price Wall", inflation, habitual convenience)
+[Stage 3: Retail Checkout Basket] 41% of basket contents survive the shelf algorithm & promotions
+         │
+         ▼ (Drop -13%: Household spoilage, expiration & food waste)
+[Stage 4: True Dietary Ingestion] 28% of meals meet health guidelines
+         │
+         ▼ (Drop -10%: Cooking emissions & supply-chain leakage)
+[Stage 5: Net Planetary Benefit] 18% actual carbon and water savings realized
+    </div>
+  </section>
+
+  <section>
+    <h2>3. The 4 Layers of the System (How It Works)</h2>
+    <p>
+      Following the multi-agent pedagogical framework of <b>Egonex-AI/Understand-Anything</b>, the system is designed in 4 clear, transparent layers:
+    </p>
+    <ol>
+      <li><b>Tier 1 — Data Ingestion & Live Scrapling:</b> Collects raw food facts, EAN barcodes, and protected origins using Python and <i>D4Vinci Scrapling</i> to keep data fresh without getting blocked.</li>
+      <li><b>Tier 2 — In-Browser Columnar Storage (DuckDB-Wasm):</b> Downloaded directly into your web browser. <b>No cloud server tracking your clicks.</b> You can query 11 Parquet tables in milliseconds right on your laptop!</li>
+      <li><b>Tier 3 — AI & Econometric Forecasting:</b> Uses <i>Google TimesFM 2.0</i> (a cutting-edge foundation model) to forecast price and consumption trends up to 2028, and calculates Push vs. Pull market elasticity.</li>
+      <li><b>Tier 4 — Reactive Almanac UI:</b> Clean, publication-grade screens styled in our restrained Hallmark design system.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>4. Quick Guide to the 12 Observatories</h2>
+    <div class="observatory-grid">
+      <div class="observatory-card">
+        <div class="card-num">Section I</div>
+        <div class="card-title">Almanac Overview & Plate</div>
+        <div class="card-desc">Compare your country's current food consumption with the scientifically verified EAT-Lancet Planetary Boundary diet.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section II</div>
+        <div class="card-title">NSI & TimesFM 2.0 Lab</div>
+        <div class="card-desc">Explore how household income quintiles affect food choices in IT, ES, FR, NL, DE, UK, with AI chronological forecasts.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section III</div>
+        <div class="card-title">Consumer Behavior & Infodemiology</div>
+        <div class="card-desc">Track Wikipedia curiosity across 6 languages and inspect the 5-stage intention-to-plate behavioral cascade.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section IV</div>
+        <div class="card-title">Full Cartography & Terroir</div>
+        <div class="card-desc">Interactive Europe map pin-pointing 6,845 protected geographical indications (DOP, IGP) and their environmental footprints.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section V</div>
+        <div class="card-title">DuckDB Parquet SQL Console</div>
+        <div class="card-desc">Run real SQL queries directly against our 11 Parquet tables inside your browser with sub-50ms execution.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section VI</div>
+        <div class="card-title">Researcher Survey Ledger</div>
+        <div class="card-desc">Enter your 24-hour food intake and immediately calculate your personalized macro-nutrients and environmental footprint.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section VII</div>
+        <div class="card-title">Retail Product Trilemma</div>
+        <div class="card-desc">Explore the 3-way tension between Nutritional Quality, Climate Footprint, and Economic Affordability per 1,000 kcal.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section VIII</div>
+        <div class="card-title">Agribalyse 3.1 LCA Database</div>
+        <div class="card-desc">Search 2,451 food products categorized by French agency ADEME for greenhouse gases, water usage, and land use.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section IX</div>
+        <div class="card-title">Price & Literature Engine</div>
+        <div class="card-desc">Historical food inflation series paired with academic literature on nutritional shifts during economic crises.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section X</div>
+        <div class="card-title">Policy Intervention Model</div>
+        <div class="card-desc">Interactive policy levers: simulate carbon taxes, ultra-processed food reductions, plant shifts, and food waste cuts.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section XI</div>
+        <div class="card-title">Code Floorplan & Blueprints</div>
+        <div class="card-desc">Full transparency: toggle between the 33-file code graph (Floorplan) and the vector architectural schematic (Diagram-Design).</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section XII</div>
+        <div class="card-title">Pan-EU Retail Scanner</div>
+        <div class="card-desc">151.2k SKUs, €57.3B sell-out, Metaproduct reformulations, Push vs. Pull, 10 EU countries, and an Autonomous AI Grocery Planner.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. Key Concepts Demystified</h2>
+    <h3>What is a "Metaproduct"?</h3>
+    <p>
+      Imagine putting every single food product in a supermarket into one giant blender—weighted by how many units people actually buy. The resulting nutrition per 100g reveals the nation's true dietary baseline. In Italy, the GS1 Metaproduct averages <b>173.9 kcal, 6.6g protein, 7.6g sugar, and 2.9g saturated fat</b>.
+    </p>
+
+    <h3>What does "Push vs. Pull" mean?</h3>
+    <p>
+      <b>Push</b> is when manufacturers flood supermarket shelves with new varieties (e.g. dozens of high-protein yogurts and bars). <b>Pull</b> is when consumers demand something organically (e.g. surging demand for chia seeds or zero-pesticide-residue produce).
+    </p>
+
+    <h3>What is NOVA Classification?</h3>
+    <p>
+      Developed by the University of São Paulo, NOVA groups food by how much it was industrially processed:
+    </p>
+    <ul>
+      <li><b>NOVA 1:</b> Whole or minimally processed (fresh fruit, raw grains, pasteurized milk, eggs).</li>
+      <li><b>NOVA 2:</b> Culinary ingredients (olive oil, butter, salt, sugar).</li>
+      <li><b>NOVA 3:</b> Traditional processed food (fresh bakery bread, canned tuna in oil, aged cheese).</li>
+      <li><b>NOVA 4 (Ultra-Processed):</b> Industrial formulations with emulsifiers, colors, and synthetic flavorings.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>6. Built for Public Transparency</h2>
+    <p>
+      Unlike most modern web dashboards that track your clicks and store your data on private corporate servers, <b>DietShift Atlas runs 100% locally in your browser</b> using WebAssembly (DuckDB-Wasm). All databases and code blueprints are public, open-source, and verifiable.
+    </p>
+  </section>
+
+  <div class="nav-bar">
+    <div>
+      <a href="/" class="btn btn-primary">← Return to DietShift Atlas</a>
+      <a href="/architecture_blueprint.html" class="btn btn-secondary" target="_blank">View Architecture Blueprint</a>
+    </div>
+    <div style="font-size: 12px; color: var(--ink-muted); font-family: 'IBM Plex Mono', monospace;">
+      Open Science Edition • 2026
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

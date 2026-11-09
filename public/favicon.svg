@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256"><title>DietShift Atlas</title><g transform="translate(-12.88 -11.75) scale(1.127)">
+  <title id="title">DietShift Atlas — Meridian Plate Small Cut (16px)</title>
+  <g id="symbol">
+    <path fill="#111827" fill-rule="evenodd" d="
+      M 118 24
+      A 102 102 0 0 0 118 228
+      Z
+      M 40 90 H 100 V 114 H 40 Z
+      M 40 138 H 100 V 162 H 40 Z
+    "/>
+    <path fill="#111827" d="
+      M 142 142
+      L 228 165.04
+      A 102 102 0 0 1 142 224
+      Z
+    "/>
+    <path fill="#8A1253" d="
+      M 142 20
+      A 102 102 0 0 1 228 88.96
+      L 142 112
+      Z
+    "/>
+    <circle fill="#8A1253" cx="214" cy="127" r="20"/>
+  </g>
+</g></svg>

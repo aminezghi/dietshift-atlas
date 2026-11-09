@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietShift Atlas — Editorial System Architecture Blueprint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #eaedf2;
+      --card-bg: #ffffff;
+      --ink: #163d4a;
+      --ink-muted: #52606d;
+      --rule: #d8dde6;
+      --accent-coral: #8a1253; /* Hallmark Tyrian Berry */
+      --accent-teal: #163d4a;  /* Hallmark Deep Teal */
+      --accent-emerald: #059669; /* Sostenibilità Green */
+      --accent-amber: #d97706;  /* Terroir Ochre */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 32px 36px;
+      box-shadow: 0 4px 16px rgba(22, 61, 74, 0.04);
+    }
+
+    header {
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1.5px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .title-group h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .title-group p {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    .badge-group {
+      display: flex;
+      gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-primary { background: var(--accent-coral); color: #fff; }
+    .badge-secondary { background: var(--ink); color: #fff; }
+    .badge-outline { background: transparent; border: 1px solid var(--rule); color: var(--ink-muted); }
+
+    .svg-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      min-width: 960px;
+      max-width: 1160px;
+    }
+
+    /* SVG typography */
+    text {
+      user-select: none;
+    }
+    .zone-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      fill: var(--ink-muted);
+    }
+    .node-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      fill: var(--ink);
+    }
+    .node-title-coral {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      fill: #ffffff;
+    }
+    .node-desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 10px;
+      fill: var(--ink-muted);
+    }
+    .node-desc-coral {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 10px;
+      fill: rgba(255, 255, 255, 0.85);
+    }
+    .node-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      fill: var(--accent-coral);
+    }
+    .node-tag-coral {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      fill: #f7d070;
+    }
+    .edge-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 500;
+      fill: var(--ink-muted);
+    }
+
+    footer.legend-row {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+    .legend-items {
+      display: flex;
+      gap: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-bullet {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="title-group">
+      <h1>DietShift Atlas — Multi-Tier System Architecture Blueprint</h1>
+      <p>Self-contained editorial schematic: data ingestion, client-side columnar storage, econometric ML, and reactive UI.</p>
+    </div>
+    <div class="badge-group">
+      <span class="badge badge-primary">DuckDB-Wasm 1.28</span>
+      <span class="badge badge-secondary">Google TimesFM 2.0</span>
+      <span class="badge badge-outline">D4Vinci Scrapling 0.5.1</span>
+    </div>
+  </header>
+
+  <div class="svg-wrapper">
+    <svg viewBox="0 0 1140 640" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Arrow markers -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#163d4a" />
+        </marker>
+        <marker id="arrow-coral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8a1253" />
+        </marker>
+        <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#059669" />
+        </marker>
+
+        <!-- Node Gradients & Drops -->
+        <filter id="subtle-shadow" x="-4%" y="-4%" width="108%" height="108%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#163d4a" flood-opacity="0.04"/>
+        </filter>
+      </defs>
+
+      <!-- ================= TIER BACKGROUND ZONES ================= -->
+      <!-- Zone 1: Data Ingestion & Scrapling -->
+      <rect x="20" y="30" width="230" height="580" rx="8" fill="#f8fafc" stroke="#d8dde6" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="36" y="58" class="zone-title">I. Ingestion & Scrapling</text>
+
+      <!-- Zone 2: Columnar Data Warehouse -->
+      <rect x="280" y="30" width="260" height="580" rx="8" fill="#f8fafc" stroke="#d8dde6" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="296" y="58" class="zone-title">II. Client In-Memory Data</text>
+
+      <!-- Zone 3: ML & Econometric Engine -->
+      <rect x="570" y="30" width="250" height="580" rx="8" fill="#f8fafc" stroke="#d8dde6" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="586" y="58" class="zone-title">III. ML & Econometrics</text>
+
+      <!-- Zone 4: Reactive Presentation Deck -->
+      <rect x="850" y="30" width="270" height="580" rx="8" fill="#f8fafc" stroke="#d8dde6" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="866" y="58" class="zone-title">IV. UI Deck & Observatories</text>
+
+      <!-- ================= CONNECTOR PATHS (Drawn before nodes) ================= -->
+      <!-- Ingestion -> Parquet Store -->
+      <path d="M 230,120 H 295" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+      <path d="M 230,230 H 295" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+      <path d="M 230,340 H 295" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+      <path d="M 230,450 H 295" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+      <path d="M 230,550 H 295" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+
+      <!-- Parquet Store -> DuckDB-Wasm Engine (Orthogonal elbows) -->
+      <path d="M 520,120 H 545 Q 555,120 555,130 V 230 Q 555,240 565,240 H 585" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+      <path d="M 520,280 H 585" fill="none" stroke="#8a1253" stroke-width="2" marker-end="url(#arrow-coral)" />
+      <path d="M 520,440 H 545 Q 555,440 555,420 V 320 Q 555,310 565,310 H 585" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+
+      <!-- DuckDB-Wasm / ML -> UI Deck -->
+      <path d="M 800,140 H 865" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+      <path d="M 800,280 H 865" fill="none" stroke="#8a1253" stroke-width="2" marker-end="url(#arrow-coral)" />
+      <path d="M 800,430 H 865" fill="none" stroke="#059669" stroke-width="1.8" marker-end="url(#arrow-emerald)" />
+      <path d="M 800,540 H 865" fill="none" stroke="#163d4a" stroke-width="1.5" marker-end="url(#arrow)" />
+
+      <!-- Live User Loop / Feedback back into DuckDB -->
+      <path d="M 985,500 V 470 Q 985,460 975,460 H 815" fill="none" stroke="#8a1253" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-coral)" />
+
+      <!-- ================= NODES ================= -->
+
+      <!-- ZONE I NODES (Ingestion) -->
+      <!-- Node: EUIPO & Qualigeo -->
+      <g transform="translate(35, 80)">
+        <rect width="195" height="75" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="14" y="24" class="node-tag">REGULATORY HARVESTER</text>
+        <text x="14" y="44" class="node-title">EUIPO & Qualigeo (GI)</text>
+        <text x="14" y="62" class="node-desc">6,029 Terroir records & NUTS-2 geocoding</text>
+      </g>
+
+      <!-- Node: GS1 Immagino 2026 -->
+      <g transform="translate(35, 190)">
+        <rect width="195" height="75" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="14" y="24" class="node-tag">SCANNER BENCHMARK</text>
+        <text x="14" y="44" class="node-title">GS1 Immagino 2026</text>
+        <text x="14" y="62" class="node-desc">151.2k SKUs, €57.3B retail sell-out</text>
+      </g>
+
+      <!-- Node: D4Vinci Scrapling -->
+      <g transform="translate(35, 300)">
+        <rect width="195" height="75" rx="6" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="14" y="24" class="node-tag" fill="#059669">STEALTHED WEB HARVESTER</text>
+        <text x="14" y="44" class="node-title">D4Vinci Scrapling 0.5.1</text>
+        <text x="14" y="62" class="node-desc">Pan-EU live grocery claims & EAN barcodes</text>
+      </g>
+
+      <!-- Node: ADEME Agribalyse 3.1 -->
+      <g transform="translate(35, 410)">
+        <rect width="195" height="75" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="14" y="24" class="node-tag">ENVIRONMENTAL LCA</text>
+        <text x="14" y="44" class="node-title">ADEME Agribalyse 3.1</text>
+        <text x="14" y="62" class="node-desc">2,451 food LCA profiles (CO2, H2O, Land)</text>
+      </g>
+
+      <!-- Node: EFSA & NSI Quintiles -->
+      <g transform="translate(35, 515)">
+        <rect width="195" height="75" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="14" y="24" class="node-tag">SURVEYS & STATISTICAL</text>
+        <text x="14" y="44" class="node-title">EFSA & NSI Quintiles</text>
+        <text x="14" y="62" class="node-desc">INE, ISTAT, CBS, INSEE household diets</text>
+      </g>
+
+      <!-- ZONE II NODES (Columnar Storage) -->
+      <!-- Node: Parquet Partition Store -->
+      <g transform="translate(295, 80)">
+        <rect width="225" height="135" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">COLUMNAR TABLES (11)</text>
+        <text x="16" y="46" class="node-title">ZSTD Parquet Store</text>
+        <text x="16" y="66" class="node-desc">• agribalyse_31.parquet (2.4k LCA)</text>
+        <text x="16" y="82" class="node-desc">• gi_terroir_registry.parquet (6.8k pins)</text>
+        <text x="16" y="98" class="node-desc">• gs1_immagino_observatory.parquet</text>
+        <text x="16" y="114" class="node-desc">• pan_eu_retail_scanner.parquet</text>
+      </g>
+
+      <!-- Node: FOCAL DuckDB-Wasm In-Memory Engine -->
+      <g transform="translate(295, 240)">
+        <rect width="225" height="150" rx="8" fill="#8a1253" stroke="#5d0b37" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="26" class="node-tag-coral">CORE SQL COLD-START ENGINE</text>
+        <text x="16" y="52" class="node-title-coral" font-size="16">DuckDB-Wasm 1.28</text>
+        <text x="16" y="74" class="node-desc-coral">• WebWorker thread isolation</text>
+        <text x="16" y="92" class="node-desc-coral">• Sub-50ms analytical SQL queries</text>
+        <text x="16" y="110" class="node-desc-coral">• 11 zero-copy registered HTTP views</text>
+        <text x="16" y="130" class="node-desc-coral">• Native Arrow schema decoding</text>
+      </g>
+
+      <!-- Node: Crosswalk Rosetta Harmonization -->
+      <g transform="translate(295, 415)">
+        <rect width="225" height="95" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">ONTOLOGY ALIGNMENT</text>
+        <text x="16" y="44" class="node-title">Crosswalk Rosetta Stone</text>
+        <text x="16" y="64" class="node-desc">EFSA FoodEx2 ↔ Agribalyse 3.1 ↔</text>
+        <text x="16" y="78" class="node-desc">Open Food Facts taxonomy bridge</text>
+      </g>
+
+      <!-- ZONE III NODES (ML & Econometrics) -->
+      <!-- Node: Google TimesFM 2.0 -->
+      <g transform="translate(585, 80)">
+        <rect width="215" height="95" rx="6" fill="#ffffff" stroke="#163d4a" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">FOUNDATION TIME SERIES ML</text>
+        <text x="16" y="46" class="node-title">Google TimesFM 2.0</text>
+        <text x="16" y="66" class="node-desc">Zero-shot price & consumer intake</text>
+        <text x="16" y="80" class="node-desc">chronological forecast horizons</text>
+      </g>
+
+      <!-- Node: Push vs Pull Econometrics -->
+      <g transform="translate(585, 235)">
+        <rect width="215" height="110" rx="6" fill="#ffffff" stroke="#8a1253" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">ECONOMETRIC QUADRANT</text>
+        <text x="16" y="46" class="node-title">Push vs. Pull Modeling</text>
+        <text x="16" y="66" class="node-desc">Shelf supply expansion vs. demand</text>
+        <text x="16" y="80" class="node-desc">volume elasticity across 10 phenomena</text>
+        <text x="16" y="96" class="node-desc">and E-Commerce over-indexing</text>
+      </g>
+
+      <!-- Node: Policy Intervention Simulator -->
+      <g transform="translate(585, 385)">
+        <rect width="215" height="95" rx="6" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag" fill="#059669">EAT-LANCET PLANETARY MODEL</text>
+        <text x="16" y="46" class="node-title">Macro Policy Simulator</text>
+        <text x="16" y="66" class="node-desc">Carbon taxation, UPF reformulation,</text>
+        <text x="16" y="80" class="node-desc">and plant-shift trade-off calculus</text>
+      </g>
+
+      <!-- ZONE IV NODES (Presentation Deck) -->
+      <!-- Node: Section XII Pan-EU Retail Scanner -->
+      <g transform="translate(865, 80)">
+        <rect width="235" height="95" rx="6" fill="#ffffff" stroke="#8a1253" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">SECTION XII OBSERVATORY</text>
+        <text x="16" y="46" class="node-title">Pan-EU Retail Scanner</text>
+        <text x="16" y="66" class="node-desc">10 Countries + EU-27, Metaproduct</text>
+        <text x="16" y="80" class="node-desc">Deltas, and Cross-Border Parity</text>
+      </g>
+
+      <!-- Node: Section XI Code Floorplan -->
+      <g transform="translate(865, 205)">
+        <rect width="235" height="95" rx="6" fill="#ffffff" stroke="#163d4a" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">SECTION XI ARCHITECTURE</text>
+        <text x="16" y="46" class="node-title">Code Floorplan & Graph</text>
+        <text x="16" y="66" class="node-desc">33 files mapped, live dependency flow,</text>
+        <text x="16" y="80" class="node-desc">subsystem descriptions (Floorplan)</text>
+      </g>
+
+      <!-- Node: Section IV & V Map and SQL Console -->
+      <g transform="translate(865, 330)">
+        <rect width="235" height="95" rx="6" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag">SECTION IV & V EXPLORERS</text>
+        <text x="16" y="46" class="node-title">Cartography & SQL Deck</text>
+        <text x="16" y="66" class="node-desc">6,845 GI map pins, live client query</text>
+        <text x="16" y="80" class="node-desc">workbench, CSV/JSON export</text>
+      </g>
+
+      <!-- Node: Autonomous AI Shopper Agent -->
+      <g transform="translate(865, 455)">
+        <rect width="235" height="95" rx="6" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#subtle-shadow)" />
+        <text x="16" y="24" class="node-tag" fill="#059669">AGENTIC GROCERY PLANNER</text>
+        <text x="16" y="46" class="node-title">Autonomous AI Shopper</text>
+        <text x="16" y="66" class="node-desc">Constraint-based 7-day healthy basket</text>
+        <text x="16" y="80" class="node-desc">synthesis powered by in-browser DuckDB</text>
+      </g>
+    </svg>
+  </div>
+
+  <footer class="legend-row">
+    <div>
+      <b>Design Standard:</b> Hallmark Almanac Restrained Palette • Orthogonal L/Elbow Routing • Editorial Precision
+    </div>
+    <div class="legend-items">
+      <div class="legend-item">
+        <span class="legend-bullet" style="background: #8a1253;"></span>
+        <span>Core Analytical Anchor (Focal)</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-bullet" style="background: #163d4a;"></span>
+        <span>Storage & Engine Tiers</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-bullet" style="background: #059669;"></span>
+        <span>Sustainability & Web Harvesting</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>

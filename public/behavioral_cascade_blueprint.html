@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DietShift Atlas — 5-Stage Intention-to-Plate Behavioral Cascade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #eaedf2;
+      --card-bg: #ffffff;
+      --ink: #163d4a;
+      --ink-muted: #52606d;
+      --rule: #d8dde6;
+      --accent-coral: #8a1253; /* Hallmark Tyrian Berry */
+      --accent-teal: #163d4a;  /* Hallmark Deep Teal */
+      --accent-emerald: #059669; /* Sostenibilità Green */
+      --accent-amber: #d97706;  /* Terroir Ochre */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Hanken Grotesk', -apple-system, sans-serif;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 32px 36px;
+      box-shadow: 0 4px 16px rgba(22, 61, 74, 0.04);
+    }
+
+    header {
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1.5px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .title-group h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .title-group p {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    .badge-group {
+      display: flex;
+      gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-primary { background: var(--accent-coral); color: #fff; }
+    .badge-secondary { background: var(--ink); color: #fff; }
+
+    .svg-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      min-width: 960px;
+      max-width: 1160px;
+    }
+
+    /* SVG typography */
+    text { user-select: none; }
+    .stage-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      fill: var(--ink-muted);
+    }
+    .stage-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+      fill: var(--ink);
+    }
+    .stage-metric {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      fill: var(--accent-coral);
+    }
+    .stage-metric-teal {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      fill: var(--accent-teal);
+    }
+    .stage-body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      fill: var(--ink-muted);
+      line-height: 1.4;
+    }
+    .friction-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      fill: #b91c1c; /* Crimson */
+    }
+    .friction-desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 9px;
+      fill: #7f1d1d;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="title-group">
+      <h1>The 5-Stage Intention-to-Plate Behavioral Cascade</h1>
+      <p>Tracking the progressive attrition from cultural awareness and health intentions to actual retail checkout and dietary carbon footprint.</p>
+    </div>
+    <div class="badge-group">
+      <span class="badge badge-primary">Section III Behavioral Science</span>
+      <span class="badge badge-secondary">Friction-Loss Calculus</span>
+    </div>
+  </header>
+
+  <div class="svg-wrapper">
+    <svg viewBox="0 0 1140 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#163d4a" />
+        </marker>
+        <marker id="arrow-crimson" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#b91c1c" />
+        </marker>
+
+        <filter id="card-shadow" x="-3%" y="-3%" width="106%" height="106%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#163d4a" flood-opacity="0.04"/>
+        </filter>
+      </defs>
+
+      <!-- Flow Connectors between Stages -->
+      <path d="M 215,150 H 255" fill="none" stroke="#163d4a" stroke-width="2" marker-end="url(#arrow)" />
+      <path d="M 445,150 H 485" fill="none" stroke="#163d4a" stroke-width="2" marker-end="url(#arrow)" />
+      <path d="M 675,150 H 715" fill="none" stroke="#163d4a" stroke-width="2" marker-end="url(#arrow)" />
+      <path d="M 905,150 H 945" fill="none" stroke="#163d4a" stroke-width="2" marker-end="url(#arrow)" />
+
+      <!-- STAGE 1: CULTURAL AWARENESS -->
+      <g transform="translate(20, 60)">
+        <rect width="195" height="190" rx="8" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#card-shadow)" />
+        <text x="16" y="24" class="stage-eyebrow">STAGE I</text>
+        <text x="16" y="48" class="stage-title">Cultural Discourse</text>
+        <text x="16" y="78" class="stage-metric">100%</text>
+        <text x="16" y="98" class="stage-body" font-weight="600">Total Population Exposed</text>
+        <text x="16" y="118" class="stage-body">• Wikipedia pageviews spike</text>
+        <text x="16" y="134" class="stage-body">• Mainstream news headlines</text>
+        <text x="16" y="150" class="stage-body">• Reddit & social discussions</text>
+        <text x="16" y="166" class="stage-body">• Planetary health campaigns</text>
+      </g>
+
+      <!-- FRICTION DROP 1 -->
+      <g transform="translate(20, 290)">
+        <path d="M 117,-40 V 20" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-crimson)" />
+        <rect width="195" height="70" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+        <text x="14" y="22" class="friction-label">−28% ATTENTION DECAY</text>
+        <text x="14" y="38" class="friction-desc">Information overload, conflicting health</text>
+        <text x="14" y="52" class="friction-desc">claims & social fatigue</text>
+      </g>
+
+      <!-- STAGE 2: STATED INTENTION -->
+      <g transform="translate(250, 60)">
+        <rect width="195" height="190" rx="8" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#card-shadow)" />
+        <text x="16" y="24" class="stage-eyebrow">STAGE II</text>
+        <text x="16" y="48" class="stage-title">Stated Intention</text>
+        <text x="16" y="78" class="stage-metric">72%</text>
+        <text x="16" y="98" class="stage-body" font-weight="600">Willing to Shift Diets</text>
+        <text x="16" y="118" class="stage-body">• EFSA consumer survey replies</text>
+        <text x="16" y="134" class="stage-body">• "Aiming to eat less red meat"</text>
+        <text x="16" y="150" class="stage-body">• "Seeking organic & clean label"</text>
+        <text x="16" y="166" class="stage-body">• Active recipe searching</text>
+      </g>
+
+      <!-- FRICTION DROP 2 -->
+      <g transform="translate(250, 290)">
+        <path d="M 117,-40 V 20" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-crimson)" />
+        <rect width="195" height="70" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+        <text x="14" y="22" class="friction-label">−31% PRICE & HABIT WALL</text>
+        <text x="14" y="38" class="friction-desc">Food inflation, sensory habit inertia,</text>
+        <text x="14" y="52" class="friction-desc">and time poverty in meal prep</text>
+      </g>
+
+      <!-- STAGE 3: RETAIL CHECKOUT BASKET -->
+      <g transform="translate(480, 60)">
+        <rect width="195" height="190" rx="8" fill="#ffffff" stroke="#8a1253" stroke-width="1.5" filter="url(#card-shadow)" />
+        <text x="16" y="24" class="stage-eyebrow" fill="#8a1253">STAGE III (FOCAL)</text>
+        <text x="16" y="48" class="stage-title">Retail Checkout</text>
+        <text x="16" y="78" class="stage-metric">41%</text>
+        <text x="16" y="98" class="stage-body" font-weight="600">Actual Basket Purchase</text>
+        <text x="16" y="118" class="stage-body">• GS1 barcode scanner truth</text>
+        <text x="16" y="134" class="stage-body">• Plant-based (+34% growth)</text>
+        <text x="16" y="150" class="stage-body">• Free-from & high-protein</text>
+        <text x="16" y="166" class="stage-body">• Promotional discounting pull</text>
+      </g>
+
+      <!-- FRICTION DROP 3 -->
+      <g transform="translate(480, 290)">
+        <path d="M 117,-40 V 20" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-crimson)" />
+        <rect width="195" height="70" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+        <text x="14" y="22" class="friction-label">−13% HOUSEHOLD WASTE</text>
+        <text x="14" y="38" class="friction-desc">Spoilage of fresh produce, expiry dates,</text>
+        <text x="14" y="52" class="friction-desc">and unequal intra-family consumption</text>
+      </g>
+
+      <!-- STAGE 4: ACTUAL INTAKE -->
+      <g transform="translate(710, 60)">
+        <rect width="195" height="190" rx="8" fill="#ffffff" stroke="#d8dde6" stroke-width="1.2" filter="url(#card-shadow)" />
+        <text x="16" y="24" class="stage-eyebrow">STAGE IV</text>
+        <text x="16" y="48" class="stage-title">Nutritional Ingestion</text>
+        <text x="16" y="78" class="stage-metric-teal">28%</text>
+        <text x="16" y="98" class="stage-body" font-weight="600">Net Healthy Intake</text>
+        <text x="16" y="118" class="stage-body">• EFSA FoodEx2 24h recall data</text>
+        <text x="16" y="134" class="stage-body">• True macro & micronutrients</text>
+        <text x="16" y="150" class="stage-body">• UPF (NOVA 4) consumption</text>
+        <text x="16" y="166" class="stage-body">• Metabolic absorption</text>
+      </g>
+
+      <!-- FRICTION DROP 4 -->
+      <g transform="translate(710, 290)">
+        <path d="M 117,-40 V 20" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-crimson)" />
+        <rect width="195" height="70" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+        <text x="14" y="22" class="friction-label">−10% EMISSIONS LEAKAGE</text>
+        <text x="14" y="38" class="friction-desc">Cooking energy, refrigeration,</text>
+        <text x="14" y="52" class="friction-desc">and processing lifecycle emissions</text>
+      </g>
+
+      <!-- STAGE 5: PLANETARY IMPACT -->
+      <g transform="translate(940, 60)">
+        <rect width="180" height="190" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.5" filter="url(#card-shadow)" />
+        <text x="16" y="24" class="stage-eyebrow" fill="#059669">STAGE V</text>
+        <text x="16" y="48" class="stage-title">Planetary Impact</text>
+        <text x="16" y="78" class="stage-metric" fill="#059669">18%</text>
+        <text x="16" y="98" class="stage-body" font-weight="600">Net Footprint Shift</text>
+        <text x="16" y="118" class="stage-body">• Agribalyse 3.1 LCA metric</text>
+        <text x="16" y="134" class="stage-body">• kg CO2eq averted</text>
+        <text x="16" y="150" class="stage-body">• Agricultural water spared</text>
+        <text x="16" y="166" class="stage-body">• Biodiversity land freed</text>
+      </g>
+
+      <!-- Bottom Comparative Summary -->
+      <g transform="translate(20, 390)">
+        <rect width="1100" height="90" rx="8" fill="#f8fafc" stroke="#d8dde6" stroke-width="1.2" />
+        <text x="24" y="32" class="stage-eyebrow">KEY TAKEAWAY FOR POLICY MAKERS & RETAIL EXECUTIVES</text>
+        <text x="24" y="54" class="stage-title" font-size="14">The "Intention-Action Gap" accounts for an 82% attrition from initial health discourse to net environmental benefit.</text>
+        <text x="24" y="72" class="stage-body">Retail checkout algorithms, price parity on plant-based alternatives, and mandatory front-of-pack transparency (Nutri-Score) are the most effective intervention points to plug the 31% drop at Stage III.</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+</body>
+</html>
