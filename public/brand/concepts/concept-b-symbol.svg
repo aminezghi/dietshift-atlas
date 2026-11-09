@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">DietShift Atlas — Atlas D-A Monogram Symbol</title>
+  <g id="symbol" fill="#111827">
+    <path fill-rule="evenodd" d="
+      M 28 24
+      H 128
+      A 104 104 0 0 1 128 232
+      H 28
+      Z
+      M 124 62
+      L 168 182
+      H 142
+      L 133 156
+      H 115
+      L 106 182
+      H 80
+      Z
+      M 28 118
+      H 64
+      V 138
+      H 28
+      Z
+    "/>
+    <polygon points="124,96 130,136 118,136"/>
+  </g>
+</svg>

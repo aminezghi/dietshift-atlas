@@ -1,0 +1,49 @@
+<svg fill="#8a1253" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1012 256" width="1012" height="256" role="img" aria-labelledby="title"><title>DietShift Atlas</title>
+  <title id="title">DietShift Atlas — Horizontal Lockup</title>
+  <g id="symbol">
+    <path fill="#8a1253" fill-rule="evenodd" d="
+      M 122 24
+      A 102 102 0 0 0 122 228
+      Z
+      M 44 82 H 104 V 98 H 44 Z
+      M 32 118 H 104 V 134 H 32 Z
+      M 44 154 H 104 V 170 H 44 Z
+    "/>
+    <path fill="#8a1253" d="
+      M 138 136
+      L 226 159.58
+      A 102 102 0 0 1 138 224
+      Z
+    "/>
+    <path fill="#8a1253" d="
+      M 138 20
+      A 102 102 0 0 1 226 94.42
+      L 138 118
+      Z
+    "/>
+    <circle fill="#8a1253" cx="216" cy="127" r="16"/>
+  </g>
+  <g id="wordmark">
+    <g fill="#8a1253">
+      <g transform="translate(276.0,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 44 A 50 50 0 0 1 44 100 H 0 Z M 18 18 V 82 H 42 A 32 32 0 0 0 42 18 Z"/></g>
+      <g transform="translate(338.6,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 18 V 100 H 0 Z"/></g>
+      <g transform="translate(357.8,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 68 V 18 H 18 V 41 H 58 V 59 H 18 V 82 H 68 V 100 H 0 Z"/></g>
+      <g transform="translate(408.1,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 76 V 18 H 47 V 100 H 29 V 18 H 0 Z"/></g>
+      <g transform="translate(463.2,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 66 24 H 47 C 45 16 38 15 32 15 C 22 15 18 20 18 27 C 18 35 26 38 42 42 C 62 47 70 56 70 72 C 70 90 55 100 35 100 C 13 100 0 88 0 71 H 19 C 20 80 26 84 36 84 C 46 84 52 79 52 72 C 52 63 44 60 28 56 C 10 51 0 43 0 27 C 0 11 14 0 33 0 C 53 0 65 10 66 24 Z"/></g>
+      <g transform="translate(514.7,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 18 V 41 H 58 V 0 H 76 V 100 H 58 V 59 H 18 V 100 H 0 Z"/></g>
+      <g transform="translate(569.9,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 18 V 100 H 0 Z"/></g>
+      <g transform="translate(589.1,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 66 V 18 H 18 V 43 H 56 V 61 H 18 V 100 H 0 Z"/></g>
+      <g transform="translate(638.1,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 76 V 18 H 47 V 100 H 29 V 18 H 0 Z"/></g>
+    </g>
+    <g fill="#8a1253">
+      <g transform="translate(710.6,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 34 0 H 52 L 86 100 H 67 L 59 76 H 27 L 19 100 H 0 Z M 32 59 H 54 L 43 24 Z"/></g>
+      <g transform="translate(772.0,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 76 V 18 H 47 V 100 H 29 V 18 H 0 Z"/></g>
+      <g transform="translate(827.2,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 0 0 H 18 V 82 H 66 V 100 H 0 Z"/></g>
+      <g transform="translate(876.2,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 34 0 H 52 L 86 100 H 67 L 59 76 H 27 L 19 100 H 0 Z M 32 59 H 54 L 43 24 Z"/></g>
+      <g transform="translate(937.5,66.0) scale(0.620)"><path fill-rule="evenodd" d="M 66 24 H 47 C 45 16 38 15 32 15 C 22 15 18 20 18 27 C 18 35 26 38 42 42 C 62 47 70 56 70 72 C 70 90 55 100 35 100 C 13 100 0 88 0 71 H 19 C 20 80 26 84 36 84 C 46 84 52 79 52 72 C 52 63 44 60 28 56 C 10 51 0 43 0 27 C 0 11 14 0 33 0 C 53 0 65 10 66 24 Z"/></g>
+    </g>
+    <rect fill="#8a1253" x="276" y="150" width="705" height="6"/>
+    <rect fill="#8a1253" x="276" y="170" width="240" height="12"/>
+    <rect fill="#8a1253" x="532" y="170" width="168" height="12"/>
+  </g>
+</svg>
