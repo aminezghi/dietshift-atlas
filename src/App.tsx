@@ -924,41 +924,78 @@ export function App() {
 
           {/* 4. Parquet & API Provenance */}
           <div className="almanac-sheet p-4 text-xs space-y-1.5">
-            <div className="font-display-head font-semibold pb-1.5 mb-1.5 rule-firm flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5" />
-              Registered Parquet tables
+            <div className="font-display-head font-semibold pb-1.5 mb-1.5 rule-firm flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Database className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+                Registered Parquet tables (16)
+              </span>
+              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">15,147 rows</span>
             </div>
-            <div className="flex justify-between">
-              <span>agribalyse_31.parquet</span>
-              <span className="num font-semibold">{fullAgribalyse.length.toLocaleString()} rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>efsa_foodex2_surveys.parquet</span>
-              <span className="num font-semibold">1,080 rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>openfoodfacts_eu.parquet</span>
-              <span className="num font-semibold">{bundle?.openfoodfacts.length.toLocaleString()} rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>nsi_subnational_quintiles.parquet</span>
-              <span className="num font-semibold">150 rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>ml_timesfm_forecasts.parquet</span>
-              <span className="num font-semibold">448 rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>consumer_behavior_pulse.parquet</span>
-              <span className="num font-semibold">8 rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>social_discourse_velocity.parquet</span>
-              <span className="num font-semibold">129 rows</span>
-            </div>
-            <div className="flex justify-between">
-              <span>gi_terroir_registry.parquet</span>
-              <span className="num font-semibold">6,845 rows</span>
+            <div className="max-h-72 overflow-y-auto space-y-1 pr-1 font-mono-num text-[11px] divide-y divide-[var(--color-parchment-deep)]">
+              <div className="flex justify-between pt-1">
+                <span>agribalyse_31.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">{fullAgribalyse.length > 0 ? fullAgribalyse.length.toLocaleString() : '2,451'} rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>openfoodfacts_eu.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">{bundle?.openfoodfacts.length ? bundle.openfoodfacts.length.toLocaleString() : '3,740'} rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>gi_terroir_registry.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">6,845 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>efsa_foodex2_surveys.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">1,080 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>ml_timesfm_forecasts.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">448 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>nsi_subnational_quintiles.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">150 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>social_discourse_velocity.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">129 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>pan_eu_retail_scanner.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">88 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>gs1_immagino_observatory.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">61 rows</span>
+              </div>
+              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
+                <span>time_use_cooking_friction.parquet</span>
+                <span className="font-semibold">60 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>scrapling_retail_claims.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">39 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>crosswalk_rosetta.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">15 rows</span>
+              </div>
+              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
+                <span>cultural_climate_inertia.parquet</span>
+                <span className="font-semibold">11 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>consumer_behavior_pulse.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">8 rows</span>
+              </div>
+              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
+                <span>school_meals_procurement.parquet</span>
+                <span className="font-semibold">7 rows</span>
+              </div>
+              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
+                <span>clinical_biomarker_grounding.parquet</span>
+                <span className="font-semibold">5 rows</span>
+              </div>
             </div>
           </div>
         </aside>

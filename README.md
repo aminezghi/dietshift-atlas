@@ -72,22 +72,22 @@ Experience the computational almanac directly in your browser without any instal
 
 | Table | Records | Data Source / Description | Schema Scope |
 | :--- | :---: | :--- | :--- |
-| `pan_eu_retail_scanner` | 132 | Harmonized Pan-EU retail scanner observatory across 11 territories (10 countries + EU-27) | Turnover, volume, growth rates, household penetration, price index |
-| `gs1_immagino_observatory` | 24 | GS1 Italy Immagino metasystem (138k barcodes, €45.4B turnover, 6 macro-phenomena) | Barcode count, market share, YoY demand, inflation elasticity |
-| `scrapling_retail_claims` | 24 | Granular retail SKU scanner scraped via D4Vinci Scrapling | Brand, retailer, energy, macro-nutrients, front-of-pack claims |
+| `pan_eu_retail_scanner` | 88 | Harmonized Pan-EU retail scanner observatory across 11 territories (10 countries + EU-27) | Turnover, volume, growth rates, household penetration, price index |
+| `gs1_immagino_observatory` | 61 | GS1 Italy Immagino metasystem (138k barcodes, €45.4B turnover, 6 macro-phenomena) | Barcode count, market share, YoY demand, inflation elasticity |
+| `scrapling_retail_claims` | 39 | Granular retail SKU scanner scraped via D4Vinci Scrapling | Brand, retailer, energy, macro-nutrients, front-of-pack claims |
 | `nsi_subnational_quintiles` | 150 | Subnational household budget surveys (INSEE, ISTAT, Destatis, INE, CBS) | Regional food budget shares across 5 income quintiles |
-| `ml_timesfm_forecasts` | 336 | Google TimesFM 200M foundation model projections through 2030 | Category time-series, projected consumption, 80% CI bands |
-| `consumer_behavior_pulse` | 14 | Behavioral friction indicators & intention-to-action say-do gap scores | Plant-based search velocity, price sensitivity, intention dropoff |
-| `social_discourse_velocity` | 50 | Social sentiment & discourse velocity (Mastodon/Bluesky/Twitter corpora) | Topic volumes, polarity scores, weekly velocity trends |
+| `ml_timesfm_forecasts` | 448 | Google TimesFM 200M foundation model projections through 2030 | Category time-series, projected consumption, 80% CI bands |
+| `consumer_behavior_pulse` | 8 | Behavioral friction indicators & intention-to-action say-do gap scores | Plant-based search velocity, price sensitivity, intention dropoff |
+| `social_discourse_velocity` | 129 | Social sentiment & discourse velocity (Mastodon/Bluesky/Twitter corpora) | Topic volumes, polarity scores, weekly velocity trends |
 | `gi_terroir_registry` | 6,845 | European Commission eAmbrosia geographical indications (PDO, PGI, TSG) | Category, registration date, legal scheme, subnational origin |
 | `time_use_cooking_friction` | 60 | Multinational Time Use Study (MTUS/ATUS & IPUMS Time Use) | Daily cooking/food prep minutes, convenience food expenditure share, time-poverty rate across income quintiles |
 | `clinical_biomarker_grounding` | 5 | CDC NHANES cohort empirical dietary validation | LDL-C, hs-CRP inflammation, HbA1c, blood pressure, Framingham/ASCVD risk delta across 5 archetypes |
 | `school_meals_procurement` | 7 | GCNF Global Survey of School Meal Programs (Data in Brief 2026) | France EGALIM, Italy CAM, Germany DGE statutory plant days, organic quotas, student volumes |
 | `cultural_climate_inertia` | 11 | European Social Survey (ESS) & TISP (Nature Sci Data 2024) | Climate worry score vs culinary cultural inertia index vs actual plant basket penetration |
 | `agribalyse_31` | 2,451 | ADEME Agribalyse 3.1.1 life cycle assessments | CO2 eq, water scarcity, land use, PEF single score |
-| `openfoodfacts_eu` | 5,000 | Open Food Facts European product dataset | Nutri-Score (A-E), NOVA group (1-4), Eco-Score, protein |
-| `efsa_foodex2_surveys` | 180 | EFSA Comprehensive European Food Consumption Database | Grams/day consumption, age groups, survey methodologies |
-| `crosswalk_rosetta` | 50 | Canonical crosswalk mapping FoodEx2, Agribalyse, OFF, and COICOP | Standardized category identifiers, conversion factors |
+| `openfoodfacts_eu` | 3,740 | Open Food Facts European product dataset | Nutri-Score (A-E), NOVA group (1-4), Eco-Score, protein |
+| `efsa_foodex2_surveys` | 1,080 | EFSA Comprehensive European Food Consumption Database | Grams/day consumption, age groups, survey methodologies |
+| `crosswalk_rosetta` | 15 | Canonical crosswalk mapping FoodEx2, Agribalyse, OFF, and COICOP | Standardized category identifiers, conversion factors |
 
 ---
 
