@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/brand/kit/dietshift-symbol-color.svg" width="95" height="95" alt="DietShift Atlas Logo" />
+  <img src="https://raw.githubusercontent.com/aminezghi/dietshift-atlas/main/public/brand/kit/dietshift-symbol-color.svg" width="95" height="95" alt="DietShift Atlas Logo" />
   <h1 align="center">DietShift Atlas</h1>
   <p align="center">
     <strong>European & Global Food Systems Computational Almanac</strong><br/>
@@ -58,7 +58,7 @@ Experience the computational almanac directly in your browser without any instal
 
 ## 🌟 Key Capabilities & Highlights
 
-- **100% In-Browser SQL Analytics**: Powered by **DuckDB-Wasm 1.28**, querying 12 compressed columnar Parquet files via asynchronous web workers with HTTP range requests—zero server dependencies, zero recurring cloud costs.
+- **100% In-Browser SQL Analytics**: Powered by **DuckDB-Wasm 1.28**, querying 16 compressed columnar Parquet files via asynchronous web workers with HTTP range requests—zero server dependencies, zero recurring cloud costs.
 - **Section XII: Pan-European Retail Scanner Observatory**: Modeled after GS1 Italy's Immagino methodology and harmonized across 10 EU member states (IT, FR, DE, ES, NL, BE, PL, SE, AT, PT + EU-27 benchmark) across 6 universal food phenomena (*100% Italian/Local*, *Plant-Based/Veg*, *Free-From*, *Rich-In Protein*, *Sustainability/Eco*, *Traditional/PDO/PGI*).
 - **On-Demand D4Vinci Scrapling Harvester**: Real-world retail product scraper targeting major retailers (Carrefour, Coop, Esselunga, Rewe), extracting 13 meta-product nutrition dimensions and packaging claims.
 - **AI Forecasting Engine (Google TimesFM)**: Pre-computed zero-shot foundation model time-series projections through 2030 across 5 income quintiles and 7 food categories (mean forecast + 80% confidence intervals).
@@ -80,6 +80,10 @@ Experience the computational almanac directly in your browser without any instal
 | `consumer_behavior_pulse` | 14 | Behavioral friction indicators & intention-to-action say-do gap scores | Plant-based search velocity, price sensitivity, intention dropoff |
 | `social_discourse_velocity` | 50 | Social sentiment & discourse velocity (Mastodon/Bluesky/Twitter corpora) | Topic volumes, polarity scores, weekly velocity trends |
 | `gi_terroir_registry` | 6,845 | European Commission eAmbrosia geographical indications (PDO, PGI, TSG) | Category, registration date, legal scheme, subnational origin |
+| `time_use_cooking_friction` | 60 | Multinational Time Use Study (MTUS/ATUS & IPUMS Time Use) | Daily cooking/food prep minutes, convenience food expenditure share, time-poverty rate across income quintiles |
+| `clinical_biomarker_grounding` | 5 | CDC NHANES cohort empirical dietary validation | LDL-C, hs-CRP inflammation, HbA1c, blood pressure, Framingham/ASCVD risk delta across 5 archetypes |
+| `school_meals_procurement` | 7 | GCNF Global Survey of School Meal Programs (Data in Brief 2026) | France EGALIM, Italy CAM, Germany DGE statutory plant days, organic quotas, student volumes |
+| `cultural_climate_inertia` | 11 | European Social Survey (ESS) & TISP (Nature Sci Data 2024) | Climate worry score vs culinary cultural inertia index vs actual plant basket penetration |
 | `agribalyse_31` | 2,451 | ADEME Agribalyse 3.1.1 life cycle assessments | CO2 eq, water scarcity, land use, PEF single score |
 | `openfoodfacts_eu` | 5,000 | Open Food Facts European product dataset | Nutri-Score (A-E), NOVA group (1-4), Eco-Score, protein |
 | `efsa_foodex2_surveys` | 180 | EFSA Comprehensive European Food Consumption Database | Grams/day consumption, age groups, survey methodologies |
@@ -102,7 +106,7 @@ Experience the computational almanac directly in your browser without any instal
 ├───────────────────────┤   ├───────────────────────┤   ├───────────────────────┤
 │ • D4Vinci Scrapling   │   │ • DuckDB-Wasm 1.28    │   │ • React 19 + Vite 6   │
 │ • GS1 / Retail APIs   │──▶│ • HTTP Range Requests │──▶│ • Apache ECharts      │
-│ • Agribalyse 3.1.1    │   │ • 12 Parquet Tables   │   │ • Tailwind CSS v4     │
+│ • Agribalyse 3.1.1    │   │ • 16 Parquet Tables   │   │ • Tailwind CSS v4     │
 │ • TimesFM AI Forecast │   │ • Sub-10ms SQL Joins  │   │ • Responsive Layouts  │
 └───────────────────────┘   └───────────────────────┘   └───────────────────────┘
 ```
@@ -132,7 +136,7 @@ dietshift-atlas/
 ├── public/
 │   ├── brand/                    ← Production vector brand kit (symbols, lockups, icons)
 │   ├── data/
-│   │   ├── parquet/              ← 12 compressed columnar Parquet files
+│   │   ├── parquet/              ← 16 compressed columnar Parquet files
 │   │   ├── *.json                ← Pre-compiled JSON research bundles
 │   │   └── world.geojson         ← European & global boundary cartography
 │   ├── architecture_blueprint.html ← Editorial SVG system schematic
@@ -140,6 +144,7 @@ dietshift-atlas/
 │   ├── floorplan.html            ← Interactive codebase floorplan (force graph)
 │   └── public_guide.html         ← Standalone citizen public guide companion
 ├── scripts/
+│   ├── build_empirical_social_microdata.py ← Empirical MTUS, NHANES, GCNF & ESS compiler
 │   ├── build_consumer_pulse_and_scale_off.py
 │   ├── build_gi_terroir_and_social_scrapling.py
 │   ├── build_gs1_immagino_parquet.py
@@ -150,6 +155,7 @@ dietshift-atlas/
 ├── src/
 │   ├── components/
 │   │   ├── ConsumerBehaviorPulse.tsx    ← Section VIII: Behavioral cascade
+│   │   ├── EmpiricalSocialMicrodataPlate.tsx ← MTUS, NHANES, GCNF & ESS microdata plate
 │   │   ├── DuckDBParquetWorkbench.tsx   ← Section IX: In-browser SQL workbench
 │   │   ├── GS1ImmaginoObservatory.tsx   ← Section XII: Pan-EU scanner & Scrapling
 │   │   ├── InteractiveChoroplethMap.tsx ← Section II: Cartography & GI terroir
@@ -229,6 +235,11 @@ DietShift Atlas was built on the shoulders of open-science data providers, insti
   - **European Food Safety Authority (EFSA)**: For the Comprehensive European Food Consumption Database.
   - **National Statistical Institutes**: ISTAT (Italy), INSEE (France), Destatis (Germany), INE (Spain), and CBS (Netherlands) for subnational household consumption surveys.
   - **European Commission DG AGRI**: For the eAmbrosia geographical indications database (PDO, PGI, TSG).
+  - **Todd R. Jones**: For the curated empirical microdata repository ([`toddrjones/datasets`](https://github.com/toddrjones/datasets/)) linking time use, demographic, and cohort surveys.
+  - **Multinational Time Use Study (MTUS) & IPUMS Time Use / ATUS**: For objective daily minutes allocated to food preparation, grocery shopping, and culinary time-poverty across income quintiles.
+  - **CDC National Health and Nutrition Examination Survey (NHANES)**: For objective clinical biomarkers (LDL-C, hs-CRP, HbA1c, blood pressure, Framingham/ASCVD CVD risk) grounding dietary archetypes.
+  - **Global Child Nutrition Foundation (GCNF)**: For the Global Survey of School Meal Programs (Data in Brief 2026) documenting statutory school canteen plant-based quotas and sustainable procurement mandates.
+  - **European Social Survey (ESS) & TISP (Nature Scientific Data 2024)**: For pan-European climate worry scores, culinary cultural inertia indices, and public food system transition support metrics.
   - **Google Research**: For the zero-shot TimesFM 200M foundation model.
 - **Open-Source Technologies**:
   - **DuckDB Foundation**: For the groundbreaking [DuckDB-Wasm](https://github.com/duckdb/duckdb-wasm) in-browser analytical database engine.

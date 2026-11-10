@@ -126,6 +126,61 @@ FROM gi_terroir_registry
 GROUP BY product_sector, eu_class
 ORDER BY Protected_GI_Count DESC;`,
   },
+  {
+    id: 'time_use_poverty',
+    title: '7. Time Poverty & Cooking Friction (Multinational Time Use Study)',
+    badge: 'time_use_cooking_friction.parquet',
+    description:
+      'Queries daily food preparation minutes vs. convenience food expenditure share across income quintiles (MTUS/ATUS).',
+    sql: `SELECT 
+  country_name AS Country,
+  income_quintile AS Quintile,
+  daily_cooking_food_prep_min AS Cooking_Prep_Min,
+  daily_eating_drinking_min AS Eating_Min,
+  daily_grocery_shopping_min AS Shopping_Min,
+  total_food_time_min AS Total_Food_Min,
+  convenience_food_expenditure_share_pct AS Convenience_Share_Pct,
+  culinary_time_poverty_rate_pct AS Time_Poverty_Rate_Pct
+FROM time_use_cooking_friction
+WHERE income_quintile IN ('Q1 (Lowest)', 'Q3 (Median)', 'Q5 (Highest)')
+ORDER BY Country, income_quintile;`,
+  },
+  {
+    id: 'clinical_nhanes',
+    title: '8. Clinical Biomarker Grounding (NHANES Cohort Validation)',
+    badge: 'clinical_biomarker_grounding.parquet',
+    description:
+      'Evaluates objective lab biomarkers (cholesterol, HbA1c, hs-CRP inflammation, blood pressure) across 5 dietary patterns.',
+    sql: `SELECT 
+  dietary_pattern AS Dietary_Pattern,
+  mean_fiber_g_day AS Fiber_g_day,
+  plant_protein_share_pct AS Plant_Protein_Pct,
+  total_cholesterol_mg_dl AS Total_Cholesterol,
+  ldl_cholesterol_mg_dl AS LDL_Cholesterol,
+  hs_crp_inflammation_mg_l AS hs_CRP_Inflammation,
+  systolic_bp_mmhg AS Systolic_BP,
+  cardiovascular_risk_delta_pct AS CVD_Risk_Delta_Pct
+FROM clinical_biomarker_grounding
+ORDER BY CVD_Risk_Delta_Pct ASC;`,
+  },
+  {
+    id: 'school_canteen_policy',
+    title: '9. Public School Meals & Organic Mandates (GCNF Survey)',
+    badge: 'school_meals_procurement.parquet',
+    description:
+      'Compares legal frameworks (France EGALIM, Italy CAM, Germany DGE) for public canteen plant-based quotas and organic procurement.',
+    sql: `SELECT 
+  country_name AS Country,
+  legal_framework AS Legal_Framework,
+  mandatory_plant_days_per_week AS Mandatory_Veg_Days_Wk,
+  organic_procurement_quota_pct AS Organic_Quota_Pct,
+  sustainable_quality_quota_pct AS Quality_Quota_Pct,
+  local_terroir_priority AS Local_Terroir_Priority,
+  students_served_daily_m AS Students_M,
+  annual_procurement_budget_eur_m AS Budget_EUR_M
+FROM school_meals_procurement
+ORDER BY Students_M DESC;`,
+  },
 ];
 
 export function DuckDBParquetWorkbench({ selectedCountry }: { selectedCountry: string }) {
