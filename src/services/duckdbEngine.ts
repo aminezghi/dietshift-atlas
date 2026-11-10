@@ -44,6 +44,10 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
       'gs1_immagino_observatory.parquet',
       'scrapling_retail_claims.parquet',
       'pan_eu_retail_scanner.parquet',
+      'time_use_cooking_friction.parquet',
+      'clinical_biomarker_grounding.parquet',
+      'school_meals_procurement.parquet',
+      'cultural_climate_inertia.parquet',
     ];
 
     for (const file of parquetFiles) {
@@ -70,6 +74,10 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
       CREATE VIEW IF NOT EXISTS gs1_immagino_observatory AS SELECT * FROM parquet_scan('gs1_immagino_observatory.parquet');
       CREATE VIEW IF NOT EXISTS scrapling_retail_claims AS SELECT * FROM parquet_scan('scrapling_retail_claims.parquet');
       CREATE VIEW IF NOT EXISTS pan_eu_retail_scanner AS SELECT * FROM parquet_scan('pan_eu_retail_scanner.parquet');
+      CREATE VIEW IF NOT EXISTS time_use_cooking_friction AS SELECT * FROM parquet_scan('time_use_cooking_friction.parquet');
+      CREATE VIEW IF NOT EXISTS clinical_biomarker_grounding AS SELECT * FROM parquet_scan('clinical_biomarker_grounding.parquet');
+      CREATE VIEW IF NOT EXISTS school_meals_procurement AS SELECT * FROM parquet_scan('school_meals_procurement.parquet');
+      CREATE VIEW IF NOT EXISTS cultural_climate_inertia AS SELECT * FROM parquet_scan('cultural_climate_inertia.parquet');
     `);
 
     dbInstance = db;

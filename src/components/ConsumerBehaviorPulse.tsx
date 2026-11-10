@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { assetUrl } from '../utils/assetPath';
+import { EmpiricalSocialMicrodataPlate } from './EmpiricalSocialMicrodataPlate';
 import {
   Activity,
   Award,
@@ -1121,6 +1122,9 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
               </table>
             </div>
           </div>
+
+          {/* Section V: Empirical Microdata & Cohort Grounding (MTUS, NHANES, GCNF, ESS) */}
+          <EmpiricalSocialMicrodataPlate selectedCountry={activeCountry} />
         </div>
       )}
     </div>

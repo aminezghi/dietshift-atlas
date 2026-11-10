@@ -1,0 +1,123 @@
+[
+  {
+    "country_code": "IT",
+    "country_name": "Italy",
+    "climate_worry_score_pct": 82.4,
+    "personal_responsibility_feel_pct": 74.2,
+    "willingness_to_reduce_meat_pct": 46.5,
+    "perceived_price_barrier_pct": 68.2,
+    "cultural_culinary_inertia_index": 84.5,
+    "actual_plant_basket_penetration_pct": 14.8,
+    "say_do_divergence_gap_pct": 31.7
+  },
+  {
+    "country_code": "FR",
+    "country_name": "France",
+    "climate_worry_score_pct": 79.1,
+    "personal_responsibility_feel_pct": 71.0,
+    "willingness_to_reduce_meat_pct": 52.4,
+    "perceived_price_barrier_pct": 64.0,
+    "cultural_culinary_inertia_index": 79.0,
+    "actual_plant_basket_penetration_pct": 16.4,
+    "say_do_divergence_gap_pct": 36.0
+  },
+  {
+    "country_code": "ES",
+    "country_name": "Spain",
+    "climate_worry_score_pct": 84.8,
+    "personal_responsibility_feel_pct": 76.5,
+    "willingness_to_reduce_meat_pct": 49.0,
+    "perceived_price_barrier_pct": 71.5,
+    "cultural_culinary_inertia_index": 81.2,
+    "actual_plant_basket_penetration_pct": 15.2,
+    "say_do_divergence_gap_pct": 33.8
+  },
+  {
+    "country_code": "DE",
+    "country_name": "Germany",
+    "climate_worry_score_pct": 76.2,
+    "personal_responsibility_feel_pct": 69.8,
+    "willingness_to_reduce_meat_pct": 63.5,
+    "perceived_price_barrier_pct": 54.2,
+    "cultural_culinary_inertia_index": 52.0,
+    "actual_plant_basket_penetration_pct": 24.8,
+    "say_do_divergence_gap_pct": 38.7
+  },
+  {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "climate_worry_score_pct": 73.5,
+    "personal_responsibility_feel_pct": 67.2,
+    "willingness_to_reduce_meat_pct": 61.0,
+    "perceived_price_barrier_pct": 51.0,
+    "cultural_culinary_inertia_index": 48.5,
+    "actual_plant_basket_penetration_pct": 26.2,
+    "say_do_divergence_gap_pct": 34.8
+  },
+  {
+    "country_code": "BE",
+    "country_name": "Belgium",
+    "climate_worry_score_pct": 75.8,
+    "personal_responsibility_feel_pct": 68.4,
+    "willingness_to_reduce_meat_pct": 54.0,
+    "perceived_price_barrier_pct": 59.5,
+    "cultural_culinary_inertia_index": 65.0,
+    "actual_plant_basket_penetration_pct": 19.5,
+    "say_do_divergence_gap_pct": 34.5
+  },
+  {
+    "country_code": "SE",
+    "country_name": "Sweden",
+    "climate_worry_score_pct": 74.0,
+    "personal_responsibility_feel_pct": 72.5,
+    "willingness_to_reduce_meat_pct": 66.8,
+    "perceived_price_barrier_pct": 48.0,
+    "cultural_culinary_inertia_index": 42.0,
+    "actual_plant_basket_penetration_pct": 28.5,
+    "say_do_divergence_gap_pct": 38.3
+  },
+  {
+    "country_code": "PL",
+    "country_name": "Poland",
+    "climate_worry_score_pct": 68.4,
+    "personal_responsibility_feel_pct": 58.0,
+    "willingness_to_reduce_meat_pct": 38.5,
+    "perceived_price_barrier_pct": 78.0,
+    "cultural_culinary_inertia_index": 76.5,
+    "actual_plant_basket_penetration_pct": 11.2,
+    "say_do_divergence_gap_pct": 27.3
+  },
+  {
+    "country_code": "AT",
+    "country_name": "Austria",
+    "climate_worry_score_pct": 77.5,
+    "personal_responsibility_feel_pct": 71.0,
+    "willingness_to_reduce_meat_pct": 56.5,
+    "perceived_price_barrier_pct": 58.0,
+    "cultural_culinary_inertia_index": 68.0,
+    "actual_plant_basket_penetration_pct": 20.8,
+    "say_do_divergence_gap_pct": 35.7
+  },
+  {
+    "country_code": "PT",
+    "country_name": "Portugal",
+    "climate_worry_score_pct": 86.2,
+    "personal_responsibility_feel_pct": 78.4,
+    "willingness_to_reduce_meat_pct": 51.5,
+    "perceived_price_barrier_pct": 73.5,
+    "cultural_culinary_inertia_index": 82.0,
+    "actual_plant_basket_penetration_pct": 14.5,
+    "say_do_divergence_gap_pct": 37.0
+  },
+  {
+    "country_code": "EU27",
+    "country_name": "European Union (EU-27)",
+    "climate_worry_score_pct": 77.8,
+    "personal_responsibility_feel_pct": 70.8,
+    "willingness_to_reduce_meat_pct": 55.4,
+    "perceived_price_barrier_pct": 62.5,
+    "cultural_culinary_inertia_index": 67.5,
+    "actual_plant_basket_penetration_pct": 19.1,
+    "say_do_divergence_gap_pct": 36.3
+  }
+]
