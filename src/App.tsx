@@ -116,6 +116,7 @@ export function App() {
     Number(initialHash.get('upf')) || 25
   );
   const [copiedNotice, setCopiedNotice] = useState<string | null>(null);
+  const [exportDatasetKey, setExportDatasetKey] = useState<string>('off');
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -624,6 +625,82 @@ export function App() {
     );
   };
 
+  const handleExportDataset = async () => {
+    if (exportDatasetKey === 'off') {
+      exportFilteredCsv();
+      return;
+    }
+    if (exportDatasetKey === 'country_profile') {
+      const headers = ['Country_Code', 'Country_Name', 'Baseline_CO2_kg_d', 'Simulated_CO2_kg_d', 'CO2_Delta_Pct', 'Baseline_Cost_EUR_d', 'Simulated_Cost_EUR_d', 'Plant_Shift_Pct', 'UPF_Reduction_Pct', 'Carbon_Tax_EUR_t'];
+      const row = [
+        currentProfile.code,
+        `"${currentProfile.name}"`,
+        currentProfile.dailyCarbonKg,
+        simulatedMetrics.newCarbon,
+        simulatedMetrics.carbonDeltaPct,
+        currentProfile.dailyBasketCostEur,
+        simulatedMetrics.newCost,
+        simPlantShift,
+        simUpfReduction,
+        simCarbonTax,
+      ];
+      const csv = [headers.join(','), row.join(',')].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dietshift_${currentProfile.code}_simulation.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+    if (exportDatasetKey === 'agribalyse') {
+      const headers = ['Code_AGB', 'Name_EN', 'Group', 'CO2_kg_per_kg', 'Water_L_per_kg', 'Land_m2_per_kg', 'EF_Score'];
+      const rows = fullAgribalyse.map((a) => [
+        a.Code_AGB,
+        `"${(a.LCI_Name || '').replace(/"/g, '""')}"`,
+        `"${(a["Groupe_d'aliment"] || '').replace(/"/g, '""')}"`,
+        a.Changement_climatique,
+        a['Épuisement_des_ressources_eau'],
+        a.Utilisation_du_sol,
+        a.Score_unique_EF,
+      ]);
+      const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'dietshift_agribalyse_31.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+    // Empirical microdata JSON -> CSV
+    const fileMap: Record<string, string> = {
+      time_use: 'data/time_use_cooking_friction.json',
+      biomarkers: 'data/clinical_biomarker_grounding.json',
+      school_meals: 'data/school_meals_procurement.json',
+      cultural_inertia: 'data/cultural_climate_inertia.json',
+    };
+    const path = fileMap[exportDatasetKey];
+    if (!path) return;
+    const res = await fetch(assetUrl(path));
+    const json: Record<string, unknown>[] = await res.json();
+    if (!json.length) return;
+    const keys = Object.keys(json[0]);
+    const csv = [
+      keys.join(','),
+      ...json.map((row) => keys.map((k) => `"${String(row[k] ?? '').replace(/"/g, '""')}"`).join(',')),
+    ].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dietshift_${exportDatasetKey}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const exportFilteredCsv = () => {
     const headers = ['Code', 'Product_Name', 'Brand', 'Category', 'NutriScore', 'EcoScore', 'NOVA', 'Proteins_100g'];
     const rows = filteredProducts.map((p) => [
@@ -721,14 +798,30 @@ export function App() {
               <LinkedinIcon className="w-3.5 h-3.5 text-[#0a66c2]" />
               <span>LinkedIn</span>
             </a>
-            <button
-              onClick={exportFilteredCsv}
-              className="almanac-btn flex items-center gap-1.5"
-              title="Export filtered Open Food Facts subset to CSV"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Export CSV ({filteredProducts.length.toLocaleString()})
-            </button>
+            <div className="flex items-center gap-1">
+              <select
+                value={exportDatasetKey}
+                onChange={(e) => setExportDatasetKey(e.target.value)}
+                className="almanac-input text-xs py-1 px-2"
+                title="Select dataset to export as CSV"
+              >
+                <option value="off">Open Food Facts EU ({filteredProducts.length.toLocaleString()})</option>
+                <option value="agribalyse">Agribalyse 3.1.1 LCA ({fullAgribalyse.length.toLocaleString()})</option>
+                <option value="country_profile">Country Simulation ({currentProfile.code})</option>
+                <option value="time_use">Time Use &amp; Cooking Friction (MTUS, 60)</option>
+                <option value="biomarkers">Clinical Biomarkers (NHANES, 5)</option>
+                <option value="school_meals">School Meals Procurement (GCNF, 7)</option>
+                <option value="cultural_inertia">Cultural &amp; Climate Inertia (ESS, 11)</option>
+              </select>
+              <button
+                onClick={handleExportDataset}
+                className="almanac-btn flex items-center gap-1.5"
+                title="Export selected dataset to CSV"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Export CSV
+              </button>
+            </div>
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
