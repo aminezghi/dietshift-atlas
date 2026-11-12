@@ -769,7 +769,7 @@ export function App() {
             { id: 'inflation', label: 'IX. Price & literature', icon: TrendingUp },
             { id: 'simulator', label: 'X. Policy intervention model', icon: Sliders },
             { id: 'floorplan', label: 'XI. Code floorplan & architecture', icon: Network },
-            { id: 'gs1_immagino', label: 'XII. GS1 Immagino & Retail Lab', icon: ShoppingBag },
+            { id: 'gs1_immagino', label: 'XII. Pan-EU Retail Scanner & Claims', icon: ShoppingBag },
           ].map((tab) => {
             const Icon = tab.icon;
             const active = activeModule === tab.id;
