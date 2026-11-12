@@ -120,6 +120,7 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
   const [basket, setBasket] = useState<CustomBasketItem[]>(DEFAULT_BASKET);
   const [selectedAgbCode, setSelectedAgbCode] = useState<string>('');
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const [agbSearch, setAgbSearch] = useState<string>('');
 
   const baselineProfile = COUNTRY_PROFILES[selectedCountry] || COUNTRY_PROFILES.IT;
 
@@ -520,14 +521,24 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
               Dietary basket ledger (adjust daily gram intake)
             </h3>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                type="text"
+                value={agbSearch}
+                onChange={(e) => setAgbSearch(e.target.value)}
+                placeholder={`Search ${agribalyseCatalog.length.toLocaleString()} Agribalyse items...`}
+                className="almanac-input text-xs py-1 px-2 w-44"
+              />
               <select
                 value={selectedAgbCode}
                 onChange={(e) => setSelectedAgbCode(e.target.value)}
                 className="almanac-select max-w-[230px]"
               >
                 <option value="">Select Agribalyse 3.1 item...</option>
-                {agribalyseCatalog.slice(0, 150).map((a) => (
+                {agribalyseCatalog
+                  .filter((a) => !agbSearch || (a.LCI_Name || '').toLowerCase().includes(agbSearch.toLowerCase()))
+                  .slice(0, 150)
+                  .map((a) => (
                   <option key={a.Code_AGB} value={a.Code_AGB}>
                     {a.LCI_Name} ({Number(a.Changement_climatique_kg_CO2eq ?? a.Changement_climatique ?? 0).toFixed(1)}{' '}
                     kg CO₂)
