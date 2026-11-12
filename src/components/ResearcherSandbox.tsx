@@ -189,6 +189,10 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
   const addAgribalyseToBasket = () => {
     const agb = agribalyseCatalog.find((a) => a.Code_AGB === selectedAgbCode);
     if (!agb) return;
+    appendAgribalyseItem(agb);
+  };
+
+  const appendAgribalyseItem = (agb: AgribalyseItem) => {
     const grp = (agb.Groupe_aliment || agb["Groupe_d'aliment"] || '').toLowerCase();
     let cat = 'Vegetables & Fruits';
     let nova = 1;
@@ -521,24 +525,56 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
               Dietary basket ledger (adjust daily gram intake)
             </h3>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <input
-                type="text"
-                value={agbSearch}
-                onChange={(e) => setAgbSearch(e.target.value)}
-                placeholder={`Search ${agribalyseCatalog.length.toLocaleString()} Agribalyse items...`}
-                className="almanac-input text-xs py-1 px-2 w-44"
-              />
+            <div className="flex flex-wrap items-center gap-2 relative">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={agbSearch}
+                  onChange={(e) => setAgbSearch(e.target.value)}
+                  placeholder={`Search ${agribalyseCatalog.length.toLocaleString()} Agribalyse items...`}
+                  className="almanac-input text-xs py-1 px-2.5 w-60"
+                />
+                {agbSearch.trim().length > 0 && (
+                  <div className="absolute left-0 top-full mt-1 w-80 max-h-64 overflow-y-auto bg-[var(--color-paper)] border border-[var(--color-ink)] shadow-lg z-50 divide-y divide-[var(--color-parchment-deep)]">
+                    {(() => {
+                      const q = agbSearch.toLowerCase();
+                      const matches = agribalyseCatalog.filter((a) =>
+                        (a.LCI_Name || '').toLowerCase().includes(q)
+                      );
+                      if (matches.length === 0) {
+                        return (
+                          <div className="p-2.5 text-xs text-[var(--color-muted)]">
+                            No Agribalyse items match "{agbSearch}".
+                          </div>
+                        );
+                      }
+                      return matches.slice(0, 30).map((a) => (
+                        <button
+                          key={a.Code_AGB}
+                          type="button"
+                          onClick={() => {
+                            appendAgribalyseItem(a);
+                            setAgbSearch('');
+                          }}
+                          className="w-full text-left px-2.5 py-1.5 text-xs hover:bg-[var(--color-parchment)] flex items-center justify-between gap-2 cursor-pointer"
+                        >
+                          <span className="truncate font-medium text-[var(--color-ink)]">{a.LCI_Name}</span>
+                          <span className="font-mono-num text-[11px] text-[var(--color-accent)] shrink-0">
+                            {Number(a.Changement_climatique_kg_CO2eq ?? a.Changement_climatique ?? 0).toFixed(1)} kg CO₂
+                          </span>
+                        </button>
+                      ));
+                    })()}
+                  </div>
+                )}
+              </div>
               <select
                 value={selectedAgbCode}
                 onChange={(e) => setSelectedAgbCode(e.target.value)}
-                className="almanac-select max-w-[230px]"
+                className="almanac-select max-w-[200px]"
               >
-                <option value="">Select Agribalyse 3.1 item...</option>
-                {agribalyseCatalog
-                  .filter((a) => !agbSearch || (a.LCI_Name || '').toLowerCase().includes(agbSearch.toLowerCase()))
-                  .slice(0, 150)
-                  .map((a) => (
+                <option value="">Or browse top 150...</option>
+                {agribalyseCatalog.slice(0, 150).map((a) => (
                   <option key={a.Code_AGB} value={a.Code_AGB}>
                     {a.LCI_Name} ({Number(a.Changement_climatique_kg_CO2eq ?? a.Changement_climatique ?? 0).toFixed(1)}{' '}
                     kg CO₂)
