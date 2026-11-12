@@ -189,17 +189,17 @@ export const GS1ImmaginoObservatory: React.FC = () => {
   // Load bundle and live scrapling items
   useEffect(() => {
     fetch(assetUrl('data/gs1_immagino_bundle.json'))
-      .then(res => res.json())
+      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => setBundle(data))
       .catch(err => console.error('Error loading GS1 bundle:', err));
 
     fetch(assetUrl('data/pan_eu_retail_bundle.json'))
-      .then(res => res.json())
+      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => setPanEuBundle(data))
       .catch(err => console.error('Error loading Pan-EU bundle:', err));
 
     fetch(assetUrl('data/scrapling_retail_claims.json'))
-      .then(res => res.json())
+      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => setScraplingProducts(data))
       .catch(err => console.error('Error loading Scrapling claims:', err));
   }, []);
@@ -212,6 +212,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
   useEffect(() => {
     if (!metaprodottoChartRef.current || !bundle) return;
     const chart = echarts.init(metaprodottoChartRef.current);
+    requestAnimationFrame(() => chart.resize());
 
     const activeRec = bundle.metaprodotto.find(m => m.category === selectedCategory) || bundle.metaprodotto[4];
 
