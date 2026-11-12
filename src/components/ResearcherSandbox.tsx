@@ -389,6 +389,53 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <select
+              defaultValue=""
+              onChange={(e) => {
+                const key = e.target.value;
+                if (!key) return;
+                const presets: Record<string, typeof DEFAULT_BASKET> = {
+                  med: [
+                    { id: 'm1', foodName: 'Extra-virgin olive oil', foodEx2Category: 'Fats & Oils', gramsPerDay: 35, novaGroup: 2, carbonPerKg: 3.1, waterM3PerKg: 1.47, landPtPerKg: 3.8, kcalPer100g: 884, proteinPer100g: 0.0, costEurPerKg: 9.5 },
+                    { id: 'm2', foodName: 'Whole-wheat sourdough bread', foodEx2Category: 'Whole Grains', gramsPerDay: 140, novaGroup: 3, carbonPerKg: 0.9, waterM3PerKg: 0.11, landPtPerKg: 1.3, kcalPer100g: 250, proteinPer100g: 9.0, costEurPerKg: 3.4 },
+                    { id: 'm3', foodName: 'Cooked chickpeas & lentils', foodEx2Category: 'Legumes', gramsPerDay: 110, novaGroup: 1, carbonPerKg: 0.85, waterM3PerKg: 0.41, landPtPerKg: 2.1, kcalPer100g: 130, proteinPer100g: 8.9, costEurPerKg: 2.8 },
+                    { id: 'm4', foodName: 'Fresh tomatoes & leafy greens', foodEx2Category: 'Vegetables', gramsPerDay: 280, novaGroup: 1, carbonPerKg: 0.65, waterM3PerKg: 0.03, landPtPerKg: 0.5, kcalPer100g: 22, proteinPer100g: 1.8, costEurPerKg: 2.9 },
+                    { id: 'm5', foodName: 'Sardines / wild pelagic fish', foodEx2Category: 'Seafood', gramsPerDay: 65, novaGroup: 1, carbonPerKg: 2.4, waterM3PerKg: 0.02, landPtPerKg: 0.8, kcalPer100g: 208, proteinPer100g: 24.6, costEurPerKg: 11.0 },
+                    { id: 'm6', foodName: 'Aged Pecorino / sheep cheese', foodEx2Category: 'Dairy', gramsPerDay: 30, novaGroup: 3, carbonPerKg: 14.2, waterM3PerKg: 0.52, landPtPerKg: 8.5, kcalPer100g: 387, proteinPer100g: 26.0, costEurPerKg: 18.0 },
+                    { id: 'm7', foodName: 'Seasonal orchard fruit', foodEx2Category: 'Fruits', gramsPerDay: 220, novaGroup: 1, carbonPerKg: 0.45, waterM3PerKg: 0.08, landPtPerKg: 0.6, kcalPer100g: 52, proteinPer100g: 0.5, costEurPerKg: 2.5 },
+                  ],
+                  plant: [
+                    { id: 'p1', foodName: 'Fortified soy & oat drink', foodEx2Category: 'Plant Dairy', gramsPerDay: 220, novaGroup: 3, carbonPerKg: 0.72, waterM3PerKg: 0.03, landPtPerKg: 0.6, kcalPer100g: 45, proteinPer100g: 3.3, costEurPerKg: 2.1 },
+                    { id: 'p2', foodName: 'Organic tofu & tempeh', foodEx2Category: 'Legumes', gramsPerDay: 110, novaGroup: 3, carbonPerKg: 1.45, waterM3PerKg: 0.19, landPtPerKg: 1.7, kcalPer100g: 145, proteinPer100g: 15.5, costEurPerKg: 6.2 },
+                    { id: 'p3', foodName: 'Red lentils & black beans', foodEx2Category: 'Legumes', gramsPerDay: 130, novaGroup: 1, carbonPerKg: 0.82, waterM3PerKg: 0.39, landPtPerKg: 1.9, kcalPer100g: 120, proteinPer100g: 9.0, costEurPerKg: 2.6 },
+                    { id: 'p4', foodName: 'Whole oats & brown rice', foodEx2Category: 'Whole Grains', gramsPerDay: 160, novaGroup: 1, carbonPerKg: 1.15, waterM3PerKg: 0.16, landPtPerKg: 1.5, kcalPer100g: 360, proteinPer100g: 11.2, costEurPerKg: 2.4 },
+                    { id: 'p5', foodName: 'Cruciferous & root vegetables', foodEx2Category: 'Vegetables', gramsPerDay: 310, novaGroup: 1, carbonPerKg: 0.52, waterM3PerKg: 0.03, landPtPerKg: 0.4, kcalPer100g: 32, proteinPer100g: 2.4, costEurPerKg: 2.3 },
+                    { id: 'p6', foodName: 'Walnuts & flaxseeds', foodEx2Category: 'Nuts & Seeds', gramsPerDay: 30, novaGroup: 1, carbonPerKg: 1.9, waterM3PerKg: 0.49, landPtPerKg: 2.8, kcalPer100g: 620, proteinPer100g: 16.5, costEurPerKg: 14.5 },
+                  ],
+                  upf: [
+                    { id: 'u1', foodName: 'Processed beef burger patty', foodEx2Category: 'Red Meat', gramsPerDay: 130, novaGroup: 4, carbonPerKg: 28.5, waterM3PerKg: 1.54, landPtPerKg: 24.0, kcalPer100g: 270, proteinPer100g: 17.5, costEurPerKg: 11.2 },
+                    { id: 'u2', foodName: 'Sugar-sweetened cola', foodEx2Category: 'Beverages', gramsPerDay: 350, novaGroup: 4, carbonPerKg: 0.55, waterM3PerKg: 0.02, landPtPerKg: 0.3, kcalPer100g: 42, proteinPer100g: 0.0, costEurPerKg: 1.4 },
+                    { id: 'u3', foodName: 'Extruded savory snacks', foodEx2Category: 'Snacks', gramsPerDay: 65, novaGroup: 4, carbonPerKg: 2.8, waterM3PerKg: 0.12, landPtPerKg: 2.2, kcalPer100g: 510, proteinPer100g: 6.2, costEurPerKg: 9.8 },
+                    { id: 'u4', foodName: 'Industrial white sandwich bread', foodEx2Category: 'Refined Grains', gramsPerDay: 120, novaGroup: 4, carbonPerKg: 1.05, waterM3PerKg: 0.12, landPtPerKg: 1.4, kcalPer100g: 265, proteinPer100g: 8.1, costEurPerKg: 2.2 },
+                    { id: 'u5', foodName: 'Sweetened breakfast cereal', foodEx2Category: 'Refined Grains', gramsPerDay: 60, novaGroup: 4, carbonPerKg: 1.85, waterM3PerKg: 0.14, landPtPerKg: 1.8, kcalPer100g: 385, proteinPer100g: 6.5, costEurPerKg: 5.5 },
+                    { id: 'u6', foodName: 'Frozen ultra-processed pizza', foodEx2Category: 'Prepared Meals', gramsPerDay: 150, novaGroup: 4, carbonPerKg: 4.9, waterM3PerKg: 0.26, landPtPerKg: 4.1, kcalPer100g: 260, proteinPer100g: 10.5, costEurPerKg: 6.8 },
+                  ],
+                };
+                if (presets[key]) {
+                  setBasket(presets[key]);
+                  setUploadStatus(`Loaded "${e.target.options[e.target.selectedIndex].text}" (${presets[key].length} items)`);
+                }
+                e.target.value = '';
+              }}
+              className="almanac-input text-xs py-1 px-2"
+              title="Load a pre-built dietary cohort without downloading/uploading CSV"
+            >
+              <option value="">⚡ Load Cohort Preset…</option>
+              <option value="med">Mediterranean Cohort (7 items)</option>
+              <option value="plant">Plant-Forward Flexitarian (6 items)</option>
+              <option value="upf">High-UPF Western Basket (6 items)</option>
+            </select>
+
             <label className="almanac-btn almanac-btn--primary flex items-center gap-1.5">
               <Upload className="w-3.5 h-3.5" />
               Upload survey CSV
