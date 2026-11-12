@@ -1034,7 +1034,10 @@ point_forecast, quantile_forecast = tfm.forecast(inputs=historical_series, freq=
             </h3>
             <p className="almanac-label mt-0.5">
               Concordance linking National Statistical Institute household expenditure codes (ECOICOP 5-digit) to EFSA
-              FoodEx2 dietary intake and ADEME Agribalyse 3.1 life-cycle inventory codes.
+              FoodEx2 dietary intake and ADEME Agribalyse 3.1 life-cycle inventory codes.{' '}
+              <span className="font-mono-num text-[11px] text-[var(--color-accent)]">
+                [Match-Confidence: Exact LCI (1.0) vs. Category-Proxy (0.72–0.85) — probabilistic many-to-many mapping]
+              </span>
             </p>
           </div>
           <div className="overflow-x-auto">

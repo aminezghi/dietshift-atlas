@@ -467,6 +467,12 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
       {/* Tab 2: Clinical Biomarkers Grounding */}
       {activeTab === 'biomarkers' && (
         <div className="space-y-4">
+          <div className="almanac-well p-3 border-l-4 border-[var(--color-accent)] text-xs text-[var(--color-ink)]">
+            <span className="font-mono-num font-semibold text-[var(--color-accent)] uppercase mr-2">
+              Methodological Caveat (Domain Transfer):
+            </span>
+            Clinical biomarker baselines (LDL-C, hs-CRP, HbA1c, ASCVD 10-yr delta) are anchored in the US CDC NHANES cohort. Direct extrapolation to European populations requires covariate adjustment (age, baseline BMI, statin prevalence) and calibration against EU prospective cohorts (e.g., EPIC, NutriNet-Santé) to avoid ecological fallacy.
+          </div>
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
             <div className="xl:col-span-7">
               <div className="h-80 w-full">
