@@ -245,10 +245,11 @@ export const GS1ImmaginoObservatory: React.FC = () => {
         textStyle: { color: '#163d4a', fontFamily: 'IBM Plex Mono', fontSize: 11 }
       },
       grid: {
-        top: 25,
-        left: 45,
-        right: 25,
-        bottom: 45
+        top: 40,
+        left: 20,
+        right: 24,
+        bottom: 48,
+        containLabel: true
       },
       xAxis: {
         type: 'category',
@@ -340,10 +341,11 @@ export const GS1ImmaginoObservatory: React.FC = () => {
         textStyle: { color: '#ffffff' }
       },
       grid: {
-        top: 40,
-        left: 55,
-        right: 40,
-        bottom: 50
+        top: 52,
+        left: 24,
+        right: 36,
+        bottom: 56,
+        containLabel: true
       },
       xAxis: {
         type: 'value',
@@ -436,10 +438,11 @@ export const GS1ImmaginoObservatory: React.FC = () => {
         textStyle: { color: '#ffffff' }
       },
       grid: {
-        top: 20,
-        left: 170,
-        right: 40,
-        bottom: 30
+        top: 32,
+        left: 24,
+        right: 36,
+        bottom: 40,
+        containLabel: true
       },
       xAxis: {
         type: 'value',
@@ -514,10 +517,11 @@ export const GS1ImmaginoObservatory: React.FC = () => {
         textStyle: { color: '#163d4a', fontFamily: 'Hanken Grotesk', fontSize: 11 }
       },
       grid: {
-        top: 40,
-        left: 45,
-        right: 25,
-        bottom: 35
+        top: 52,
+        left: 24,
+        right: 24,
+        bottom: 48,
+        containLabel: true
       },
       xAxis: {
         type: 'category',
