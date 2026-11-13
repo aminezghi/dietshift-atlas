@@ -16,6 +16,8 @@ dist-ssr
 .venv
 .gemini
 floorplan/.cache
+scripts/.raw_cache
+.pytest_cache
 __pycache__/
 *.pyc
 
