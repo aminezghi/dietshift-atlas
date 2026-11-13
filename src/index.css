@@ -34,6 +34,56 @@
   --display-weight: 600;
 }
 
+/* Evening Obsidian Almanac — Full Dark Mode Palette */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: oklch(14.5% 0.014 245);
+  --color-paper-2: oklch(18.5% 0.014 245);
+  --color-paper-3: oklch(23.5% 0.015 245);
+  --color-sheet: oklch(17.5% 0.014 245);
+  --color-ink: oklch(93% 0.008 245);
+  --color-ink-2: oklch(84% 0.010 245);
+  --color-muted: oklch(68% 0.014 245);
+  --color-rule: oklch(30% 0.016 245);
+  --color-rule-2: oklch(52% 0.018 245);
+  --color-accent: oklch(68% 0.190 350);
+  --color-accent-2: oklch(58% 0.175 350);
+  --color-accent-ink: oklch(98% 0.005 245);
+  --color-focus: oklch(72% 0.200 350);
+  --color-teal: oklch(68% 0.120 210);
+  --color-ochre: oklch(76% 0.130 75);
+}
+
+/* Dark-mode harmonization for legacy Tailwind surface & ink utilities (e.g. Section XII) */
+html[data-theme="dark"] .bg-white {
+  background-color: var(--color-sheet) !important;
+}
+html[data-theme="dark"] .bg-\[\#eaedf2\] {
+  background-color: var(--color-paper-2) !important;
+}
+html[data-theme="dark"] .border-\[\#d8dde6\] {
+  border-color: var(--color-rule) !important;
+}
+html[data-theme="dark"] .text-\[\#163d4a\] {
+  color: var(--color-ink) !important;
+}
+html[data-theme="dark"] .text-\[\#8a1253\] {
+  color: var(--color-accent) !important;
+}
+html[data-theme="dark"] .text-\[\#059669\] {
+  color: #34d399 !important;
+}
+html[data-theme="dark"] .text-stone-700,
+html[data-theme="dark"] .text-stone-600 {
+  color: var(--color-ink-2) !important;
+}
+html[data-theme="dark"] .text-stone-500 {
+  color: var(--color-muted) !important;
+}
+html[data-theme="dark"] .hover\:bg-stone-100:hover {
+  background-color: var(--color-paper-3) !important;
+}
+
 html,
 body {
   overflow-x: clip;
@@ -83,6 +133,17 @@ h4,
   color: var(--color-sheet);
   border-top: var(--rule-bar) solid var(--color-ink);
   border-radius: var(--radius-card);
+}
+
+html[data-theme="dark"] .almanac-ink-band {
+  background-color: var(--color-paper-3);
+  color: var(--color-ink);
+  border-top-color: var(--color-accent);
+}
+
+html[data-theme="dark"] .almanac-select option {
+  background-color: #1f252e;
+  color: #e5e9f0;
 }
 
 .rule-firm {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from './ThemedEChart';
 import * as echarts from 'echarts';
 import { Award, ExternalLink, Filter, Globe2, Layers, MapPin, ZoomIn } from 'lucide-react';
 import { assetUrl } from '../utils/assetPath';
