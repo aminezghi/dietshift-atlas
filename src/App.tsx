@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from './components/ThemedEChart';
 import {
   BarChart3,
   BookOpen,
@@ -13,6 +13,7 @@ import {
   Info,
   Layers,
   Maximize2,
+  Moon,
   Network,
   RefreshCw,
   RotateCcw,
@@ -21,6 +22,7 @@ import {
   ShoppingBasket,
   Sliders,
   Sparkles,
+  Sun,
   TrendingUp,
   Users,
 } from 'lucide-react';
@@ -32,6 +34,7 @@ import { ConsumerBehaviorPulse } from './components/ConsumerBehaviorPulse';
 import { GS1ImmaginoObservatory } from './components/GS1ImmaginoObservatory';
 import { DietShiftLogo } from './components/DietShiftLogo';
 import { assetUrl } from './utils/assetPath';
+import { toggleTheme, useDarkMode } from './utils/chartTheme';
 import {
   COUNTRY_PROFILES,
   type AgribalyseItem,
@@ -89,6 +92,7 @@ const NOVA_LABELS: Record<number, string> = {
 };
 
 export function App() {
+  const isDark = useDarkMode();
   const [bundle, setBundle] = useState<LiveResearchBundle | null>(null);
   const [fullAgribalyse, setFullAgribalyse] = useState<AgribalyseItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -844,6 +848,15 @@ export function App() {
               title="Copy BibTeX citation (CITATION.cff)"
             >
               <span>{copiedNotice === 'BibTeX copied' ? '✓ BibTeX Copied' : 'Cite (BibTeX)'}</span>
+            </button>
+            <button
+              onClick={() => toggleTheme()}
+              className="almanac-btn flex items-center gap-1.5"
+              title="Toggle Evening Obsidian Dark Mode / Cool Slate Light Mode"
+              aria-label="Toggle color theme"
+            >
+              {isDark ? <Sun className="w-3.5 h-3.5 text-[#f0c36b]" /> : <Moon className="w-3.5 h-3.5" />}
+              <span>{isDark ? 'Light' : 'Dark'}</span>
             </button>
           </div>
         </div>

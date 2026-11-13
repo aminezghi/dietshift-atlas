@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from './ThemedEChart';
 import { Database, Play, Sparkles, Terminal } from 'lucide-react';
 import { runDuckDBQuery } from '../services/duckdbEngine';
 

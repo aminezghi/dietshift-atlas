@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import * as echarts from 'echarts';
+import { adaptChartOption, useDarkMode } from '../utils/chartTheme';
 import { 
   TrendingUp, 
   ShoppingCart, 
@@ -159,6 +160,7 @@ const EU_COUNTRIES: Array<{ code: string; name: string; flag: string }> = [
 ];
 
 export const GS1ImmaginoObservatory: React.FC = () => {
+  const isDark = useDarkMode();
   const [selectedCountry, setSelectedCountry] = useState<string>('IT');
   const [bundle, setBundle] = useState<GS1Bundle | null>(null);
   const [panEuBundle, setPanEuBundle] = useState<PanEUCountry[]>([]);
@@ -293,14 +295,14 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       ]
     };
 
-    chart.setOption(option);
+    chart.setOption(adaptChartOption(option, isDark), true);
     const handleResize = () => chart.resize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
       chart.dispose();
     };
-  }, [bundle, selectedCategory, selectedCountry, activeCountryData, activeTab]);
+  }, [bundle, selectedCategory, selectedCountry, activeCountryData, activeTab, isDark]);
 
   // Push vs Pull Quadrant EChart
   useEffect(() => {
@@ -401,14 +403,14 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       ]
     };
 
-    chart.setOption(option);
+    chart.setOption(adaptChartOption(option, isDark), true);
     const handleResize = () => chart.resize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
       chart.dispose();
     };
-  }, [bundle, selectedThemeFilter, activeTab]);
+  }, [bundle, selectedThemeFilter, activeTab, isDark]);
 
   // E-Commerce Over-Indexing Chart
   useEffect(() => {
@@ -486,14 +488,14 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       ]
     };
 
-    chart.setOption(option);
+    chart.setOption(adaptChartOption(option, isDark), true);
     const handleResize = () => chart.resize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
       chart.dispose();
     };
-  }, [bundle, activeTab]);
+  }, [bundle, activeTab, isDark]);
 
   // Cross-Border Benchmark Charts
   useEffect(() => {
@@ -554,7 +556,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
         }
       ]
     };
-    barChart.setOption(barOption);
+    barChart.setOption(adaptChartOption(barOption, isDark), true);
 
     // 2. Radar Chart: Active Country vs EU-27 Average
     const radarChart = echarts.init(crossBorderRadarRef.current);
@@ -621,7 +623,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
         }
       ]
     };
-    radarChart.setOption(radarOption);
+    radarChart.setOption(adaptChartOption(radarOption, isDark), true);
 
     const handleResize = () => {
       barChart.resize();
@@ -633,7 +635,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       barChart.dispose();
       radarChart.dispose();
     };
-  }, [panEuBundle, activeCountryData, activeTab]);
+  }, [panEuBundle, activeCountryData, activeTab, isDark]);
 
   // Execute Agentic AI Basket Planner Query
   const runAgenticPlanner = async (goal: 'clean_hypertrophy' | 'mediterranean_terroir' | 'gut_allergen_free') => {

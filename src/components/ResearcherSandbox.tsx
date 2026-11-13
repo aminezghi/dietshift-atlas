@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from './ThemedEChart';
 import Papa from 'papaparse';
 import {
   CheckCircle2,

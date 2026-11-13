@@ -17,7 +17,7 @@ export function DietShiftLogo({ className = 'w-11 h-11 shrink-0', size = 44 }: D
       <title id="dietshiftLogoTitle">DietShift Atlas — Meridian Plate Logo</title>
       <g id="symbol">
         <path
-          fill="#111827"
+          fill="var(--color-ink)"
           fillRule="evenodd"
           d="
             M 122 24
@@ -29,7 +29,7 @@ export function DietShiftLogo({ className = 'w-11 h-11 shrink-0', size = 44 }: D
           "
         />
         <path
-          fill="#111827"
+          fill="var(--color-ink)"
           d="
             M 138 136
             L 226 159.58
@@ -38,7 +38,7 @@ export function DietShiftLogo({ className = 'w-11 h-11 shrink-0', size = 44 }: D
           "
         />
         <path
-          fill="#8A1253"
+          fill="var(--color-accent)"
           d="
             M 138 20
             A 102 102 0 0 1 226 94.42
@@ -46,7 +46,7 @@ export function DietShiftLogo({ className = 'w-11 h-11 shrink-0', size = 44 }: D
             Z
           "
         />
-        <circle fill="#8A1253" cx="216" cy="127" r="16" />
+        <circle fill="var(--color-accent)" cx="216" cy="127" r="16" />
       </g>
     </svg>
   );

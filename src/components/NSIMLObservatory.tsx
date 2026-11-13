@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from './ThemedEChart';
 import { assetUrl } from '../utils/assetPath';
 import {
   Award,
