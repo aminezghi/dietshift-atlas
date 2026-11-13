@@ -48,6 +48,8 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
       'clinical_biomarker_grounding.parquet',
       'school_meals_procurement.parquet',
       'cultural_climate_inertia.parquet',
+      'global_poore_nemecek_lca.parquet',
+      'global_healthy_diet_affordability.parquet',
     ];
 
     for (const file of parquetFiles) {
@@ -78,6 +80,8 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
       CREATE VIEW IF NOT EXISTS clinical_biomarker_grounding AS SELECT * FROM parquet_scan('clinical_biomarker_grounding.parquet');
       CREATE VIEW IF NOT EXISTS school_meals_procurement AS SELECT * FROM parquet_scan('school_meals_procurement.parquet');
       CREATE VIEW IF NOT EXISTS cultural_climate_inertia AS SELECT * FROM parquet_scan('cultural_climate_inertia.parquet');
+      CREATE VIEW IF NOT EXISTS global_poore_nemecek_lca AS SELECT * FROM parquet_scan('global_poore_nemecek_lca.parquet');
+      CREATE VIEW IF NOT EXISTS global_healthy_diet_affordability AS SELECT * FROM parquet_scan('global_healthy_diet_affordability.parquet');
     `);
 
     dbInstance = db;

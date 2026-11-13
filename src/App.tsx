@@ -107,11 +107,45 @@ interface EconometricCalibration {
   eurostat_food_ppp_index_eu27_100: number;
 }
 
+interface PooreLcaItem {
+  food_item: string;
+  stage_land_use: number;
+  stage_farm: number;
+  stage_animal_feed: number;
+  stage_processing: number;
+  stage_transport: number;
+  stage_retail: number;
+  stage_packaging: number;
+  stage_losses: number;
+  ghg_kg_co2eq_per_kg: number;
+  land_use_m2_per_kg: number;
+  freshwater_withdrawals_l_per_kg: number;
+  transport_share_pct: number;
+}
+
+interface GlobalCohdItem {
+  iso3: string;
+  country_name: string;
+  geojson_name: string;
+  year: number;
+  cost_healthy_diet_ppp_usd: number;
+  unaffordable_pct: number | null;
+  unaffordable_millions: number | null;
+  cost_to_food_exp_ratio: number | null;
+}
+
+interface GlobalBenchmarksBundle {
+  poore_nemecek_lca: PooreLcaItem[];
+  cohd_latest_by_country: GlobalCohdItem[];
+}
+
 export function App() {
   const isDark = useDarkMode();
   const [bundle, setBundle] = useState<LiveResearchBundle | null>(null);
   const [fullAgribalyse, setFullAgribalyse] = useState<AgribalyseItem[]>([]);
   const [calibration, setCalibration] = useState<Record<string, EconometricCalibration>>({});
+  const [globalBenchmarks, setGlobalBenchmarks] = useState<GlobalBenchmarksBundle | null>(null);
+  const [plate4Mode, setPlate4Mode] = useState<'agribalyse' | 'poore'>('agribalyse');
   const [loading, setLoading] = useState(true);
   const initialHash = useMemo(() => {
     const raw = window.location.hash.replace(/^#/, '');
@@ -160,16 +194,21 @@ export function App() {
       fetch(assetUrl('data/econometric_calibration.json'))
         .then((r) => r.json())
         .catch(() => ({})),
+      fetch(assetUrl('data/global_benchmarks.json'))
+        .then((r) => r.json())
+        .catch(() => null),
     ])
       .then(
-        ([bundleData, agbFull, calData]: [
+        ([bundleData, agbFull, calData, globData]: [
           LiveResearchBundle,
           AgribalyseItem[],
           Record<string, EconometricCalibration>,
+          GlobalBenchmarksBundle | null,
         ]) => {
           setBundle(bundleData);
           setFullAgribalyse(agbFull.length > 0 ? agbFull : bundleData.agribalyse);
           setCalibration(calData || {});
+          setGlobalBenchmarks(globData);
           setLoading(false);
         }
       )
@@ -663,6 +702,84 @@ export function App() {
     };
   }, [filteredAgribalyse]);
 
+  const pooreLcaOption = useMemo(() => {
+    const items = globalBenchmarks?.poore_nemecek_lca || [];
+    const targetOrder = [
+      'Beef (beef herd)',
+      'Lamb & Mutton',
+      'Cheese',
+      'Beef (dairy herd)',
+      'Pig Meat',
+      'Poultry Meat',
+      'Eggs',
+      'Rice',
+      'Tofu',
+      'Peas',
+    ];
+    const selected = targetOrder
+      .map((name) => items.find((r) => r.food_item === name))
+      .filter((x): x is PooreLcaItem => Boolean(x));
+
+    return {
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        backgroundColor: '#eaedf2',
+        borderColor: '#2d3643',
+        textStyle: { color: '#111827', fontSize: 12, fontFamily: 'IBM Plex Mono, monospace' },
+      },
+      legend: {
+        top: 0,
+        itemGap: 12,
+        textStyle: { color: '#2d3643', fontSize: 11, fontFamily: 'Newsreader, Georgia, serif' },
+      },
+      grid: { top: 44, right: 24, bottom: 48, left: 152 },
+      xAxis: {
+        type: 'value',
+        min: 0,
+        name: 'Poore & Nemecek (2018) Global Supply-Chain GHG (kg CO₂eq / kg)',
+        nameLocation: 'middle',
+        nameGap: 28,
+        nameTextStyle: { color: '#3d4654', fontSize: 11, fontFamily: 'Newsreader, Georgia, serif' },
+        splitLine: { lineStyle: { color: '#aeb6c4', type: 'solid' } },
+        axisLabel: { color: '#3d4654', fontFamily: 'IBM Plex Mono, monospace', fontSize: 11 },
+      },
+      yAxis: {
+        type: 'category',
+        inverse: true,
+        data: selected.map((s) => s.food_item),
+        axisLabel: { color: '#111827', fontSize: 11, fontFamily: 'Newsreader, Georgia, serif' },
+      },
+      series: [
+        {
+          name: 'Farm + Land Use + Feed',
+          type: 'bar',
+          stack: 'ghg',
+          barMaxWidth: 16,
+          itemStyle: { color: '#8a1253' },
+          data: selected.map((s) => +(s.stage_farm + s.stage_land_use + s.stage_animal_feed).toFixed(2)),
+        },
+        {
+          name: 'Processing + Packaging + Losses',
+          type: 'bar',
+          stack: 'ghg',
+          barMaxWidth: 16,
+          itemStyle: { color: '#6b4c1b' },
+          data: selected.map((s) => +(s.stage_processing + s.stage_packaging + s.stage_losses).toFixed(2)),
+        },
+        {
+          name: 'Transport + Retail',
+          type: 'bar',
+          stack: 'ghg',
+          barMaxWidth: 16,
+          itemStyle: { color: '#163d4a' },
+          data: selected.map((s) => +(s.stage_transport + s.stage_retail).toFixed(2)),
+        },
+      ],
+    };
+  }, [globalBenchmarks]);
+
   const toggleNova = (nova: number) => {
     setSelectedNova((prev) =>
       prev.includes(nova) ? (prev.length > 1 ? prev.filter((n) => n !== nova) : prev) : [...prev, nova]
@@ -1119,9 +1236,9 @@ export function App() {
             <div className="font-display-head font-semibold pb-1.5 mb-1.5 rule-firm flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-                Registered Parquet tables (16)
+                Registered Parquet tables (18)
               </span>
-              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">16,453 rows</span>
+              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">17,897 rows</span>
             </div>
             <div className="max-h-72 overflow-y-auto space-y-1 pr-1 font-mono-num text-[11px] divide-y divide-[var(--color-parchment-deep)]">
               <div className="flex justify-between pt-1">
@@ -1136,9 +1253,17 @@ export function App() {
                 <span>gi_terroir_registry.parquet</span>
                 <span className="font-semibold text-[var(--color-ink)]">6,845 rows</span>
               </div>
+              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
+                <span>global_healthy_diet_affordability.parquet</span>
+                <span className="font-semibold">1,399 rows</span>
+              </div>
               <div className="flex justify-between pt-1">
                 <span>efsa_foodex2_surveys.parquet</span>
                 <span className="font-semibold text-[var(--color-ink)]">1,080 rows</span>
+              </div>
+              <div className="flex justify-between pt-1">
+                <span>scrapling_retail_claims.parquet</span>
+                <span className="font-semibold text-[var(--color-ink)]">1,355 rows</span>
               </div>
               <div className="flex justify-between pt-1">
                 <span>ml_timesfm_forecasts.parquet</span>
@@ -1164,9 +1289,9 @@ export function App() {
                 <span>time_use_cooking_friction.parquet</span>
                 <span className="font-semibold">60 rows</span>
               </div>
-              <div className="flex justify-between pt-1">
-                <span>scrapling_retail_claims.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">1,355 rows</span>
+              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
+                <span>global_poore_nemecek_lca.parquet</span>
+                <span className="font-semibold">45 rows</span>
               </div>
               <div className="flex justify-between pt-1">
                 <span>crosswalk_rosetta.parquet</span>
@@ -1326,22 +1451,44 @@ export function App() {
               </div>
 
               <div className="almanac-sheet p-4 flex flex-col">
-                <div className="flex items-start justify-between pb-2.5 mb-2 rule-firm">
+                <div className="flex flex-wrap items-start justify-between gap-2 pb-2.5 mb-2 rule-firm">
                   <div>
                     <h2 className="text-base font-semibold flex items-center gap-2">
                       <BarChart3 className="w-4 h-4" />
-                      Plate IV. ADEME Agribalyse 3.1 LCA synthesis ({filteredAgribalyse.length.toLocaleString()} items)
+                      {plate4Mode === 'poore'
+                        ? 'Plate IV. Global Farm LCA by Supply-Chain Stage (Poore & Nemecek 2018)'
+                        : `Plate IV. ADEME Agribalyse 3.1 LCA synthesis (${filteredAgribalyse.length.toLocaleString()} items)`}
                     </h2>
                     <p className="almanac-label">
-                      Mean climate change (kg CO₂eq/kg) and water depletion (m³/kg) across food groups.
+                      {plate4Mode === 'poore'
+                        ? '38,700 farms in 119 countries: land use & farm stages dominate over transport (<2%).'
+                        : 'Mean climate change (kg CO₂eq/kg) and water depletion (m³/kg) across food groups.'}
                     </p>
                   </div>
-                  <button onClick={() => setActiveModule('duckdb')} className="almanac-btn">
-                    Query SQL
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setPlate4Mode('agribalyse')}
+                      className={`almanac-btn ${plate4Mode === 'agribalyse' ? 'almanac-btn--primary' : ''}`}
+                    >
+                      EU Agribalyse
+                    </button>
+                    <button
+                      onClick={() => setPlate4Mode('poore')}
+                      className={`almanac-btn ${plate4Mode === 'poore' ? 'almanac-btn--primary' : ''}`}
+                    >
+                      Global (119 countries)
+                    </button>
+                    <button onClick={() => setActiveModule('duckdb')} className="almanac-btn">
+                      Query SQL
+                    </button>
+                  </div>
                 </div>
                 <div className="h-80 w-full">
-                  <ReactECharts option={agribalyseGroupOption} style={{ height: '100%', width: '100%' }} />
+                  <ReactECharts
+                    option={plate4Mode === 'poore' ? pooreLcaOption : agribalyseGroupOption}
+                    notMerge={true}
+                    style={{ height: '100%', width: '100%' }}
+                  />
                 </div>
               </div>
               </div>
@@ -1354,7 +1501,7 @@ export function App() {
                       Distributional Equity & Regressive Incidence (Q1 vs. Q5)
                     </span>
                     <span className="almanac-label text-[11px] font-mono-num">
-                      Eurostat HBS × EHIS × HICP
+                      Eurostat HBS × EHIS × WB CoHD
                     </span>
                   </div>
                   <p className="text-xs text-[var(--color-muted)]">
@@ -1392,6 +1539,20 @@ export function App() {
                       </div>
                     </div>
                   </div>
+                  {globalBenchmarks && (
+                    <div className="text-[11px] font-mono-num text-[var(--color-ink)] bg-[var(--color-paper-2)] p-2 border border-[var(--color-rule)] flex flex-wrap gap-x-3 gap-y-1">
+                      <span className="font-semibold text-[var(--color-primary)]">WB/FAO CoHD (2024):</span>
+                      {(['ITA', 'USA', 'BRA', 'IND', 'NGA'] as const).map((iso) => {
+                        const rec = globalBenchmarks.cohd_latest_by_country.find((c) => c.iso3 === iso);
+                        if (!rec) return null;
+                        return (
+                          <span key={iso}>
+                            <b>{iso}</b> ${rec.cost_healthy_diet_ppp_usd} PPP/d ({rec.unaffordable_pct ?? '—'}% unafford.)
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
                   <div className="text-[11px] font-mono-num text-[var(--color-ink)] bg-[var(--color-parchment)] p-2 border border-[var(--color-parchment-deep)]">
                     Policy Prescription ({simulatedMetrics.q1TaxExposureRatio}× Q1/Q5 food-budget exposure):{' '}
                     {simCarbonTax > 60

@@ -110,10 +110,10 @@ ORDER BY S5_Plate_Adherence_Pct DESC;`,
   },
   {
     id: 'gi_terroir_vs_lca',
-    title: '6. Full EUIPO GIview (6,029) & Qualigeo (3,692) Lakehouse (6,845 GIs)',
+    title: '6. EUIPO GIview & Qualigeo by Sector (3,037 Food / 6,845 Total)',
     badge: 'gi_terroir_registry.parquet (6,845 rows)',
     description:
-      'Queries all 6,845 unified EUIPO GIview + Qualigeo PDO/PGI/TSG records by EU GI class, product sector, NOVA group, and Agribalyse LCA.',
+      'Separates the 3,037 dietary Agro-Foodstuffs (FOOD) from Wine (3,198), Spirits (499) & Craft (111) across all 6,845 EUIPO + Qualigeo records.',
     sql: `SELECT 
   product_sector AS Sector,
   eu_class AS EU_GI_Class,
@@ -180,6 +180,42 @@ ORDER BY CVD_Risk_Delta_Pct ASC;`,
   annual_procurement_budget_eur_m AS Budget_EUR_M
 FROM school_meals_procurement
 ORDER BY Students_M DESC;`,
+  },
+  {
+    id: 'poore_global_lca',
+    title: '9. Global Farm-Level LCA & Transport Share (Poore & Nemecek 2018)',
+    badge: 'global_poore_nemecek_lca.parquet (45 rows)',
+    description:
+      '38,700 farms in 119 countries: decomposes total kg CO2eq/kg across farm, land use, feed, transport, and freshwater withdrawals.',
+    sql: `SELECT
+  food_item AS Commodity,
+  ghg_kg_co2eq_per_kg AS Total_GHG_kg,
+  stage_land_use + stage_farm + stage_animal_feed AS Farm_Land_Feed_CO2,
+  stage_transport AS Transport_CO2,
+  transport_share_pct AS Transport_Pct,
+  land_use_m2_per_kg AS Land_m2_kg,
+  freshwater_withdrawals_l_per_kg AS Water_L_kg,
+  ghg_kg_per_100g_protein AS GHG_per_100g_Protein
+FROM global_poore_nemecek_lca
+ORDER BY Total_GHG_kg DESC;`,
+  },
+  {
+    id: 'wb_cohd_global',
+    title: '10. Global Cost & Unaffordability of a Healthy Diet (World Bank/FAO 2024)',
+    badge: 'global_healthy_diet_affordability.parquet (1,399 rows)',
+    description:
+      'Cross-country ICP PPP$/day cost of a healthy diet, population share unable to afford it, and cost-to-food-expenditure ratio.',
+    sql: `SELECT
+  iso3,
+  country_name AS Country,
+  year,
+  cost_healthy_diet_ppp_usd AS Cost_PPP_USD_Day,
+  unaffordable_pct AS Unaffordable_Pct,
+  unaffordable_millions AS Unaffordable_M
+FROM global_healthy_diet_affordability
+WHERE year = 2024
+  AND iso3 IN ('ITA','FRA','DEU','ESP','NLD','POL','SWE','GBR','USA','BRA','IND','CHN','JPN','NGA')
+ORDER BY Unaffordable_Pct DESC NULLS LAST;`,
   },
 ];
 

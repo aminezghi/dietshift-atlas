@@ -138,7 +138,7 @@ export function ConsumerBehaviorPulse({
   );
   const [selectedFrame, setSelectedFrame] = useState<string>('ALL');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('ALL');
-  const [giSectorFilter, setGiSectorFilter] = useState<string>('ALL');
+  const [giSectorFilter, setGiSectorFilter] = useState<string>('FOOD');
   const [giClassFilter, setGiClassFilter] = useState<string>('ALL');
   const [giSchemeFilter, setGiSchemeFilter] = useState<string>('ALL');
   const [giSearch, setGiSearch] = useState<string>('');
@@ -949,13 +949,13 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
               <div>
                 <h3 className="text-base font-semibold flex items-center gap-2">
                   <Award className="w-4 h-4" />
-                  Unified EUIPO GIview (6,029) & Qualigeo (3,692) Registry —{' '}
-                  {filteredGIRecords.length.toLocaleString()} of{' '}
-                  {(pulseData.gi_terroir_records.length || 6845).toLocaleString()} total protected GIs
+                  Unified EUIPO GIview (6,029) &amp; Qualigeo (3,692) Registry —{' '}
+                  {filteredGIRecords.length.toLocaleString()} shown of{' '}
+                  {(pulseData.gi_terroir_records.length || 6845).toLocaleString()} total GIs (3,037 Food)
                 </h3>
                 <p className="almanac-label">
-                  100% of the EUIPO GIview Union Register (tmdn.org/giview) cross-linked with all 3,692 Qualigeo
-                  (qualigeo.eu) DOP/IGP/STG sheets, mapped to EFSA FoodEx2, NOVA (1–3), and ADEME Agribalyse 3.1 LCA.
+                  Defaults to Agro-Foodstuffs (<code>FOOD</code>: 3,037 records) to avoid mixing Wine (3,198), Spirits
+                  (499) &amp; Craft (111) into dietary denominators; switch sector filter to browse all 6,845 records.
                 </p>
               </div>
 

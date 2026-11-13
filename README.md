@@ -58,7 +58,7 @@ Experience the computational almanac directly in your browser without any instal
 
 ## 🌟 Key Capabilities & Highlights
 
-- **100% In-Browser SQL Analytics**: Powered by **DuckDB-Wasm 1.28**, querying 16 compressed columnar Parquet files via asynchronous web workers with HTTP range requests—zero server dependencies, zero recurring cloud costs.
+- **100% In-Browser SQL Analytics**: Powered by **DuckDB-Wasm 1.28**, querying 18 compressed columnar Parquet files via asynchronous web workers with HTTP range requests—zero server dependencies, zero recurring cloud costs.
 - **Section XII: Pan-European Retail Scanner Observatory**: Modeled after GS1 Italy's Immagino methodology and harmonized across 10 EU member states (IT, FR, DE, ES, NL, BE, PL, SE, AT, PT + EU-27 benchmark) across 6 universal food phenomena (*100% Italian/Local*, *Plant-Based/Veg*, *Free-From*, *Rich-In Protein*, *Sustainability/Eco*, *Traditional/PDO/PGI*).
 - **On-Demand D4Vinci Scrapling Harvester**: Real-world retail product scraper targeting major retailers (Carrefour, Coop, Esselunga, Rewe), extracting 13 meta-product nutrition dimensions and packaging claims.
 - **AI Forecasting Engine (Google TimesFM)**: Pre-computed zero-shot foundation model time-series projections through 2030 across 5 income quintiles and 7 food categories (mean forecast + 80% confidence intervals).
@@ -79,7 +79,9 @@ Experience the computational almanac directly in your browser without any instal
 | `ml_timesfm_forecasts` | 448 | Google TimesFM 200M foundation model projections through 2030 | Category time-series, projected consumption, 80% CI bands |
 | `consumer_behavior_pulse` | 8 | Behavioral friction indicators & intention-to-action say-do gap scores | Plant-based search velocity, price sensitivity, intention dropoff |
 | `social_discourse_velocity` | 129 | Social sentiment & discourse velocity (Mastodon/Bluesky/Twitter corpora) | Topic volumes, polarity scores, weekly velocity trends |
-| `gi_terroir_registry` | 6,845 | European Commission eAmbrosia geographical indications (PDO, PGI, TSG) | Category, registration date, legal scheme, subnational origin |
+| `gi_terroir_registry` | 6,845 | European Commission / EUIPO GIview + Qualigeo GIs (`3,037 FOOD` + `3,808 Wine/Spirit/Craft` across 82 countries) | Sector, scheme, registration status, protection date, LCA mapping |
+| `global_healthy_diet_affordability` | 1,399 | World Bank & FAO *Food Prices for Nutrition* (2017–2024 across 177 countries) | Cost of a healthy diet (ICP PPP $/day), unaffordable share %, headcount, food-expenditure ratio |
+| `global_poore_nemecek_lca` | 45 | Poore & Nemecek (*Science* 2018 — 38,700 farms in 119 countries) | 8-stage supply chain GHG, land use, freshwater withdrawals, scarcity water, eutrophication |
 | `time_use_cooking_friction` | 60 | Multinational Time Use Study (MTUS/ATUS & IPUMS Time Use) | Daily cooking/food prep minutes, convenience food expenditure share, time-poverty rate across income quintiles |
 | `clinical_biomarker_grounding` | 5 | CDC NHANES 2021–2023 `.XPT` weighted adult microdata (`n=4,262` respondents) | Total-C, Non-HDL-C, LDL-C, hs-CRP inflammation, systolic BP with complex-survey 95% CIs across 5 fiber-density quintiles |
 | `school_meals_procurement` | 7 | GCNF Global Survey of School Meal Programs (Data in Brief 2026) | France EGALIM, Italy CAM, Germany DGE statutory plant days, organic quotas, student volumes |
@@ -106,7 +108,7 @@ Experience the computational almanac directly in your browser without any instal
 ├───────────────────────┤   ├───────────────────────┤   ├───────────────────────┤
 │ • D4Vinci Scrapling   │   │ • DuckDB-Wasm 1.28    │   │ • React 19 + Vite 6   │
 │ • GS1 / Retail APIs   │──▶│ • HTTP Range Requests │──▶│ • Apache ECharts      │
-│ • Agribalyse 3.1.1    │   │ • 16 Parquet Tables   │   │ • Tailwind CSS v4     │
+│ • Agribalyse 3.1.1    │   │ • 18 Parquet Tables   │   │ • Tailwind CSS v4     │
 │ • TimesFM AI Forecast │   │ • Sub-10ms SQL Joins  │   │ • Responsive Layouts  │
 └───────────────────────┘   └───────────────────────┘   └───────────────────────┘
 ```
