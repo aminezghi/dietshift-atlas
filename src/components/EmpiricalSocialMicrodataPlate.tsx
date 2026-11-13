@@ -22,19 +22,26 @@ interface ClinicalBiomarkerRecord {
   pattern_id: string;
   dietary_pattern: string;
   description: string;
+  n_respondents?: number;
   mean_fiber_g_day: number;
   saturated_fat_pct_kcal: number;
   plant_protein_share_pct: number;
   total_cholesterol_mg_dl: number;
+  total_cholesterol_ci95?: number;
+  non_hdl_cholesterol_mg_dl?: number;
+  non_hdl_ci95?: number;
   ldl_cholesterol_mg_dl: number;
   hdl_cholesterol_mg_dl: number;
   triglycerides_mg_dl: number;
   hba1c_pct: number;
   hs_crp_inflammation_mg_l: number;
+  hs_crp_ci95?: number;
   systolic_bp_mmhg: number;
+  systolic_bp_ci95?: number;
   diastolic_bp_mmhg: number;
   cardiovascular_risk_delta_pct: number;
-  sample_size_n: number;
+  sample_size_n?: number;
+  cohort_source?: string;
 }
 
 interface SchoolMealRecord {
@@ -484,35 +491,64 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
               <div className="almanac-well p-4 space-y-2">
                 <div className="font-semibold text-xs text-[var(--color-ink)] flex items-center gap-1.5">
                   <HeartPulse className="w-3.5 h-3.5 text-[#059669]" />
-                  Clinical Ground-Truthing (NHANES Cohort Validation)
+                  Clinical Ground-Truthing (CDC NHANES 2021–2023 Microdata)
                 </div>
-                <p className="text-xs text-[var(--color-muted)] leading-relaxed">
-                  Validating simulated dietary transitions against objective blood biomarkers: shifting from a Heavy UPF/Red Meat
-                  archetype to an EAT-Lancet planetary flexitarian diet reduces <b>hs-CRP systemic inflammation by 67%</b>{' '}
-                  (from 3.42 to 1.12 mg/L) and drops <b>10-year ASCVD cardiovascular risk by −31.8%</b>.
-                </p>
+                {(() => {
+                  const totalN = data.clinical_biomarkers.reduce(
+                    (acc, r) => acc + (r.n_respondents ?? r.sample_size_n ?? 0),
+                    0
+                  );
+                  const topQ = data.clinical_biomarkers[0];
+                  const botQ = data.clinical_biomarkers[data.clinical_biomarkers.length - 1];
+                  const crpDropPct =
+                    topQ && botQ && botQ.hs_crp_inflammation_mg_l > 0
+                      ? (((botQ.hs_crp_inflammation_mg_l - topQ.hs_crp_inflammation_mg_l) / botQ.hs_crp_inflammation_mg_l) * 100).toFixed(1)
+                      : '—';
+                  return (
+                    <p className="text-xs text-[var(--color-muted)] leading-relaxed">
+                      Directly aggregated from <b>{totalN.toLocaleString()} CDC NHANES 2021–2023</b> adult examination
+                      microdata records (<code>DEMO_L</code>, <code>DR1TOT_L</code>, <code>TCHOL_L</code>,{' '}
+                      <code>HDL_L</code>, <code>HSCRP_L</code>, <code>BPXO_L</code> with <code>WTDRD1</code> weights):
+                      top fiber-density quintile (Q5, <b>{topQ?.mean_fiber_g_day} g/d</b>) vs bottom quintile (Q1,{' '}
+                      <b>{botQ?.mean_fiber_g_day} g/d</b>) exhibits <b>{crpDropPct}% lower mean hs-CRP</b> (
+                      {topQ?.hs_crp_inflammation_mg_l} ± {topQ?.hs_crp_ci95 ?? '—'} vs. {botQ?.hs_crp_inflammation_mg_l} ±{' '}
+                      {botQ?.hs_crp_ci95 ?? '—'} mg/L) and non-HDL differential CVD risk delta of{' '}
+                      <b>{topQ?.cardiovascular_risk_delta_pct}%</b> vs. median.
+                    </p>
+                  );
+                })()}
               </div>
 
               <div className="overflow-x-auto">
                 <table className="almanac-table text-xs">
                   <thead>
                     <tr>
-                      <th>Dietary Pattern</th>
-                      <th className="text-right">Fiber (g)</th>
-                      <th className="text-right">LDL-C</th>
-                      <th className="text-right">hs-CRP</th>
+                      <th>Dietary Quintile</th>
+                      <th className="text-right">n</th>
+                      <th className="text-right">Fiber</th>
+                      <th className="text-right">Non-HDL (±CI)</th>
+                      <th className="text-right">hs-CRP (±CI)</th>
                       <th className="text-right">CVD Δ</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.clinical_biomarkers.map((a) => (
-                      <tr key={a.pattern_id}>
-                        <td className="font-semibold text-[var(--color-ink)] max-w-[140px] truncate" title={a.dietary_pattern}>
+                      <tr key={a.pattern_id} title={a.cohort_source || a.description}>
+                        <td className="font-semibold text-[var(--color-ink)] max-w-[130px] truncate" title={a.dietary_pattern}>
                           {a.dietary_pattern.split('(')[0]}
                         </td>
+                        <td className="num text-right text-[var(--color-muted)]">
+                          {(a.n_respondents ?? a.sample_size_n ?? 0).toLocaleString()}
+                        </td>
                         <td className="num text-right">{a.mean_fiber_g_day}g</td>
-                        <td className="num text-right">{a.ldl_cholesterol_mg_dl}</td>
-                        <td className="num text-right font-mono-num">{a.hs_crp_inflammation_mg_l}</td>
+                        <td className="num text-right font-mono-num">
+                          {a.non_hdl_cholesterol_mg_dl ?? a.ldl_cholesterol_mg_dl}
+                          {a.non_hdl_ci95 != null ? ` ±${a.non_hdl_ci95}` : ''}
+                        </td>
+                        <td className="num text-right font-mono-num">
+                          {a.hs_crp_inflammation_mg_l}
+                          {a.hs_crp_ci95 != null ? ` ±${a.hs_crp_ci95}` : ''}
+                        </td>
                         <td
                           className={`num text-right font-semibold ${
                             a.cardiovascular_risk_delta_pct < 0 ? 'text-[#059669]' : 'text-[var(--color-accent)]'

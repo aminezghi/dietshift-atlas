@@ -91,10 +91,27 @@ const NOVA_LABELS: Record<number, string> = {
   4: 'NOVA 4: Ultra-processed products',
 };
 
+interface EconometricCalibration {
+  country_code: string;
+  hbs_q1_food_share_pct: number;
+  hbs_q5_food_share_pct: number;
+  hbs_q1_meat_share_pm: number;
+  hbs_q5_meat_share_pm: number;
+  ehis_q1_5plus_veg_pct: number;
+  ehis_q5_5plus_veg_pct: number;
+  ehis_q1_zero_veg_pct: number;
+  empirical_own_price_elasticity: number;
+  hicp_meat_inflation_21_24_pct: number;
+  hicp_backtest_22_24_mape_pct: number;
+  empirical_ci95_rel_halfwidth: number;
+  eurostat_food_ppp_index_eu27_100: number;
+}
+
 export function App() {
   const isDark = useDarkMode();
   const [bundle, setBundle] = useState<LiveResearchBundle | null>(null);
   const [fullAgribalyse, setFullAgribalyse] = useState<AgribalyseItem[]>([]);
+  const [calibration, setCalibration] = useState<Record<string, EconometricCalibration>>({});
   const [loading, setLoading] = useState(true);
   const initialHash = useMemo(() => {
     const raw = window.location.hash.replace(/^#/, '');
@@ -140,12 +157,22 @@ export function App() {
       fetch(assetUrl('data/agribalyse_full.json'))
         .then((r) => r.json())
         .catch(() => []),
+      fetch(assetUrl('data/econometric_calibration.json'))
+        .then((r) => r.json())
+        .catch(() => ({})),
     ])
-      .then(([bundleData, agbFull]: [LiveResearchBundle, AgribalyseItem[]]) => {
-        setBundle(bundleData);
-        setFullAgribalyse(agbFull.length > 0 ? agbFull : bundleData.agribalyse);
-        setLoading(false);
-      })
+      .then(
+        ([bundleData, agbFull, calData]: [
+          LiveResearchBundle,
+          AgribalyseItem[],
+          Record<string, EconometricCalibration>,
+        ]) => {
+          setBundle(bundleData);
+          setFullAgribalyse(agbFull.length > 0 ? agbFull : bundleData.agribalyse);
+          setCalibration(calData || {});
+          setLoading(false);
+        }
+      )
       .catch((err) => {
         console.error('Failed to load research bundle:', err);
         setLoading(false);
@@ -154,6 +181,7 @@ export function App() {
 
   const currentProfile = COUNTRY_PROFILES[selectedCountry] || COUNTRY_PROFILES.IT;
   const compareProfile = COUNTRY_PROFILES[comparisonCountry] || COUNTRY_PROFILES.FR;
+  const currentCalibration = calibration[currentProfile.code] || calibration.EU27 || null;
 
   const offCategories = useMemo(() => {
     if (!bundle) return [];
@@ -191,11 +219,16 @@ export function App() {
 
   const simulatedMetrics = useMemo(() => {
     const base = currentProfile;
+    const cal = currentCalibration;
+    // Scale carbon tax price response by Eurostat HBS-calibrated own-price elasticity (falls back to -0.65)
+    const elasticityMag = Math.abs(cal?.empirical_own_price_elasticity ?? -0.65);
+    const taxPricePassThrough = (simCarbonTax / 150) * 0.18 * elasticityMag;
     const carbonFactor =
       (1 - (simPlantShift / 100) * 0.42) *
       (1 - (simWasteCut / 100) * 0.18) *
-      (1 - (simCarbonTax / 150) * 0.12);
+      (1 - taxPricePassThrough);
     const newCarbon = +(base.dailyCarbonKg * carbonFactor).toFixed(2);
+    const ci95RelHalfwidth = cal?.empirical_ci95_rel_halfwidth ?? 0.055;
 
     const waterFactor =
       (1 - (simPlantShift / 100) * 0.24) * (1 - (simWasteCut / 100) * 0.16);
@@ -217,8 +250,15 @@ export function App() {
       +(simPlantShift * 0.28 + simUpfReduction * 0.35 + (simCarbonTax / 100) * 4.2).toFixed(1)
     );
 
+    const q1FoodShare = cal?.hbs_q1_food_share_pct ?? 18.3;
+    const q5FoodShare = cal?.hbs_q5_food_share_pct ?? 14.4;
+    const q1TaxExposureRatio = q1FoodShare / Math.max(q5FoodShare, 1);
+
     return {
       newCarbon,
+      ci95RelHalfwidth,
+      elasticityMag,
+      q1TaxExposureRatio: +q1TaxExposureRatio.toFixed(2),
       carbonDeltaPct: +(((newCarbon - base.dailyCarbonKg) / base.dailyCarbonKg) * 100).toFixed(1),
       newWater,
       waterDeltaPct: +(((newWater - base.dailyWaterLiters) / base.dailyWaterLiters) * 100).toFixed(1),
@@ -242,7 +282,7 @@ export function App() {
         ),
       },
     };
-  }, [currentProfile, simPlantShift, simUpfReduction, simCarbonTax, simWasteCut]);
+  }, [currentProfile, currentCalibration, simPlantShift, simUpfReduction, simCarbonTax, simWasteCut]);
 
   const radarOption = useMemo(() => {
     const c = currentProfile.eatLancetIndex;
@@ -1081,7 +1121,7 @@ export function App() {
                 <Database className="w-3.5 h-3.5 text-[var(--color-primary)]" />
                 Registered Parquet tables (16)
               </span>
-              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">15,147 rows</span>
+              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">16,453 rows</span>
             </div>
             <div className="max-h-72 overflow-y-auto space-y-1 pr-1 font-mono-num text-[11px] divide-y divide-[var(--color-parchment-deep)]">
               <div className="flex justify-between pt-1">
@@ -1126,7 +1166,7 @@ export function App() {
               </div>
               <div className="flex justify-between pt-1">
                 <span>scrapling_retail_claims.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">39 rows</span>
+                <span className="font-semibold text-[var(--color-ink)]">1,355 rows</span>
               </div>
               <div className="flex justify-between pt-1">
                 <span>crosswalk_rosetta.parquet</span>
@@ -1173,11 +1213,11 @@ export function App() {
                     {simulatedMetrics.newCarbon}
                   </span>
                   <span className="text-xs num text-[var(--color-muted)]">
-                    ± {(simulatedMetrics.newCarbon * 0.11).toFixed(2)} kg CO₂/d (95% CI, base {currentProfile.dailyCarbonKg})
+                    ± {(simulatedMetrics.newCarbon * simulatedMetrics.ci95RelHalfwidth).toFixed(2)} kg CO₂/d (95% CI, base {currentProfile.dailyCarbonKg})
                   </span>
                 </div>
                 <div className="almanac-label text-xs mt-1">
-                  Delta: <span className="num font-semibold">{simulatedMetrics.carbonDeltaPct}%</span> | Target: 1.95 kg
+                  Delta: <span className="num font-semibold">{simulatedMetrics.carbonDeltaPct}%</span> | Target: 1.95 kg | ε={currentCalibration?.empirical_own_price_elasticity ?? -0.65}
                 </div>
               </div>
 
@@ -1313,19 +1353,29 @@ export function App() {
                     <span className="font-display-head font-semibold text-sm">
                       Distributional Equity & Regressive Incidence (Q1 vs. Q5)
                     </span>
-                    <span className="almanac-label text-[11px] font-mono-num">MTUS × NSI Quintiles</span>
+                    <span className="almanac-label text-[11px] font-mono-num">
+                      Eurostat HBS × EHIS × HICP
+                    </span>
                   </div>
                   <p className="text-xs text-[var(--color-muted)]">
-                    Evaluates whether the active policy mix (€{simCarbonTax}/t carbon price, {simPlantShift}% plant shift, {simUpfReduction}% NOVA-4 cut) is regressive for lowest-income households (Q1) relative to highest-income (Q5).
+                    Calibrated to [{currentProfile.code}] live Eurostat HBS quintile food shares (Q1:{' '}
+                    <b>{currentCalibration?.hbs_q1_food_share_pct ?? '—'}%</b> vs Q5:{' '}
+                    <b>{currentCalibration?.hbs_q5_food_share_pct ?? '—'}%</b> of household spend, food PLI{' '}
+                    <b>{currentCalibration?.eurostat_food_ppp_index_eu27_100 ?? 100}</b> vs EU27=100) and out-of-sample
+                    2022–24 HICP backtest MAPE (<b>{currentCalibration?.hicp_backtest_22_24_mape_pct ?? '—'}%</b>).
                   </p>
                   <div className="grid grid-cols-2 gap-3 pt-1">
                     <div className="almanac-well p-3">
                       <div className="almanac-label text-[11px]">Q1 (Lowest Income) Budget Impact</div>
                       <div className="text-lg font-semibold font-mono-num text-[var(--color-accent)] mt-0.5">
-                        +{((simCarbonTax / 100) * 3.8 - simPlantShift * 0.04).toFixed(1)}%
+                        +{((simCarbonTax / 100) * 1.9 * simulatedMetrics.q1TaxExposureRatio - simPlantShift * 0.04).toFixed(1)}%
                       </div>
                       <div className="text-[11px] text-[var(--color-muted)] mt-0.5">
-                        Time-poverty friction: <span className="font-semibold">High (34.2% &lt;30m prep)</span>
+                        5+ fruit/veg (EHIS):{' '}
+                        <span className="font-semibold">
+                          {currentCalibration?.ehis_q1_5plus_veg_pct ?? '—'}%
+                        </span>{' '}
+                        | 0 veg: {currentCalibration?.ehis_q1_zero_veg_pct ?? '—'}%
                       </div>
                     </div>
                     <div className="almanac-well p-3">
@@ -1334,12 +1384,19 @@ export function App() {
                         +{((simCarbonTax / 100) * 1.4 - simPlantShift * 0.02).toFixed(1)}%
                       </div>
                       <div className="text-[11px] text-[var(--color-muted)] mt-0.5">
-                        Time-poverty friction: <span className="font-semibold">Low (14.8% &lt;30m prep)</span>
+                        5+ fruit/veg (EHIS):{' '}
+                        <span className="font-semibold">
+                          {currentCalibration?.ehis_q5_5plus_veg_pct ?? '—'}%
+                        </span>{' '}
+                        | HICP meat +21–24: +{currentCalibration?.hicp_meat_inflation_21_24_pct ?? '—'}%
                       </div>
                     </div>
                   </div>
                   <div className="text-[11px] font-mono-num text-[var(--color-ink)] bg-[var(--color-parchment)] p-2 border border-[var(--color-parchment-deep)]">
-                    Policy Prescription: {simCarbonTax > 60 ? 'Regressive without rebate — pair carbon pricing with Q1 legume/produce vouchers & school canteen mandates.' : 'Moderately progressive — NOVA-4 reduction offsets carbon price incidence.'}
+                    Policy Prescription ({simulatedMetrics.q1TaxExposureRatio}× Q1/Q5 food-budget exposure):{' '}
+                    {simCarbonTax > 60
+                      ? 'Regressive without rebate — pair carbon pricing with Q1 legume/produce vouchers & school canteen mandates.'
+                      : 'Moderately progressive — NOVA-4 reduction offsets carbon price incidence.'}
                   </div>
                 </div>
 
