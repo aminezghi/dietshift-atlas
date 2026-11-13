@@ -13,7 +13,21 @@ export type MapMetric =
   | 'sayDoGapScore'
   | 'redMeat'
   | 'giTotalCount'
-  | 'giPlantSharePct';
+  | 'giPlantSharePct'
+  | 'cohdCostPpp'
+  | 'cohdUnaffordablePct';
+
+export interface CohdCountryRecord {
+  iso3: string;
+  country_name: string;
+  geojson_name: string;
+  year: number;
+  cost_healthy_diet_ppp_usd: number;
+  unaffordable_pct: number | null;
+  unaffordable_millions: number | null;
+  cost_to_food_exp_ratio: number | null;
+  share_year?: number | null;
+}
 
 export interface GICartographyItem {
   gi_id: string;
@@ -57,6 +71,7 @@ export function InteractiveChoroplethMap({
   const [metric, setMetric] = useState<MapMetric>('dailyCarbonKg');
   const [focusView, setFocusView] = useState<'europe' | 'world'>('europe');
   const [giRecords, setGiRecords] = useState<GICartographyItem[]>([]);
+  const [cohdRecords, setCohdRecords] = useState<CohdCountryRecord[]>([]);
   const [showGiPins, setShowGiPins] = useState<boolean>(!compact);
   const [giSectorFilter, setGiSectorFilter] = useState<string>('FOOD');
   const [giRoleFilter, setGiRoleFilter] = useState<string>('ALL');
@@ -89,7 +104,31 @@ export function InteractiveChoroplethMap({
       .catch(() => {
         // Ignore if not loaded yet
       });
+
+    fetch(assetUrl('data/global_benchmarks.json'))
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.cohd_latest_by_country) {
+          setCohdRecords(d.cohd_latest_by_country);
+        }
+      })
+      .catch(() => {
+        // Ignore if not loaded yet
+      });
   }, []);
+
+  const foodGiCount = useMemo(
+    () => giRecords.filter((r) => (r.product_sector || 'FOOD') === 'FOOD').length,
+    [giRecords]
+  );
+
+  const cohdByGeoName = useMemo(() => {
+    const map: Record<string, CohdCountryRecord> = {};
+    for (const c of cohdRecords) {
+      map[c.geojson_name] = c;
+    }
+    return map;
+  }, [cohdRecords]);
 
   /* Aggregate GI counts and Plant-Origin GI share per country code from all 6,845 records */
   const giCountryStats = useMemo(() => {
@@ -197,12 +236,12 @@ export function InteractiveChoroplethMap({
         getValue: (p) => p.eatLancetIndex.redMeat,
       },
       giTotalCount: {
-        label: 'Protected GI terroir density (GIview + Qualigeo)',
-        unit: 'registered PDO / PGI / TSG products',
+        label: 'Food GI terroir density (GIview + Qualigeo FOOD sector)',
+        unit: 'registered agro-food PDO / PGI / TSG',
         min: 5,
-        max: 950,
+        max: 900,
         colors: ['#d8dde6', '#8fa8b2', '#3f6f7d', '#163d4a'],
-        getValue: (p) => giCountryStats[p.code]?.total || 0,
+        getValue: (p) => giCountryStats[p.code]?.food || 0,
       },
       giPlantSharePct: {
         label: 'Plant-origin & olive oil GI share (Class 1.5 & 1.6)',
@@ -212,8 +251,24 @@ export function InteractiveChoroplethMap({
         colors: ['#d8dde6', '#8fa8b2', '#3f6f7d', '#163d4a'],
         getValue: (p) => giCountryStats[p.code]?.plantSharePct || 0,
       },
+      cohdCostPpp: {
+        label: 'Global: Cost of a healthy diet (WB/FAO 2024 PPP)',
+        unit: 'ICP PPP $ / person / day',
+        min: 2.0,
+        max: 6.5,
+        colors: ['#d8dde6', '#8fa8b2', '#983b6a', '#6e0d42'],
+        getValue: (p) => cohdByGeoName[p.geoJsonName]?.cost_healthy_diet_ppp_usd || 0,
+      },
+      cohdUnaffordablePct: {
+        label: 'Global: Share unable to afford a healthy diet (WB/FAO)',
+        unit: '% of population (latest)',
+        min: 0,
+        max: 75,
+        colors: ['#d8dde6', '#b88ca8', '#983b6a', '#6e0d42'],
+        getValue: (p) => cohdByGeoName[p.geoJsonName]?.unaffordable_pct || 0,
+      },
     }),
-    [giCountryStats]
+    [giCountryStats, cohdByGeoName]
   );
 
   const nameToCodeMap = useMemo(() => {
@@ -331,23 +386,53 @@ export function InteractiveChoroplethMap({
   const mapOption = useMemo(() => {
     if (!geoLoaded) return {};
     const m = METRIC_META[metric];
+    const isGlobalMetric = metric === 'cohdCostPpp' || metric === 'cohdUnaffordablePct';
 
-    const data = Object.values(COUNTRY_PROFILES)
+    const euByGeoName: Record<string, CountryDietaryProfile> = {};
+    Object.values(COUNTRY_PROFILES)
       .filter((p) => p.code !== 'EU27_2020')
-      .map((p) => ({
-        name: p.geoJsonName,
-        value: m.getValue(p),
-        countryCode: p.code,
-        profile: p,
-        giStat: giCountryStats[p.code],
-        itemStyle:
-          p.code === selectedCountry
-            ? {
-                borderColor: '#111827',
-                borderWidth: 2.2,
-              }
-            : undefined,
-      }));
+      .forEach((p) => {
+        euByGeoName[p.geoJsonName] = p;
+      });
+
+    const data = isGlobalMetric
+      ? cohdRecords
+          .filter((c) => {
+            const val = metric === 'cohdCostPpp' ? c.cost_healthy_diet_ppp_usd : c.unaffordable_pct;
+            return val != null && val > 0;
+          })
+          .map((c) => {
+            const euProf = euByGeoName[c.geojson_name];
+            return {
+              name: c.geojson_name,
+              value: metric === 'cohdCostPpp' ? c.cost_healthy_diet_ppp_usd : (c.unaffordable_pct ?? 0),
+              countryCode: euProf?.code,
+              profile: euProf,
+              cohd: c,
+              giStat: euProf ? giCountryStats[euProf.code] : undefined,
+              itemStyle:
+                euProf && euProf.code === selectedCountry
+                  ? { borderColor: '#111827', borderWidth: 2.2 }
+                  : undefined,
+            };
+          })
+      : Object.values(COUNTRY_PROFILES)
+          .filter((p) => p.code !== 'EU27_2020')
+          .map((p) => ({
+            name: p.geoJsonName,
+            value: m.getValue(p),
+            countryCode: p.code,
+            profile: p,
+            cohd: cohdByGeoName[p.geoJsonName],
+            giStat: giCountryStats[p.code],
+            itemStyle:
+              p.code === selectedCountry
+                ? {
+                    borderColor: '#111827',
+                    borderWidth: 2.2,
+                  }
+                : undefined,
+          }));
 
     const scatterPoints = filteredGiPins.slice(0, compact ? 450 : 2500).map((gi) => {
       const isPlant =
@@ -381,6 +466,7 @@ export function InteractiveChoroplethMap({
           seriesType?: string;
           data?: {
             profile?: CountryDietaryProfile;
+            cohd?: CohdCountryRecord;
             value?: number | number[];
             giStat?: { total: number; food: number; wine: number; spirit: number; plantSharePct: number };
             giItem?: GICartographyItem;
@@ -411,9 +497,25 @@ export function InteractiveChoroplethMap({
           }
 
           const p = params.data?.profile;
+          const cohd = params.data?.cohd;
           const gs = params.data?.giStat;
+          if (!p && cohd) {
+            return `
+              <div style="min-width:225px;">
+                <div style="font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:13px;color:#111827;border-bottom:2px solid #2d3643;padding-bottom:3px;margin-bottom:5px;">
+                  [${cohd.iso3}] ${cohd.country_name}
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px;color:#3d4654;font-family:'IBM Plex Mono',monospace;">
+                  <span>Healthy Diet: <b>$${cohd.cost_healthy_diet_ppp_usd} PPP/d</b></span>
+                  <span>Unaffordable: <b>${cohd.unaffordable_pct ?? '—'}%</b></span>
+                  <span>Headcount: <b>${cohd.unaffordable_millions ?? '—'}M</b></span>
+                  <span>Year: <b>${cohd.year}</b></span>
+                </div>
+              </div>
+            `;
+          }
           if (!p) {
-            return `<div style="font-size:12px;color:#3d4654;"><b>${params.name}</b><br/>Click to inspect jurisdiction</div>`;
+            return `<div style="font-size:12px;color:#3d4654;"><b>${params.name}</b><br/>No harmonized overlay record</div>`;
           }
           return `
             <div style="min-width:230px;">
@@ -428,8 +530,9 @@ export function InteractiveChoroplethMap({
                 <span>NOVA 4: <b>${p.eatLancetIndex.ultraProcessedShare}%</b></span>
                 <span>Plant: <b>${p.plantProteinSharePct}%</b></span>
                 <span>Cost: <b>€${p.dailyBasketCostEur}/d</b></span>
-                <span>Total GIs: <b>${gs ? gs.total : 0}</b></span>
+                <span>Food GIs: <b>${gs ? gs.food : 0}</b></span>
                 <span>Plant GI: <b>${gs ? gs.plantSharePct : 0}%</b></span>
+                ${cohd ? `<span>WB CoHD: <b>$${cohd.cost_healthy_diet_ppp_usd} PPP</b></span><span>Unafford: <b>${cohd.unaffordable_pct ?? '—'}%</b></span>` : ''}
               </div>
             </div>
           `;
@@ -526,19 +629,26 @@ export function InteractiveChoroplethMap({
         <div>
           <h2 className="text-base font-semibold flex items-center gap-2">
             <Globe2 className="w-4 h-4" />
-            Plate I. European & global dietary choropleth + GI terroir spatial layer ({giRecords.length.toLocaleString()}{' '}
-            GIs)
+            Plate I. European &amp; global dietary choropleth + GI terroir spatial layer (
+            {foodGiCount > 0 ? foodGiCount.toLocaleString() : '3,037'} Food GIs /{' '}
+            {giRecords.length > 0 ? giRecords.length.toLocaleString() : '6,845'} total)
           </h2>
           <p className="almanac-label">
-            Click any jurisdiction or toggle the 6,845 EUIPO GIview & Qualigeo terroir pins to inspect local PDO/PGI
-            heritage foods.
+            Defaults to Agro-Foodstuffs (<code>FOOD</code>: {foodGiCount.toLocaleString()}) so Wine, Spirits &amp; Craft
+            are excluded from dietary counts; switch metric for 150+ World Bank CoHD economies.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <select
             value={metric}
-            onChange={(e) => setMetric(e.target.value as MapMetric)}
+            onChange={(e) => {
+              const next = e.target.value as MapMetric;
+              setMetric(next);
+              if (next === 'cohdCostPpp' || next === 'cohdUnaffordablePct') {
+                setFocusView('world');
+              }
+            }}
             className="almanac-select"
           >
             {Object.entries(METRIC_META).map(([k, v]) => (
@@ -553,7 +663,9 @@ export function InteractiveChoroplethMap({
             className={`almanac-btn flex items-center gap-1 ${showGiPins ? 'almanac-btn--primary' : ''}`}
           >
             <Layers className="w-3.5 h-3.5" />
-            {showGiPins ? `GI Terroir Pins ON (${filteredGiPins.length.toLocaleString()})` : 'Overlay 6,845 GI Pins'}
+            {showGiPins
+              ? `GI Terroir Pins ON (${filteredGiPins.length.toLocaleString()})`
+              : `Overlay Food GI Pins (${foodGiCount > 0 ? foodGiCount.toLocaleString() : '3,037'})`}
           </button>
 
           <div className="flex items-center border border-[var(--color-ink)]">

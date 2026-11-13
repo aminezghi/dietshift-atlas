@@ -20,8 +20,8 @@ def manifest():
 
 def test_provenance_manifest_all_parquet_hashes_and_rows(manifest):
     tables = manifest["parquet_tables"]
-    assert manifest["total_parquet_tables"] == 16
-    assert len(tables) == 16
+    assert manifest["total_parquet_tables"] == 18
+    assert len(tables) == 18
 
     observed_total_rows = 0
     for name, meta in tables.items():
@@ -35,7 +35,7 @@ def test_provenance_manifest_all_parquet_hashes_and_rows(manifest):
         observed_total_rows += pf.metadata.num_rows
 
     assert observed_total_rows == manifest["total_rows"]
-    assert observed_total_rows >= 16000
+    assert observed_total_rows >= 17500
 
 
 def test_nhanes_clinical_biomarker_invariants():
@@ -102,3 +102,37 @@ def test_scrapling_retail_claims_schema_and_coverage():
 
     prices = [r["price_eur"] for r in rows]
     assert all(isinstance(p, (int, float)) and 0 < p < 500 for p in prices)
+
+
+def test_poore_nemecek_global_lca_invariants():
+    parquet_path = PARQUET_DIR / "global_poore_nemecek_lca.parquet"
+    assert parquet_path.exists()
+    table = pq.read_table(parquet_path)
+    assert table.num_rows >= 40
+    rows = {r["food_item"]: r for r in table.to_pylist()}
+    assert "Beef (beef herd)" in rows and "Peas" in rows
+    beef = rows["Beef (beef herd)"]
+    peas = rows["Peas"]
+    assert beef["ghg_kg_co2eq_per_kg"] > 50.0
+    assert peas["ghg_kg_co2eq_per_kg"] < 2.0
+    assert 0.0 <= beef["transport_share_pct"] < 5.0
+    assert beef["land_use_m2_per_kg"] > peas["land_use_m2_per_kg"]
+
+
+def test_world_bank_cohd_global_affordability_invariants():
+    parquet_path = PARQUET_DIR / "global_healthy_diet_affordability.parquet"
+    bench_path = DATA_DIR / "global_benchmarks.json"
+    assert parquet_path.exists() and bench_path.exists()
+
+    table = pq.read_table(parquet_path)
+    assert table.num_rows >= 1000
+    rows = table.to_pylist()
+    assert len({r["iso3"] for r in rows}) >= 150
+    assert max(r["year"] for r in rows) >= 2024
+
+    bench = json.loads(bench_path.read_text(encoding="utf-8"))
+    by_iso = {c["iso3"]: c for c in bench["cohd_latest_by_country"]}
+    for iso in ("ITA", "FRA", "DEU", "USA", "BRA", "IND", "NGA"):
+        assert iso in by_iso
+        assert 1.0 < by_iso[iso]["cost_healthy_diet_ppp_usd"] < 15.0
+        assert 0.0 <= by_iso[iso]["unaffordable_pct"] <= 100.0

@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-11-13T09:50:08.421136+00:00",
-  "pipeline": "build_deep_empirical_pipeline.py + harvest_raw_prices_scrapling.py",
+  "generated_at_utc": "2026-11-13T10:58:44.928971+00:00",
+  "pipeline": "build_deep_empirical_pipeline.py + harvest_raw_prices_scrapling.py + build_international_benchmarks.py",
   "raw_source_sha256": {
     "NHANES_DEMO_L.XPT": "ca4374a158b493b8b0163e1388da21d57a18d1b9cecff2aa4e2fa2bec494fe23",
     "NHANES_DR1TOT_L.XPT": "73a3097aab64000f9c1d138367363ca605968b691e349981132bd6032ca6c9ef",
@@ -11,7 +11,19 @@
     "Eurostat_hbs_t223.json": "ad799bf71c294bf612be8b7f4ba3dddc56803caee052e1b3139279832e2aac8e",
     "Eurostat_ehis_fv.json": "90a7152b0413bb4638bbcc7639cb84df2821814450ceaa5454df762b2930e3b9",
     "Eurostat_hicp_midx.json": "8ff489a4dd60d465d4bc6cef6d76836f336c5641080ba219cecdd32a5da9a6cd",
-    "Eurostat_ppp_a01.json": "ecb1c0839f6746021e876f702f174c621356eba5ea87e23cadc5cad816445200"
+    "Eurostat_ppp_a01.json": "ecb1c0839f6746021e876f702f174c621356eba5ea87e23cadc5cad816445200",
+    "OWID_food-emissions-supply-chain.csv": "c2777cafeb0df1a909bb9ffe94dc51c49e0f6a92465ef7de8f0358dc250aa67a",
+    "OWID_ghg-per-kg-poore.csv": "aa9425a00b37eb1e8d716596e67b3e072864d9c14b67b519aec618d69296e36a",
+    "OWID_ghg-per-protein-poore.csv": "475d7903fe1e012bf369cfaee4fca9905dea6e62aa9025ba126ead7219d7585e",
+    "OWID_ghg-kcal-poore.csv": "665479712f417dabfab17d75d8e77f927595f8f14b807fe42cadf7eac2f682b2",
+    "OWID_land-use-per-kg-poore.csv": "b1c92be763c8096a09cc4d0454b0bf6a2d4016428b29999473847e98e645bdfd",
+    "OWID_water-withdrawals-per-kg-poore.csv": "1bf248d1afa10c60f6c752e1dd8d01afe07f088902affcf1b3d2cd68b972fca7",
+    "OWID_scarcity-water-per-kg-poore.csv": "639fe727243a525d17f1b568ca6b1a809fa8c11655821999dd94d6b46a441572",
+    "OWID_eutrophying-emissions-per-kg-poore.csv": "11a0ab11f91c4121082bccea1297439ff031c07699ddcd77149a791fae47e960",
+    "OWID_cost-healthy-diet.csv": "2e9464d738fd007c48e5763d7f0cf487a06b64b2548af57f3a3defc5cb0ab951",
+    "OWID_share-healthy-diet-unaffordable.csv": "d270a39b8ecbde1b52aa5ab94e81c27276a67bf7d7bdebffbd131d3a09b15f77",
+    "OWID_number-healthy-diet-unaffordable.csv": "078aeecdea609dbff24b4e42f5ecd9802d601ed1994bed8d7bee81510e93a415",
+    "OWID_cost-healthy-diet-share-food-expenditure.csv": "8c710b064e7c1be749e9925614f2e8388237fa02749357f21e3b2748a1930a74"
   },
   "parquet_tables": {
     "agribalyse_31.parquet": {
@@ -55,6 +67,18 @@
       "columns": 24,
       "bytes": 404856,
       "sha256": "5557289521e26f6b0d19c3f3d649b9655fc52f5f6641e76aaa155ccb8bed2879"
+    },
+    "global_healthy_diet_affordability.parquet": {
+      "rows": 1399,
+      "columns": 9,
+      "bytes": 23530,
+      "sha256": "50e1edef2ae530c6824392cd16359ec3683508a9c1ff33f041fe50c53097d8e7"
+    },
+    "global_poore_nemecek_lca.parquet": {
+      "rows": 45,
+      "columns": 19,
+      "bytes": 18107,
+      "sha256": "93c18f1153c8c1ae86f5c6ccdc655025dd831c01e968a88eb443b422092b9d42"
     },
     "gs1_immagino_observatory.parquet": {
       "rows": 61,
@@ -111,6 +135,6 @@
       "sha256": "aea52660a38f5b827a14a9b24f41b91ade357a2ce8f7aa53088e6e72e5cf39e0"
     }
   },
-  "total_parquet_tables": 16,
-  "total_rows": 16453
+  "total_parquet_tables": 18,
+  "total_rows": 17897
 }
