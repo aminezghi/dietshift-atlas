@@ -10,6 +10,21 @@ export default defineConfig({
     port: 5173,
   },
   build: {
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 500,
+    rolldownOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('@duckdb/duckdb-wasm')) {
+            return 'vendor-duckdb'
+          }
+          if (id.includes('echarts') || id.includes('zrender')) {
+            return 'vendor-echarts'
+          }
+          if (id.includes('node_modules/react') || id.includes('node_modules/lucide-react')) {
+            return 'vendor-react'
+          }
+        },
+      },
+    },
   },
 })

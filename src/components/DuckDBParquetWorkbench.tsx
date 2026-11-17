@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import ReactECharts from './ThemedEChart';
 import { Database, Play, Sparkles, Terminal } from 'lucide-react';
-import { runDuckDBQuery } from '../services/duckdbEngine';
+import { getDuckDBConnection, getDuckDBViewAvailability, runDuckDBQuery } from '../services/duckdbEngine';
+import { classifyDuckDBSqlError, type ResourceDisclosure } from '../utils/resourceAvailability';
+import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
 
 interface PresetQuery {
   id: string;
@@ -52,24 +54,26 @@ GROUP BY country_name, income_quintile, quintile_num
 ORDER BY country_name, quintile_num;`,
   },
   {
-    id: 'timesfm_validation',
-    title: '3. Google TimesFM 2.0 vs. ETS forecast evaluation (2026–2030)',
-    badge: 'ml_timesfm_forecasts.parquet',
+    id: 'statistical_forecast_validation',
+    title: '3. Leak-free HICP statistical backtests & projections (2015–2030)',
+    badge: 'statistical_price_forecasts.parquet',
     description:
-      'Queries Google TimesFM 2.0 median & 10th–90th percentile forecasts and compares out-of-sample chronological validation MAE.',
+      'Compares out-of-sample 2023–2025 held-out MAE/RMSE across Damped ETS, Holt ETS, Ridge trend, and Drift naive baselines on observed Eurostat/ONS HICP series.',
     sql: `SELECT 
   country_label AS Country,
   indicator_name AS Indicator,
-  year AS Forecast_Year,
-  timesfm_p50 AS TimesFM_Median,
-  timesfm_p10 AS TimesFM_P10,
-  timesfm_p90 AS TimesFM_P90,
-  ets_baseline AS ETS_Baseline,
-  timesfm_val_mae AS TimesFM_MAE,
-  ets_val_mae AS ETS_MAE
-FROM ml_timesfm_forecasts
-WHERE year IN (2026, 2028, 2030) AND indicator_name LIKE 'Plant-Protein%'
-ORDER BY Country, Forecast_Year;`,
+  year AS Year,
+  split_role AS Split,
+  actual_value AS Observed,
+  damped_ets_p50 AS Damped_ETS_P50,
+  damped_ets_p10 AS P10_Lower,
+  damped_ets_p90 AS P90_Upper,
+  ets_baseline AS Holt_ETS,
+  damped_ets_val_mae AS Damped_MAE,
+  naive_val_mae AS Drift_Naive_MAE
+FROM statistical_price_forecasts
+WHERE year IN (2024, 2025, 2028, 2030) AND indicator_name LIKE 'Healthy Whole-Food%'
+ORDER BY Country, Year;`,
   },
   {
     id: 'agribalyse_full_2451',
@@ -183,7 +187,7 @@ ORDER BY Students_M DESC;`,
   },
   {
     id: 'poore_global_lca',
-    title: '9. Global Farm-Level LCA & Transport Share (Poore & Nemecek 2018)',
+    title: '10. Global Farm-Level LCA & Transport Share (Poore & Nemecek 2018)',
     badge: 'global_poore_nemecek_lca.parquet (45 rows)',
     description:
       '38,700 farms in 119 countries: decomposes total kg CO2eq/kg across farm, land use, feed, transport, and freshwater withdrawals.',
@@ -201,7 +205,7 @@ ORDER BY Total_GHG_kg DESC;`,
   },
   {
     id: 'wb_cohd_global',
-    title: '10. Global Cost & Unaffordability of a Healthy Diet (World Bank/FAO 2024)',
+    title: '11. Global Cost & Unaffordability of a Healthy Diet (World Bank/FAO 2024)',
     badge: 'global_healthy_diet_affordability.parquet (1,399 rows)',
     description:
       'Cross-country ICP PPP$/day cost of a healthy diet, population share unable to afford it, and cost-to-food-expenditure ratio.',
@@ -217,6 +221,22 @@ WHERE year = 2024
   AND iso3 IN ('ITA','FRA','DEU','ESP','NLD','POL','SWE','GBR','USA','BRA','IND','CHN','JPN','NGA')
 ORDER BY Unaffordable_Pct DESC NULLS LAST;`,
   },
+  {
+    id: 'classification_audit',
+    title: '12. Multi-taxonomy harmonisation & unmatched gap audit',
+    badge: 'classification_mappings.parquet (161 rules)',
+    description:
+      'Summarizes exact, hierarchical, approximate, ambiguous, and unmatched classification bridges across Agribalyse, FoodEx2, Open Food Facts, and COICOP.',
+    sql: `SELECT 
+  source_system AS Source_Taxonomy,
+  target_system AS Target_Taxonomy,
+  mapping_type AS Relationship,
+  COUNT(*) AS Mapping_Rules,
+  SUM(source_item_count) AS Source_Items_Covered
+FROM classification_mappings
+GROUP BY source_system, target_system, mapping_type
+ORDER BY source_system, Mapping_Rules DESC;`,
+  },
 ];
 
 export function DuckDBParquetWorkbench({ selectedCountry }: { selectedCountry: string }) {
@@ -225,75 +245,92 @@ export function DuckDBParquetWorkbench({ selectedCountry }: { selectedCountry: s
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [elapsedMs, setElapsedMs] = useState<number | null>(null);
   const [running, setRunning] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [sqlDisclosure, setSqlDisclosure] = useState<ResourceDisclosure | null>(null);
+  const [countsLoaded, setCountsLoaded] = useState<boolean>(false);
   const [tableCounts, setTableCounts] = useState<{
-    agribalyse: number;
-    off: number;
-    efsa: number;
-    nsi: number;
-    rosetta: number;
-    timesfm: number;
-    consumerPulse: number;
-    socialDiscourse: number;
-    giTerroir: number;
+    agribalyse: number | null;
+    off: number | null;
+    efsa: number | null;
+    nsi: number | null;
+    rosetta: number | null;
+    mappings: number | null;
+    forecasts: number | null;
+    consumerPulse: number | null;
+    socialDiscourse: number | null;
+    giTerroir: number | null;
+    cohd: number | null;
+    poore: number | null;
+    scrapling: number | null;
   }>({
-    agribalyse: 2451,
-    off: 3740,
-    efsa: 1080,
-    nsi: 150,
-    rosetta: 15,
-    timesfm: 448,
-    consumerPulse: 8,
-    socialDiscourse: 129,
-    giTerroir: 6845,
+    agribalyse: null,
+    off: null,
+    efsa: null,
+    nsi: null,
+    rosetta: null,
+    mappings: null,
+    forecasts: null,
+    consumerPulse: null,
+    socialDiscourse: null,
+    giTerroir: null,
+    cohd: null,
+    poore: null,
+    scrapling: null,
   });
 
   const executeSql = async (queryToRun: string) => {
     setRunning(true);
-    setError(null);
+    setSqlDisclosure(null);
     try {
       const res = await runDuckDBQuery(queryToRun);
       setColumns(res.columns);
       setRows(res.rows);
       setElapsedMs(res.elapsedMs);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err));
+      setSqlDisclosure(classifyDuckDBSqlError(err));
     } finally {
       setRunning(false);
     }
   };
 
   useEffect(() => {
+    const viewProbePairs: Array<[keyof typeof tableCounts, string]> = [
+      ['agribalyse', 'agribalyse'],
+      ['off', 'openfoodfacts'],
+      ['efsa', 'efsa_foodex2'],
+      ['nsi', 'nsi_subnational_quintiles'],
+      ['rosetta', 'crosswalk_rosetta'],
+      ['mappings', 'classification_mappings'],
+      ['forecasts', 'statistical_price_forecasts'],
+      ['consumerPulse', 'consumer_behavior_pulse'],
+      ['socialDiscourse', 'social_discourse_velocity'],
+      ['giTerroir', 'gi_terroir_registry'],
+      ['cohd', 'global_healthy_diet_affordability'],
+      ['poore', 'global_poore_nemecek_lca'],
+      ['scrapling', 'scrapling_retail_claims'],
+    ];
+
     (async () => {
-      try {
-        const countRes = await runDuckDBQuery(`
-          SELECT 
-            (SELECT COUNT(*) FROM agribalyse) AS agb,
-            (SELECT COUNT(*) FROM openfoodfacts) AS off_cnt,
-            (SELECT COUNT(*) FROM efsa_foodex2) AS efsa_cnt,
-            (SELECT COUNT(*) FROM nsi_subnational_quintiles) AS nsi_cnt,
-            (SELECT COUNT(*) FROM crosswalk_rosetta) AS ros_cnt,
-            (SELECT COUNT(*) FROM ml_timesfm_forecasts) AS tfm_cnt,
-            (SELECT COUNT(*) FROM consumer_behavior_pulse) AS cbp_cnt,
-            (SELECT COUNT(*) FROM social_discourse_velocity) AS sdv_cnt,
-            (SELECT COUNT(*) FROM gi_terroir_registry) AS gi_cnt
-        `);
-        if (countRes.rows[0]) {
-          setTableCounts({
-            agribalyse: Number(countRes.rows[0].agb || 2451),
-            off: Number(countRes.rows[0].off_cnt || 3740),
-            efsa: Number(countRes.rows[0].efsa_cnt || 1080),
-            nsi: Number(countRes.rows[0].nsi_cnt || 150),
-            rosetta: Number(countRes.rows[0].ros_cnt || 15),
-            timesfm: Number(countRes.rows[0].tfm_cnt || 448),
-            consumerPulse: Number(countRes.rows[0].cbp_cnt || 8),
-            socialDiscourse: Number(countRes.rows[0].sdv_cnt || 129),
-            giTerroir: Number(countRes.rows[0].gi_cnt || 6845),
-          });
+      await getDuckDBConnection();
+      const { unavailableViews } = getDuckDBViewAvailability();
+      const unavailableSet = new Set(unavailableViews);
+      const probedCounts: Partial<typeof tableCounts> = {};
+      for (const [stateKey, viewName] of viewProbePairs) {
+        if (unavailableSet.has(viewName)) {
+          probedCounts[stateKey] = null;
+          continue;
         }
-      } catch {
-        // Fallback counts already set
+        try {
+          const r = await runDuckDBQuery(`SELECT COUNT(*) AS cnt FROM ${viewName}`);
+          const cnt = r.rows[0]?.cnt;
+          const num = typeof cnt === 'number' ? cnt : Number(cnt);
+          probedCounts[stateKey] = Number.isFinite(num) ? num : null;
+        } catch {
+          probedCounts[stateKey] = null;
+        }
       }
+
+      setTableCounts((prev) => ({ ...prev, ...probedCounts }));
+      setCountsLoaded(true);
       executeSql(PRESET_QUERIES[0].sql);
     })();
   }, []);
@@ -367,6 +404,16 @@ ORDER BY region_name, quintile_num;`;
     };
   })();
 
+  const formatCount = (n: number | null) =>
+    n !== null ? n.toLocaleString() : countsLoaded ? 'excluded' : '…';
+
+  const trackBInactivePresets = new Set(
+    [
+      countsLoaded && tableCounts.giTerroir === null ? 'gi_terroir_vs_lca' : null,
+      countsLoaded && tableCounts.socialDiscourse === null ? 'time_use_poverty' : null,
+    ].filter(Boolean) as string[]
+  );
+
   return (
     <div className="space-y-5">
       <div className="almanac-sheet p-5">
@@ -374,61 +421,79 @@ ORDER BY region_name, quintile_num;`;
           <div>
             <h2 className="text-lg font-semibold flex items-center gap-2">
               <Database className="w-4 h-4" />
-              Section IV. DuckDB-Wasm Columnar SQL Engine over Apache Parquet
+              Section V. DuckDB-Wasm Columnar SQL Engine over Apache Parquet
             </h2>
             <p className="almanac-label">
-              Client-side analytical SQL over six ZSTD-compressed Parquet files registered in memory.
+              Client-side analytical SQL over ZSTD-compressed Apache Parquet files available in this archive ({countsLoaded && tableCounts.giTerroir === null ? '13 open Track A tables active; 6 Track B tables excluded' : 'up to 19 Parquet views registered in browser memory'}).
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs font-mono-num">
             <span className="px-2 py-0.5 almanac-well">
-              agribalyse ({tableCounts.agribalyse.toLocaleString()})
+              agribalyse ({formatCount(tableCounts.agribalyse)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              efsa_foodex2 ({tableCounts.efsa.toLocaleString()})
+              efsa_foodex2 ({formatCount(tableCounts.efsa)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              openfoodfacts ({tableCounts.off.toLocaleString()})
+              openfoodfacts ({formatCount(tableCounts.off)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              nsi_quintiles ({tableCounts.nsi})
+              nsi_quintiles ({formatCount(tableCounts.nsi)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              crosswalk_rosetta ({tableCounts.rosetta})
+              crosswalk_rosetta ({formatCount(tableCounts.rosetta)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              ml_timesfm ({tableCounts.timesfm})
+              classification_mappings ({formatCount(tableCounts.mappings)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              consumer_pulse ({tableCounts.consumerPulse})
+              statistical_price_forecasts ({formatCount(tableCounts.forecasts)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              social_discourse ({tableCounts.socialDiscourse})
+              scrapling_retail ({formatCount(tableCounts.scrapling)})
             </span>
             <span className="px-2 py-0.5 almanac-well">
-              gi_terroir ({tableCounts.giTerroir})
+              wb_cohd ({formatCount(tableCounts.cohd)})
+            </span>
+            <span className="px-2 py-0.5 almanac-well">
+              poore_lca ({formatCount(tableCounts.poore)})
+            </span>
+            <span className="px-2 py-0.5 almanac-well">
+              gi_terroir ({formatCount(tableCounts.giTerroir)})
             </span>
           </div>
         </div>
 
         {/* Preset Query Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mb-4">
-          {PRESET_QUERIES.map((pq) => (
-            <button
-              key={pq.id}
-              onClick={() => {
-                setSql(pq.sql);
-                executeSql(pq.sql);
-              }}
-              className="text-left p-3 almanac-well hover:bg-[var(--color-sheet)] transition cursor-pointer flex flex-col justify-between"
-            >
-              <div>
-                <div className="font-display-head font-semibold text-xs mb-1">{pq.title}</div>
-                <p className="almanac-label text-xs leading-relaxed mb-2">{pq.description}</p>
-              </div>
-              <span className="text-[11px] font-mono-num text-[var(--color-accent)]">{pq.badge}</span>
-            </button>
-          ))}
+          {PRESET_QUERIES.map((pq) => {
+            const isTrackBUnavailable = trackBInactivePresets.has(pq.id);
+            return (
+              <button
+                key={pq.id}
+                onClick={() => {
+                  setSql(pq.sql);
+                  executeSql(pq.sql);
+                }}
+                className={`text-left p-3 almanac-well hover:bg-[var(--color-sheet)] transition cursor-pointer flex flex-col justify-between ${
+                  isTrackBUnavailable ? 'opacity-75 border border-dashed border-[#6b4c1b]/60' : ''
+                }`}
+              >
+                <div>
+                  <div className="font-display-head font-semibold text-xs mb-1">
+                    {pq.title}
+                    {isTrackBUnavailable && (
+                      <span className="ml-1.5 px-1.5 py-0.5 text-[10px] font-mono-num border border-[#6b4c1b]/50 text-[#6b4c1b]">
+                        Track B Excluded
+                      </span>
+                    )}
+                  </div>
+                  <p className="almanac-label text-xs leading-relaxed mb-2">{pq.description}</p>
+                </div>
+                <span className="text-[11px] font-mono-num text-[var(--color-accent)]">{pq.badge}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* SQL Editor & Live Chart */}
@@ -437,7 +502,7 @@ ORDER BY region_name, quintile_num;`;
             <div className="flex items-center justify-between mb-1.5">
               <span className="almanac-label flex items-center gap-1.5">
                 <Terminal className="w-3.5 h-3.5" />
-                SQL statement editor (views: agribalyse, efsa_foodex2, openfoodfacts, crosswalk_rosetta, nsi_subnational_quintiles, ml_timesfm_forecasts)
+                SQL statement editor (open views: agribalyse, efsa_foodex2, openfoodfacts, crosswalk_rosetta, nsi_subnational_quintiles, statistical_price_forecasts, scrapling_retail_claims, ...)
               </span>
               <div className="flex items-center gap-2">
                 <button onClick={filterCountrySql} className="almanac-btn flex items-center gap-1">
@@ -458,9 +523,9 @@ ORDER BY region_name, quintile_num;`;
               rows={8}
               className="w-full almanac-ink-band p-3 font-mono-num text-xs focus:outline-none"
             />
-            {error && (
-              <div className="mt-2 p-2.5 almanac-well text-xs text-[var(--color-accent)] font-mono-num">
-                SQL error: {error}
+            {sqlDisclosure && (
+              <div className="mt-2">
+                <ResourceDisclosureBanner disclosure={sqlDisclosure} compact />
               </div>
             )}
           </div>

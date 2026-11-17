@@ -1,21 +1,35 @@
 """
+[DEPRECATED FOR OPEN FOOD FACTS REGENERATION — LEGACY IMPUTATION RISK]
 DietShift Atlas v3.5 — Multi-Layer Consumer Behavior, Retail Product Expansion (3,500+ items)
 & Digital Infodemiology Harvester (Wikimedia REST API, HN Algolia Social API, OpenAlex,
 Eurostat HICP/HBS/EHIS, INE Spain WSTempus, and D4Vinci/Scrapling Adaptive Fetcher).
 
-Can be run in two modes:
-1. Standard HTTP / REST API mode (zero-config, uses urllib + DuckDB).
-2. Adaptive Web-Scraping mode with D4Vinci/Scrapling (`pip install scrapling`) for
-   extracting dynamic supermarket/NSI tables and Google Trends/Reddit feeds with
-   TLS-fingerprint impersonation (`StealthyFetcher` / `Fetcher`).
+WARNING: Lines 99–126 silently impute missing Open Food Facts nutrients (e.g. proteins=6.5g,
+kcal=210, fiber=2.2g, salt=0.65g), Eco-Score ('C'/52.0), and NOVA (3), and overwrite
+public/data/parquet/openfoodfacts_eu.parquet + public/data/live_research_bundle.json.
+Use scripts/refresh_off_clean.py instead. Pass --allow-legacy-imputation to opt in.
 """
 
+import argparse
 import json
 import math
 import os
+import sys
 import urllib.parse
 import urllib.request
 import duckdb
+
+_parser = argparse.ArgumentParser(description="Deprecated legacy OFF scaling script")
+_parser.add_argument("--allow-legacy-imputation", action="store_true", help="Explicit opt-in required to execute legacy OFF overwrites")
+_args, _ = _parser.parse_known_args()
+if not _args.allow_legacy_imputation:
+    print(
+        "[BLOCKED - DEPRECATED] scripts/build_consumer_pulse_and_scale_off.py contains legacy constant nutriment "
+        "imputation and overwrites production Open Food Facts artifacts. Use scripts/refresh_off_clean.py instead, "
+        "or pass --allow-legacy-imputation intentionally.",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
 
 try:
     from scrapling.fetchers import Fetcher as ScraplingFetcher

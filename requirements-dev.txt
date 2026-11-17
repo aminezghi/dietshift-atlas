@@ -1,0 +1,8 @@
+# ==============================================================================
+# DietShift Atlas — Lightweight QA Validation & Playwright Chromium Dependencies
+# Use when running `npm run qa` without reinstalling heavy scraping toolchains.
+# ==============================================================================
+duckdb==2.0.0
+pyarrow>=18.0.0
+pytest>=8.0.0
+playwright>=1.53.0

@@ -13,7 +13,18 @@ import {
   Globe2
 } from 'lucide-react';
 import { runDuckDBQuery } from '../services/duckdbEngine';
-import { assetUrl } from '../utils/assetPath';
+import { fetchCachedJson } from '../services/dataProvider';
+import { classifyResourceError, type ResourceDisclosure } from '../utils/resourceAvailability';
+import { DataNatureBadge } from './DataNatureBadge';
+import { NutritionComparisonPanel } from './NutritionComparisonPanel';
+import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
+import {
+  type ComparisonBasis,
+  type ScraplingNutritionShape,
+  evaluateProductNutrition,
+  fromScraplingProduct,
+  summarizeNutrientMetric,
+} from '../analytics/nutritionEngine';
 
 interface MetaprodottoRecord {
   record_type: string;
@@ -79,15 +90,27 @@ interface ScraplingProduct {
   fenomeno_category: string;
   primary_claim: string;
   labels_list: string;
-  energy_kcal: number;
-  proteins_g: number;
-  sugars_g: number;
-  saturated_fats_g: number;
-  carbohydrates_g: number;
-  fiber_g: number;
-  salt_g: number;
-  nutriscore: string;
-  ecoscore: string;
+  energy_kcal: number | null;
+  proteins_g: number | null;
+  sugars_g: number | null;
+  saturated_fats_g: number | null;
+  carbohydrates_g: number | null;
+  fiber_g: number | null;
+  salt_g: number | null;
+  nutrition_data_status?: 'observed' | 'partial' | 'missing';
+  nutriscore: string | null;
+  ecoscore: string | null;
+  nova_group?: number | null;
+  price_eur?: number;
+  price_per?: string;
+  product_quantity?: number | null;
+  product_quantity_unit?: string | null;
+  quantity_label?: string | null;
+  retailer?: string;
+  country_code?: string;
+  city?: string;
+  observed_date?: string;
+  data_source?: string;
   image_url?: string;
   scraped_with?: string;
 }
@@ -159,9 +182,27 @@ const EU_COUNTRIES: Array<{ code: string; name: string; flag: string }> = [
   { code: 'EU27', name: 'EU-27 Aggregated', flag: '🇪🇺' },
 ];
 
-export const GS1ImmaginoObservatory: React.FC = () => {
+interface GS1ImmaginoObservatoryProps {
+  selectedCountry?: string;
+  onSelectCountry?: (code: string) => void;
+}
+
+export const GS1ImmaginoObservatory: React.FC<GS1ImmaginoObservatoryProps> = ({
+  selectedCountry: externalCountry,
+  onSelectCountry,
+}) => {
   const isDark = useDarkMode();
-  const [selectedCountry, setSelectedCountry] = useState<string>('IT');
+  const normalizedExternal = externalCountry === 'EU27_2020' ? 'EU27' : externalCountry;
+  const isExternalSupported = Boolean(normalizedExternal && EU_COUNTRIES.some(c => c.code === normalizedExternal));
+  const [countryOverride, setCountryOverride] = useState<{ forProp: string | undefined; value: string } | null>(null);
+  const effectiveOverride =
+    countryOverride !== null && countryOverride.forProp === externalCountry
+      ? countryOverride.value
+      : null;
+  const isCountryFallback = Boolean(externalCountry && !effectiveOverride && !isExternalSupported);
+  const selectedCountry = effectiveOverride ?? (isExternalSupported && normalizedExternal ? normalizedExternal : 'IT');
+  const [loadDisclosures, setLoadDisclosures] = useState<ResourceDisclosure[]>([]);
+  const [retryTick, setRetryTick] = useState<number>(0);
   const [bundle, setBundle] = useState<GS1Bundle | null>(null);
   const [panEuBundle, setPanEuBundle] = useState<PanEUCountry[]>([]);
   const [scraplingProducts, setScraplingProducts] = useState<ScraplingProduct[]>([]);
@@ -173,6 +214,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
   // Agentic AI Basket Planner State
   const [plannerGoal, setPlannerGoal] = useState<'clean_hypertrophy' | 'mediterranean_terroir' | 'gut_allergen_free'>('clean_hypertrophy');
   const [plannerLoading, setPlannerLoading] = useState<boolean>(false);
+  const [retailNutritionBasis, setRetailNutritionBasis] = useState<ComparisonBasis>('per_100g');
   const [plannerResults, setPlannerResults] = useState<{
     basket: any[];
     totalKcal: number;
@@ -188,23 +230,67 @@ export const GS1ImmaginoObservatory: React.FC = () => {
   const crossBorderChartRef = useRef<HTMLDivElement>(null);
   const crossBorderRadarRef = useRef<HTMLDivElement>(null);
 
-  // Load bundle and live scrapling items
+  // Load bundle and live scrapling items via shared cached provider
   useEffect(() => {
-    fetch(assetUrl('data/gs1_immagino_bundle.json'))
-      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
-      .then(data => setBundle(data))
-      .catch(err => console.error('Error loading GS1 bundle:', err));
+    let cancelled = false;
+    const forceRetry = retryTick > 0;
+    const availableSummary =
+      'Open Prices EU & Open Food Facts retail product slice (1,355 observed SKUs) remains live in the Retail Feed tab and Nutrition Comparison sub-panel.';
 
-    fetch(assetUrl('data/pan_eu_retail_bundle.json'))
-      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
-      .then(data => setPanEuBundle(data))
-      .catch(err => console.error('Error loading Pan-EU bundle:', err));
+    Promise.allSettled([
+      fetchCachedJson<GS1Bundle>('data/gs1_immagino_bundle.json', { forceRetry }),
+      fetchCachedJson<PanEUCountry[]>('data/pan_eu_retail_bundle.json', { forceRetry }),
+      fetchCachedJson<ScraplingProduct[]>('data/scrapling_retail_claims.json', { forceRetry }),
+    ]).then(([gs1Res, panEuRes, scraplingRes]) => {
+      if (cancelled) return;
+      const nextDisclosures: ResourceDisclosure[] = [];
 
-    fetch(assetUrl('data/scrapling_retail_claims.json'))
-      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
-      .then(data => setScraplingProducts(data))
-      .catch(err => console.error('Error loading Scrapling claims:', err));
-  }, []);
+      if (gs1Res.status === 'fulfilled') {
+        setBundle(gs1Res.value);
+      } else {
+        setBundle(null);
+        nextDisclosures.push(
+          classifyResourceError(gs1Res.reason, {
+            resourcePath: 'data/gs1_immagino_bundle.json',
+            availableSummary,
+          })
+        );
+      }
+
+      if (panEuRes.status === 'fulfilled') {
+        setPanEuBundle(panEuRes.value);
+      } else {
+        setPanEuBundle([]);
+        nextDisclosures.push(
+          classifyResourceError(panEuRes.reason, {
+            resourcePath: 'data/pan_eu_retail_bundle.json',
+            availableSummary,
+          })
+        );
+      }
+
+      if (scraplingRes.status === 'fulfilled') {
+        setScraplingProducts(scraplingRes.value);
+        if (gs1Res.status !== 'fulfilled' && panEuRes.status !== 'fulfilled') {
+          setActiveTab((prev) => (prev === 'metaprodotto' ? 'scrapling_feed' : prev));
+        }
+      } else {
+        setScraplingProducts([]);
+        nextDisclosures.push(
+          classifyResourceError(scraplingRes.reason, {
+            resourcePath: 'data/scrapling_retail_claims.json',
+            resourceLabel: 'Open Prices EU retail price & nutrition slice',
+          })
+        );
+      }
+
+      setLoadDisclosures(nextDisclosures);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [retryTick]);
 
   const activeCountryData = useMemo(() => {
     return panEuBundle.find(c => c.country_code === selectedCountry) || panEuBundle[0];
@@ -655,10 +741,13 @@ export const GS1ImmaginoObservatory: React.FC = () => {
             sugars_g, 
             saturated_fats_g,
             nutriscore,
-            ecoscore
+            ecoscore,
+            price_eur,
+            retailer,
+            country_code
           FROM scrapling_retail_claims
-          WHERE proteins_g >= 5.0 OR sugars_g <= 8.0
-          ORDER BY proteins_g DESC, saturated_fats_g ASC
+          WHERE nutrition_data_status = 'observed' AND proteins_g >= 5.0 AND energy_kcal IS NOT NULL
+          ORDER BY proteins_g DESC, COALESCE(saturated_fats_g, 999) ASC
           LIMIT 6;
         `;
       } else if (goal === 'mediterranean_terroir') {
@@ -672,9 +761,13 @@ export const GS1ImmaginoObservatory: React.FC = () => {
             sugars_g, 
             saturated_fats_g,
             nutriscore,
-            ecoscore
+            ecoscore,
+            price_eur,
+            retailer,
+            country_code
           FROM scrapling_retail_claims
-          WHERE fenomeno_category LIKE '%Italianit%' OR fenomeno_category LIKE '%Sostenibilit%' OR fenomeno_category LIKE '%Terroir%'
+          WHERE nutrition_data_status = 'observed' AND energy_kcal IS NOT NULL
+            AND (fenomeno_category LIKE '%Terroir%' OR fenomeno_category LIKE '%Organic%' OR fenomeno_category LIKE '%Plant-based%')
           ORDER BY energy_kcal ASC
           LIMIT 6;
         `;
@@ -689,25 +782,34 @@ export const GS1ImmaginoObservatory: React.FC = () => {
             sugars_g, 
             saturated_fats_g,
             nutriscore,
-            ecoscore
+            ecoscore,
+            price_eur,
+            retailer,
+            country_code
           FROM scrapling_retail_claims
-          WHERE fenomeno_category LIKE '%Free From%' OR fenomeno_category LIKE '%Super%' OR fenomeno_category LIKE '%Lifestyle%'
-          ORDER BY sugars_g ASC, saturated_fats_g ASC
+          WHERE nutrition_data_status = 'observed' AND sugars_g IS NOT NULL AND energy_kcal IS NOT NULL
+            AND (fenomeno_category LIKE '%Free-From%' OR fenomeno_category LIKE '%Plant-based%' OR fenomeno_category LIKE '%Functional%')
+          ORDER BY sugars_g ASC, COALESCE(saturated_fats_g, 999) ASC
           LIMIT 6;
         `;
       }
 
       const res = await runDuckDBQuery(sql);
 
-      // Compute basket summaries
-      const totalKcal = res.rows.reduce((acc, r: any) => acc + (r.energy_kcal || 0), 0);
-      const avgProtein = +(res.rows.reduce((acc, r: any) => acc + (r.proteins_g || 0), 0) / (res.rows.length || 1)).toFixed(1);
+      // Compute basket summaries strictly via shared nutritionEngine (non-null observed denominators)
+      const nutrInputs = (res.rows as unknown as ScraplingNutritionShape[]).map((r, i) =>
+        fromScraplingProduct({ ...r, barcode: r.barcode || `planner_${i}` })
+      );
+      const kcalSummary = summarizeNutrientMetric(nutrInputs, 'energy_kcal', 'per_100g');
+      const protSummary = summarizeNutrientMetric(nutrInputs, 'proteins_g', 'per_100g');
+      const totalKcal = (kcalSummary.data.mean ?? 0) * kcalSummary.data.validDenominator;
+      const avgProtein = protSummary.data.mean ?? 0;
 
       setPlannerResults({
         basket: res.rows,
         totalKcal: Math.round(totalKcal),
-        avgProtein,
-        sustainabilityScore: goal === 'mediterranean_terroir' ? 'A (Protected Origin / Low Miles)' : 'B+ (Certified Plant / Clean)',
+        avgProtein: +avgProtein.toFixed(1),
+        sustainabilityScore: goal === 'mediterranean_terroir' ? 'A (Protected Origin / Organic)' : 'B+ (Observed OFF Nutrition)',
         elapsedMs: res.elapsedMs
       });
     } catch (err) {
@@ -716,12 +818,6 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       setPlannerLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (activeTab === 'agentic_planner' && !plannerResults) {
-      runAgenticPlanner('clean_hypertrophy');
-    }
-  }, [activeTab]);
 
   const filteredScraplingProducts = useMemo(() => {
     if (!searchQuery) return scraplingProducts;
@@ -735,8 +831,38 @@ export const GS1ImmaginoObservatory: React.FC = () => {
     );
   }, [scraplingProducts, searchQuery]);
 
+  const scraplingNutritionInputs = useMemo(
+    () => filteredScraplingProducts.map(fromScraplingProduct),
+    [filteredScraplingProducts]
+  );
+
   return (
     <div className="space-y-6 text-[#163d4a]">
+      {loadDisclosures.map((d, idx) => (
+        <ResourceDisclosureBanner
+          key={`${d.category}-${d.resourceLabel}-${idx}`}
+          disclosure={d}
+          onRetry={
+            d.isRetryable
+              ? () => {
+                  setLoadDisclosures([]);
+                  setRetryTick((t) => t + 1);
+                }
+              : undefined
+          }
+          retryLabel="Retry"
+          compact
+        />
+      ))}
+
+      {isCountryFallback && (
+        <div className="bg-[#6b4c1b]/10 border-l-4 border-[#6b4c1b] rounded-r-xl px-4 py-2.5 text-xs text-[#163d4a]">
+          <b>Jurisdiction Fallback Disclosure:</b> Active global jurisdiction <code>{externalCountry}</code> is not in
+          the 11 Pan-European GS1 Retail jurisdictions (<code>IT, FR, DE, ES, NL, BE, PL, SE, AT, PT, EU27</code>);
+          displaying <code>IT</code> reference retail observatory below.
+        </div>
+      )}
+
       {/* Pan-European Country Selector Strip */}
       <div className="bg-[#eaedf2] border border-[#d8dde6] rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -752,7 +878,12 @@ export const GS1ImmaginoObservatory: React.FC = () => {
             return (
               <button
                 key={c.code}
-                onClick={() => setSelectedCountry(c.code)}
+                onClick={() => {
+                  setCountryOverride({ forProp: externalCountry, value: c.code });
+                  if (onSelectCountry && (c.code === 'EU27' || ['ES', 'IT', 'FR', 'DE', 'NL', 'PL', 'SE'].includes(c.code))) {
+                    onSelectCountry(c.code === 'EU27' ? 'EU27_2020' : c.code);
+                  }
+                }}
                 className={`px-2.5 py-1 rounded-md text-xs font-mono font-medium transition-all flex items-center gap-1.5 ${
                   isSelected
                     ? 'bg-[#163d4a] text-white shadow-xs font-bold ring-2 ring-[#8a1253]'
@@ -771,16 +902,15 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       <div className="bg-[#eaedf2] border border-[#d8dde6] rounded-xl p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
               <span className="px-2.5 py-0.5 text-xs font-mono font-bold uppercase rounded bg-[#8a1253] text-white">
                 {selectedCountry === 'IT' ? '19th Edition • 2026-1' : 'Pan-EU Harmonized Model'}
               </span>
               <span className="px-2.5 py-0.5 text-xs font-mono uppercase rounded bg-[#163d4a] text-white">
                 {activeCountryData ? activeCountryData.country_name : 'Italy'} FMCG Scanner
               </span>
-              <span className="px-2.5 py-0.5 text-xs font-mono uppercase rounded bg-[#059669] text-white">
-                Live Scrapling v0.5.1
-              </span>
+              <DataNatureBadge nature={selectedCountry === 'IT' ? 'Manually Compiled' : 'Estimated'} />
+              <DataNatureBadge nature="Observed" label="Open Prices EU" />
             </div>
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#163d4a]">
               Pan-European Retail Scanner & Claim Observatory
@@ -875,7 +1005,12 @@ export const GS1ImmaginoObservatory: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('agentic_planner')}
+            onClick={() => {
+              setActiveTab('agentic_planner');
+              if (!plannerResults) {
+                void runAgenticPlanner(plannerGoal);
+              }
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors flex items-center gap-1.5 ${
               activeTab === 'agentic_planner'
                 ? 'bg-[#163d4a] text-white shadow-xs'
@@ -901,7 +1036,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       </div>
 
       {/* SUBTAB 1: METAPRODOTTO & REFORMULATION */}
-      {activeTab === 'metaprodotto' && bundle && (
+      {activeTab === 'metaprodotto' && bundle && activeCountryData && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="bg-[#eaedf2] border border-[#d8dde6] rounded-xl p-5 shadow-sm space-y-4">
@@ -1128,7 +1263,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       )}
 
       {/* SUBTAB 3: THE 6 UNIVERSAL PHENOMENA */}
-      {activeTab === 'fenomeni' && (
+      {activeTab === 'fenomeni' && activeCountryData && (
         <div className="space-y-6">
           <div className="bg-[#eaedf2] border border-[#d8dde6] rounded-xl p-5 shadow-sm space-y-4">
             <div className="flex justify-between items-center">
@@ -1215,7 +1350,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
                   Health & ESG Spider Radar
                 </h3>
                 <p className="text-xs font-sans text-stone-600 mt-0.5">
-                  Benchmarking {activeCountryData.country_name} against the EU-27 unweighted baseline.
+                  Benchmarking {activeCountryData?.country_name ?? selectedCountry} against the EU-27 unweighted baseline.
                 </p>
               </div>
 
@@ -1315,7 +1450,7 @@ export const GS1ImmaginoObservatory: React.FC = () => {
                     Agentic AI Simulator
                   </span>
                   <span className="text-xs font-mono text-stone-500">
-                    Jurisdiction: {activeCountryData.country_name}
+                    Jurisdiction: {activeCountryData?.country_name ?? selectedCountry}
                   </span>
                 </div>
                 <h3 className="text-lg font-serif font-bold text-[#163d4a]">
@@ -1404,14 +1539,20 @@ export const GS1ImmaginoObservatory: React.FC = () => {
                         {prod.fenomeno_category}
                       </div>
                       <div className="grid grid-cols-3 gap-1 py-1.5 border-t border-b border-stone-100 font-mono text-[10px] text-stone-600">
-                        <div>Kcal: <b>{prod.energy_kcal}</b></div>
-                        <div>Prot: <b className="text-emerald-700">{prod.proteins_g}g</b></div>
-                        <div>Sugars: <b>{prod.sugars_g}g</b></div>
+                        <div>Kcal: <b>{prod.energy_kcal != null ? prod.energy_kcal : 'N/A'}</b></div>
+                        <div>Prot: <b className="text-emerald-700">{prod.proteins_g != null ? `${prod.proteins_g}g` : 'N/A'}</b></div>
+                        <div>Sugars: <b>{prod.sugars_g != null ? `${prod.sugars_g}g` : 'N/A'}</b></div>
                       </div>
                       <div className="flex justify-between items-center text-[10px] font-mono pt-1 text-stone-500">
-                        <span>NutriScore: <b className="text-[#163d4a]">{prod.nutriscore}</b></span>
-                        <span>EcoScore: <b className="text-emerald-700">{prod.ecoscore}</b></span>
+                        <span>NutriScore: <b className="text-[#163d4a]">{prod.nutriscore ?? 'N/A'}</b></span>
+                        <span>EcoScore: <b className="text-emerald-700">{prod.ecoscore ?? 'N/A'}</b></span>
+                        <span>Price: <b className="text-[#8a1253]">{prod.price_eur != null ? `€${Number(prod.price_eur).toFixed(2)}` : 'N/A'}</b></span>
                       </div>
+                      {prod.retailer && (
+                        <div className="text-[10px] font-mono text-stone-400 truncate">
+                          [{prod.country_code}] {prod.retailer}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -1424,6 +1565,13 @@ export const GS1ImmaginoObservatory: React.FC = () => {
       {/* SUBTAB 7: D4VINCI SCRAPLING LIVE STREAM */}
       {activeTab === 'scrapling_feed' && (
         <div className="space-y-6">
+          <NutritionComparisonPanel
+            inputs={scraplingNutritionInputs}
+            basis={retailNutritionBasis}
+            onBasisChange={setRetailNutritionBasis}
+            title="Open Prices EU × OFF — Retail Nutrition Comparability & Missingness"
+          />
+
           <div className="bg-[#eaedf2] border border-[#d8dde6] rounded-xl p-5 shadow-sm space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
@@ -1460,25 +1608,37 @@ export const GS1ImmaginoObservatory: React.FC = () => {
                 <thead>
                   <tr className="border-b border-[#d8dde6] bg-stone-50 text-stone-500 font-mono uppercase text-[10px]">
                     <th className="py-2.5 px-3">EAN Barcode</th>
-                    <th className="py-2.5 px-3">Product & Brand</th>
+                    <th className="py-2.5 px-3">Product &amp; Brand</th>
+                    <th className="py-2.5 px-3">Retailer &amp; Country</th>
+                    <th className="py-2.5 px-3 text-right">Price</th>
                     <th className="py-2.5 px-3">Pillar / Phenomenon</th>
-                    <th className="py-2.5 px-3">Verified Claims</th>
-                    <th className="py-2.5 px-3 text-right">Kcal</th>
-                    <th className="py-2.5 px-3 text-right">Proteins</th>
-                    <th className="py-2.5 px-3 text-right">Sugars</th>
-                    <th className="py-2.5 px-3 text-center">Score</th>
+                    <th className="py-2.5 px-3 text-right">
+                      {retailNutritionBasis === 'per_100g' ? 'Kcal (/100g)' : retailNutritionBasis === 'per_100kcal' ? 'Kcal (/100kcal)' : 'Kcal (/serv)'}
+                    </th>
+                    <th className="py-2.5 px-3 text-right">
+                      {retailNutritionBasis === 'per_100g' ? 'Prot (/100g)' : retailNutritionBasis === 'per_100kcal' ? 'Prot (/100kcal)' : 'Prot (/serv)'}
+                    </th>
+                    <th className="py-2.5 px-3 text-right">
+                      {retailNutritionBasis === 'per_100g' ? 'Sugars (/100g)' : retailNutritionBasis === 'per_100kcal' ? 'Sugars (/100kcal)' : 'Sugars (/serv)'}
+                    </th>
+                    <th className="py-2.5 px-3 text-center">Nutri / Eco</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#d8dde6]">
                   {filteredScraplingProducts.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-8 text-center text-stone-400 font-mono text-xs">
+                      <td colSpan={9} className="py-8 text-center text-stone-400 font-mono text-xs">
                         No retail products match the selected search criteria.
                       </td>
                     </tr>
                   ) : (
-                    filteredScraplingProducts.map(p => (
-                      <tr key={p.barcode} className="hover:bg-stone-50/70 transition-colors">
+                    filteredScraplingProducts.map((p, idx) => {
+                      const ev = evaluateProductNutrition(fromScraplingProduct(p), retailNutritionBasis);
+                      const eVal = ev.values.energy_kcal;
+                      const pVal = ev.values.proteins_g;
+                      const sVal = ev.values.sugars_g;
+                      return (
+                      <tr key={`${p.barcode}-${p.country_code || 'EU'}-${p.retailer || 'ret'}-${idx}`} className="hover:bg-stone-50/70 transition-colors">
                         <td className="py-2.5 px-3 font-mono text-[11px] text-stone-500">
                           {p.barcode}
                         </td>
@@ -1486,28 +1646,36 @@ export const GS1ImmaginoObservatory: React.FC = () => {
                           <div className="font-bold text-[#163d4a]">{p.product_name}</div>
                           <div className="text-[10px] font-mono text-stone-400">{p.brand}</div>
                         </td>
-                        <td className="py-2.5 px-3 font-mono text-[11px] text-[#8a1253]">
-                          {p.fenomeno_category}
+                        <td className="py-2.5 px-3 text-[11px] font-mono text-stone-600">
+                          <div>{p.country_code || 'EU'} · {p.retailer || 'Retailer'}</div>
+                          {p.observed_date && <div className="text-[10px] text-stone-400">{p.observed_date}</div>}
                         </td>
-                        <td className="py-2.5 px-3 text-[11px] text-stone-600 max-w-xs truncate">
-                          {p.labels_list}
+                        <td className="py-2.5 px-3 text-right font-mono font-bold text-[#8a1253]">
+                          {p.price_eur != null ? `€${p.price_eur.toFixed(2)}` : 'N/A'}
+                          <div className="text-[9px] font-normal text-stone-400">{p.price_per || ''}</div>
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono text-stone-700">
-                          {p.energy_kcal > 0 ? `${p.energy_kcal}` : '–'}
+                        <td className="py-2.5 px-3 font-mono text-[11px] text-[#163d4a]">
+                          <div>{p.fenomeno_category}</div>
+                          <div className="text-[10px] text-stone-400 truncate max-w-[160px]">{p.labels_list}</div>
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-700">
-                          {p.proteins_g > 0 ? `${p.proteins_g}g` : '–'}
+                        <td className="py-2.5 px-3 text-right font-mono text-stone-700" title={eVal.transformation}>
+                          {eVal.value != null ? `${eVal.value.toFixed(1)}` : <span className="text-stone-400">N/A</span>}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono text-stone-700">
-                          {p.sugars_g > 0 ? `${p.sugars_g}g` : '–'}
+                        <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-700" title={pVal.transformation}>
+                          {pVal.value != null ? `${pVal.value.toFixed(2)}g` : <span className="text-stone-400 font-normal">N/A</span>}
                         </td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-emerald-100 text-emerald-800">
-                            {p.nutriscore}
+                        <td className="py-2.5 px-3 text-right font-mono text-stone-700" title={sVal.transformation}>
+                          {sVal.value != null ? `${sVal.value.toFixed(2)}g` : <span className="text-stone-400">N/A</span>}
+                        </td>
+                        <td className="py-2.5 px-3 text-center font-mono text-[10px]">
+                          <span className="px-1.5 py-0.5 font-bold rounded bg-emerald-100 text-emerald-800">
+                            {p.nutriscore ?? 'N/A'}
                           </span>
+                          <span className="ml-1 text-stone-500">/ {p.ecoscore ?? 'N/A'}</span>
                         </td>
                       </tr>
-                    ))
+                    );
+                    })
                   )}
                 </tbody>
               </table>

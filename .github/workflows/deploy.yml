@@ -33,8 +33,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint and Unit Tests
+        run: |
+          npm run lint
+          npm test
+
+      - name: Setup Python and install validation + Playwright dependencies
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Python validation & Playwright Chromium
+        run: |
+          pip install -r requirements-dev.txt
+          python -m playwright install chromium --with-deps
+
       - name: Build DietShift Atlas
         run: npm run build
+
+      - name: Run Python Data Validation, JSON-Parquet Parity & Playwright E2E Gate
+        run: python -m pytest -v
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

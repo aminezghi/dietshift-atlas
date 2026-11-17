@@ -9,7 +9,7 @@ random.seed(42)
 os.makedirs("public/data", exist_ok=True)
 os.makedirs("public/data/parquet", exist_ok=True)
 
-print("=== BUILDING DIETSHIFT ATLAS v3.2: EMPIRICAL NSI API HARVEST, ROSETTA CROSSWALK & TIMESFM 2.0 BACKTESTING ===")
+print("=== BUILDING DIETSHIFT ATLAS: EMPIRICAL NSI API HARVEST, ROSETTA CROSSWALK & EXPANDING-ORIGIN STATISTICAL HICP BACKTESTING ===")
 
 # ---------------------------------------------------------------------------
 # 1. LIVE API HARVEST FROM NATIONAL STATISTICAL INSTITUTES & EUROSTAT
@@ -221,7 +221,16 @@ hicp_live["GBR"] = {
 # 2. TARGET TABLE 1: DUAL-ANCHOR ROSETTA CROSSWALK
 # ---------------------------------------------------------------------------
 print("2. Building Dual-Anchor Rosetta Stone Crosswalk ('crosswalk_rosetta.parquet')...")
-rosetta_rows = [
+agb_con = duckdb.connect()
+agb_lookup = {
+    row[0]: {"lci_name": row[1], "co2": round(float(row[2]), 3), "water": round(float(row[3]), 3)}
+    for row in agb_con.execute(
+        "SELECT Code_AGB, LCI_Name, Changement_climatique_kg_CO2eq, Eau_m3 FROM read_parquet('public/data/parquet/agribalyse_31.parquet')"
+    ).fetchall()
+}
+agb_con.close()
+
+rosetta_specs = [
     {
         "crosswalk_id": "CP01111_A01QR",
         "ecoicop_code": "01.1.1.1",
@@ -229,14 +238,14 @@ rosetta_rows = [
         "foodex2_code": "A01QR",
         "foodex2_level1": "Grains and grain-based products",
         "foodex2_level2": "Wholegrain bread & oats",
-        "agb_code": "20004",
-        "agb_lci_name": "Bread, wholemeal, commercial",
+        "agb_code": "7010",
         "nova_group": 1,
         "allocation_weight": 0.46,
         "edible_yield_factor": 0.96,
-        "mean_co2_kg": 0.95,
-        "mean_water_m3": 0.18,
-        "eat_lancet_group": "Whole Grains"
+        "eat_lancet_group": "Whole Grains",
+        "mapping_type": "broader",
+        "confidence": 0.78,
+        "explanation": "COICOP 01.1.1.1 spans rice, oats, and brown/wholemeal bread; mapped to Agribalyse 7010 brown bread as representative cereal staple.",
     },
     {
         "crosswalk_id": "CP01112_A000J",
@@ -245,14 +254,14 @@ rosetta_rows = [
         "foodex2_code": "A000J",
         "foodex2_level1": "Grains and grain-based products",
         "foodex2_level2": "Refined bakery & white pasta",
-        "agb_code": "20001",
-        "agb_lci_name": "French baguette, refined wheat",
+        "agb_code": "7002",
         "nova_group": 3,
         "allocation_weight": 0.54,
         "edible_yield_factor": 0.95,
-        "mean_co2_kg": 1.35,
-        "mean_water_m3": 0.24,
-        "eat_lancet_group": "Whole Grains"
+        "eat_lancet_group": "Whole Grains",
+        "mapping_type": "broader",
+        "confidence": 0.80,
+        "explanation": "Refined wheat bakery/pasta category anchored to Agribalyse 7002 yeast-fermented French bread.",
     },
     {
         "crosswalk_id": "CP01121_A01QX",
@@ -261,14 +270,14 @@ rosetta_rows = [
         "foodex2_code": "A01QX",
         "foodex2_level1": "Meat and meat products",
         "foodex2_level2": "Bovine & ovine ruminant red meat",
-        "agb_code": "6250",
-        "agb_lci_name": "Beef, sirloin steak, raw",
+        "agb_code": "6111",
         "nova_group": 1,
         "allocation_weight": 1.00,
         "edible_yield_factor": 0.78,
-        "mean_co2_kg": 28.40,
-        "mean_water_m3": 1.85,
-        "eat_lancet_group": "Red Meat"
+        "eat_lancet_group": "Red Meat",
+        "mapping_type": "partial",
+        "confidence": 0.85,
+        "explanation": "Ruminant meat expenditure aggregate paired with Agribalyse 6111 raw beef sirloin steak.",
     },
     {
         "crosswalk_id": "CP01122_A01RG",
@@ -278,13 +287,13 @@ rosetta_rows = [
         "foodex2_level1": "Meat and meat products",
         "foodex2_level2": "Porcine & poultry white/cured meat",
         "agb_code": "28001",
-        "agb_lci_name": "Pork loin & poultry fillet composite",
         "nova_group": 3,
         "allocation_weight": 0.82,
         "edible_yield_factor": 0.82,
-        "mean_co2_kg": 6.20,
-        "mean_water_m3": 0.75,
-        "eat_lancet_group": "Red Meat"
+        "eat_lancet_group": "Red Meat",
+        "mapping_type": "ambiguous",
+        "confidence": 0.68,
+        "explanation": "COICOP aggregate mixes lower-emission poultry with pork and cured charcuterie; matched to Agribalyse 28001 pork shoulder.",
     },
     {
         "crosswalk_id": "CP01129_A03TD",
@@ -293,14 +302,14 @@ rosetta_rows = [
         "foodex2_code": "A03TD",
         "foodex2_level1": "Meat and meat products",
         "foodex2_level2": "Plant-based meat analogues (extruded)",
-        "agb_code": "25525",
-        "agb_lci_name": "Plant-based soy/pea burger patty",
+        "agb_code": "25591",
         "nova_group": 4,
         "allocation_weight": 0.18,
         "edible_yield_factor": 0.98,
-        "mean_co2_kg": 2.45,
-        "mean_water_m3": 0.28,
-        "eat_lancet_group": "Legumes & Nuts"
+        "eat_lancet_group": "Legumes & Nuts",
+        "mapping_type": "exact",
+        "confidence": 0.94,
+        "explanation": "Direct product-level alignment between plant-based meat analogues and Agribalyse 25591 lentil/soybean patty.",
     },
     {
         "crosswalk_id": "CP01131_A026V",
@@ -309,14 +318,14 @@ rosetta_rows = [
         "foodex2_code": "A026V",
         "foodex2_level1": "Fish, seafood and amphibians",
         "foodex2_level2": "Marine & aquaculture fish fillets",
-        "agb_code": "26005",
-        "agb_lci_name": "Salmon & cod fillet composite",
+        "agb_code": "26036",
         "nova_group": 1,
         "allocation_weight": 1.00,
         "edible_yield_factor": 0.74,
-        "mean_co2_kg": 7.80,
-        "mean_water_m3": 0.45,
-        "eat_lancet_group": "Fish & Seafood"
+        "eat_lancet_group": "Fish & Seafood",
+        "mapping_type": "partial",
+        "confidence": 0.80,
+        "explanation": "Fish and seafood basket anchored to Agribalyse 26036 raw farmed salmon; wild pelagic species differ in fuel intensity.",
     },
     {
         "crosswalk_id": "CP01141_A02LR",
@@ -325,14 +334,14 @@ rosetta_rows = [
         "foodex2_code": "A02LR",
         "foodex2_level1": "Milk and dairy products",
         "foodex2_level2": "Liquid cow milk & fermented yogurt",
-        "agb_code": "19023",
-        "agb_lci_name": "Milk, semi-skimmed, UHT",
+        "agb_code": "19041",
         "nova_group": 1,
         "allocation_weight": 0.65,
         "edible_yield_factor": 1.00,
-        "mean_co2_kg": 1.45,
-        "mean_water_m3": 0.19,
-        "eat_lancet_group": "Dairy"
+        "eat_lancet_group": "Dairy",
+        "mapping_type": "partial",
+        "confidence": 0.88,
+        "explanation": "Liquid milk and plain yogurt aggregate mapped to Agribalyse 19041 semi-skimmed UHT cow milk.",
     },
     {
         "crosswalk_id": "CP01145_A02QE",
@@ -342,13 +351,13 @@ rosetta_rows = [
         "foodex2_level1": "Milk and dairy products",
         "foodex2_level2": "Ripened hard & soft dairy cheeses",
         "agb_code": "12115",
-        "agb_lci_name": "Cheese, Gouda / Emmental / Parmigiano",
         "nova_group": 3,
         "allocation_weight": 0.22,
         "edible_yield_factor": 0.95,
-        "mean_co2_kg": 8.90,
-        "mean_water_m3": 0.92,
-        "eat_lancet_group": "Dairy"
+        "eat_lancet_group": "Dairy",
+        "mapping_type": "partial",
+        "confidence": 0.84,
+        "explanation": "Ripened cheeses category anchored to Agribalyse 12115 Emmental cow's milk cheese.",
     },
     {
         "crosswalk_id": "CP01149_A03TH",
@@ -357,14 +366,14 @@ rosetta_rows = [
         "foodex2_code": "A03TH",
         "foodex2_level1": "Milk and dairy products",
         "foodex2_level2": "Plant-based dairy drinks (oat/soy)",
-        "agb_code": "18902",
-        "agb_lci_name": "Soy & oat drink, calcium fortified",
+        "agb_code": "18905",
         "nova_group": 4,
         "allocation_weight": 0.13,
         "edible_yield_factor": 1.00,
-        "mean_co2_kg": 0.55,
-        "mean_water_m3": 0.08,
-        "eat_lancet_group": "Legumes & Nuts"
+        "eat_lancet_group": "Legumes & Nuts",
+        "mapping_type": "partial",
+        "confidence": 0.86,
+        "explanation": "Plant-based beverage subgroup anchored to Agribalyse 18905 plain prepacked oat-based drink.",
     },
     {
         "crosswalk_id": "CP01161_A01BS",
@@ -373,14 +382,14 @@ rosetta_rows = [
         "foodex2_code": "A01BS",
         "foodex2_level1": "Fruit and fruit products",
         "foodex2_level2": "Fresh temperate & citrus fruits",
-        "agb_code": "13005",
-        "agb_lci_name": "Apples, oranges & seasonal fruit mix",
+        "agb_code": "13039",
         "nova_group": 1,
         "allocation_weight": 1.00,
         "edible_yield_factor": 0.84,
-        "mean_co2_kg": 0.75,
-        "mean_water_m3": 0.28,
-        "eat_lancet_group": "Vegetables & Fruits"
+        "eat_lancet_group": "Vegetables & Fruits",
+        "mapping_type": "broader",
+        "confidence": 0.76,
+        "explanation": "Broad fresh fruit category represented by Agribalyse 13039 raw apple (tropical/air-freighted berries excluded).",
     },
     {
         "crosswalk_id": "CP01171_A00FJ",
@@ -389,14 +398,14 @@ rosetta_rows = [
         "foodex2_code": "A00FJ",
         "foodex2_level1": "Vegetables and vegetable products",
         "foodex2_level2": "Leafy greens, brassicas & root veg",
-        "agb_code": "20047",
-        "agb_lci_name": "Tomatoes, spinach, carrots & broccoli",
+        "agb_code": "20047_1",
         "nova_group": 1,
         "allocation_weight": 0.72,
         "edible_yield_factor": 0.86,
-        "mean_co2_kg": 0.65,
-        "mean_water_m3": 0.12,
-        "eat_lancet_group": "Vegetables & Fruits"
+        "eat_lancet_group": "Vegetables & Fruits",
+        "mapping_type": "broader",
+        "confidence": 0.75,
+        "explanation": "Broad fresh vegetable category represented by Agribalyse 20047_1 raw tomato.",
     },
     {
         "crosswalk_id": "CP01175_A011X",
@@ -406,13 +415,13 @@ rosetta_rows = [
         "foodex2_level1": "Legumes, nuts, oilseeds and spices",
         "foodex2_level2": "Lentils, chickpeas, beans & pulses",
         "agb_code": "20505",
-        "agb_lci_name": "Lentils, green/brown & chickpeas, boiled",
         "nova_group": 1,
         "allocation_weight": 0.18,
         "edible_yield_factor": 0.99,
-        "mean_co2_kg": 0.85,
-        "mean_water_m3": 0.22,
-        "eat_lancet_group": "Legumes & Nuts"
+        "eat_lancet_group": "Legumes & Nuts",
+        "mapping_type": "partial",
+        "confidence": 0.90,
+        "explanation": "Pulses and legumes subgroup anchored to Agribalyse 20505 cooked lentils.",
     },
     {
         "crosswalk_id": "CP01168_A014C",
@@ -421,14 +430,14 @@ rosetta_rows = [
         "foodex2_code": "A014C",
         "foodex2_level1": "Legumes, nuts, oilseeds and spices",
         "foodex2_level2": "Tree nuts, peanuts & seeds",
-        "agb_code": "15001",
-        "agb_lci_name": "Walnuts, almonds & hazelnuts, shelled",
+        "agb_code": "15023",
         "nova_group": 1,
         "allocation_weight": 0.10,
         "edible_yield_factor": 0.98,
-        "mean_co2_kg": 1.65,
-        "mean_water_m3": 1.45,
-        "eat_lancet_group": "Legumes & Nuts"
+        "eat_lancet_group": "Legumes & Nuts",
+        "mapping_type": "broader",
+        "confidence": 0.78,
+        "explanation": "Tree nuts & seeds basket anchored to Agribalyse 15023 fresh walnut; water intensity varies widely (e.g., almonds).",
     },
     {
         "crosswalk_id": "CP01181_A034F",
@@ -438,13 +447,13 @@ rosetta_rows = [
         "foodex2_level1": "Sugar, confectionery and ultra-processed",
         "foodex2_level2": "Sweet snacks, confectionery & biscuits",
         "agb_code": "24001",
-        "agb_lci_name": "Biscuits, chocolate & extruded snacks",
         "nova_group": 4,
         "allocation_weight": 0.55,
         "edible_yield_factor": 1.00,
-        "mean_co2_kg": 3.10,
-        "mean_water_m3": 0.42,
-        "eat_lancet_group": "Ultra-Processed"
+        "eat_lancet_group": "Ultra-Processed",
+        "mapping_type": "ambiguous",
+        "confidence": 0.65,
+        "explanation": "COICOP snack & confectionery composite mixes biscuits (Agribalyse 24001), chocolate, and beverages.",
     },
     {
         "crosswalk_id": "CP01191_A03LZ",
@@ -453,16 +462,43 @@ rosetta_rows = [
         "foodex2_code": "A03LZ",
         "foodex2_level1": "Composite dishes & ready-to-eat meals",
         "foodex2_level2": "Convenience frozen & chilled meals",
-        "agb_code": "25010",
-        "agb_lci_name": "Pre-packaged lasagna, pizza & ready meals",
+        "agb_code": "25404",
         "nova_group": 4,
         "allocation_weight": 0.45,
         "edible_yield_factor": 0.98,
-        "mean_co2_kg": 4.80,
-        "mean_water_m3": 0.55,
-        "eat_lancet_group": "Ultra-Processed"
-    }
+        "eat_lancet_group": "Ultra-Processed",
+        "mapping_type": "broader",
+        "confidence": 0.72,
+        "explanation": "Ready-to-eat composite meals anchored to Agribalyse 25404 Margherita pizza; meat-based ready meals carry higher CO2.",
+    },
 ]
+
+rosetta_rows = []
+for spec in rosetta_specs:
+    agb_info = agb_lookup.get(spec["agb_code"])
+    if not agb_info:
+        raise ValueError(f"Crosswalk reference broken: Code_AGB={spec['agb_code']} missing in agribalyse_31.parquet")
+    rosetta_rows.append({
+        "crosswalk_id": spec["crosswalk_id"],
+        "ecoicop_code": spec["ecoicop_code"],
+        "ecoicop_label": spec["ecoicop_label"],
+        "foodex2_code": spec["foodex2_code"],
+        "foodex2_level1": spec["foodex2_level1"],
+        "foodex2_level2": spec["foodex2_level2"],
+        "agb_code": spec["agb_code"],
+        "agb_lci_name": agb_info["lci_name"],
+        "nova_group": spec["nova_group"],
+        "allocation_weight": spec["allocation_weight"],
+        "edible_yield_factor": spec["edible_yield_factor"],
+        "mean_co2_kg": agb_info["co2"],
+        "mean_water_m3": agb_info["water"],
+        "eat_lancet_group": spec["eat_lancet_group"],
+        "mapping_type": spec["mapping_type"],
+        "confidence": spec["confidence"],
+        "explanation": spec["explanation"],
+        "source_reference": "Eurostat COICOP × EFSA FoodEx2 × ADEME Agribalyse 3.1.1",
+        "mapping_version": "2.0.0",
+    })
 
 # ---------------------------------------------------------------------------
 # 3. TARGET TABLE 2: NSI SUB-NATIONAL & QUINTILE DATASET (150 COHORTS)
@@ -746,36 +782,126 @@ semantic_map = {
     upf_risk_cluster: "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
 }
 
+import numpy as np
+
+X_arr = np.array(X, dtype=float)
+_, s_vals, vt = np.linalg.svd(X_arr, full_matrices=False)
+coords = X_arr @ vt.T
+# Orient PC1 so higher NOVA4 / lower adherence points positive for readable axis alignment
+if vt[0, 3] > 0:
+    coords[:, 0] = -coords[:, 0]
+if vt[1, 0] > 0:
+    coords[:, 1] = -coords[:, 1]
+var_ratios = (s_vals ** 2) / max(float(np.sum(s_vals ** 2)), 1e-9)
+pca_explained_pct = [round(float(v) * 100.0, 1) for v in var_ratios[:2]]
+
 for i, row in enumerate(nsi_rows):
-    z = X[i]
-    pca1 = round(0.48 * z[1] + 0.44 * z[4] + 0.32 * z[0] - 0.52 * z[3] - 0.25 * z[2], 3)
-    pca2 = round(0.55 * z[5] + 0.35 * z[2] - 0.62 * z[0] + 0.20 * z[3], 3)
-    row["pca1"] = pca1
-    row["pca2"] = pca2
+    row["pca1"] = round(float(coords[i, 0]), 3)
+    row["pca2"] = round(float(coords[i, 1]), 3)
     row["cluster_label"] = semantic_map[best_labels[i]]
 
-print(f"   Clustered {len(nsi_rows)} NSI cohorts. Silhouette scores: {silhouette_curve}")
+print(f"   Clustered {len(nsi_rows)} NSI cohorts. Silhouette scores: {silhouette_curve}, PCA var%: {pca_explained_pct}")
 
 # ---------------------------------------------------------------------------
-# 5. TARGET TABLE 3: GOOGLE TIMESFM 2.0 VS. HOLT-WINTERS ETS VS. RIDGE
-#    USING REAL COUNTRY-SPECIFIC HICP & NSI TRAJECTORIES (2015-2025)
-#    AND ACTUAL HELD-OUT VALIDATION MAE/RMSE COMPUTED PER SERIES
+# 5. LEAK-FREE STATISTICAL PRICE BACKTESTING & FORECASTS (2015-2030)
+#    Strictly uses genuinely observed Eurostat prc_hicp_aind / ONS MM23 series.
+#    Train window: 2015-2022 | Held-out multi-step validation: 2023-2025 | Horizon: 2026-2030
 # ---------------------------------------------------------------------------
-print("5. Building Google TimesFM 2.0 vs. ETS vs. Ridge Backtesting on Real Country Series (2015-2030)...")
+print("5. Running leak-free statistical backtesting on observed Eurostat/ONS HICP series (2015-2030)...")
 
 forecast_meta = [
-    ("ES", "Spain — INE EPF & IPC / Eurostat HICP", 15.6, 20.8, 39.2, 44.2, 4.92, 4.58),
-    ("IT", "Italy — ISTAT Spese Famiglie / Eurostat HICP", 14.2, 17.8, 41.0, 45.4, 4.78, 4.42),
-    ("NL", "Netherlands — CBS StatLine & RIVM / HICP", 33.4, 37.2, 34.8, 41.2, 5.56, 5.12),
-    ("FR", "France — INSEE Budget de Famille & ANSES / HICP", 26.8, 31.4, 33.2, 37.5, 5.64, 5.28),
-    ("DE", "Germany — Destatis GENESIS EVS / HICP", 34.5, 38.8, 34.0, 40.1, 5.48, 5.04),
-    ("GBR", "United Kingdom — ONS LCFS & NDNS / CPIH", 46.8, 51.4, 33.5, 38.8, 5.45, 5.08),
-    ("EU27_2020", "European Union — Eurostat Aggregate (EU-27)", 26.5, 31.0, 34.6, 39.2, 5.22, 4.84),
+    ("ES", "Spain — Eurostat HICP / INE IPC"),
+    ("IT", "Italy — Eurostat HICP / ISTAT"),
+    ("NL", "Netherlands — Eurostat HICP / CBS"),
+    ("FR", "France — Eurostat HICP / INSEE"),
+    ("DE", "Germany — Eurostat HICP / Destatis"),
+    ("GBR", "United Kingdom — ONS CPIH (MM23)"),
+    ("EU27_2020", "European Union — Eurostat HICP (EU-27)"),
 ]
 
-timesfm_rows = []
 
-for c_code, c_label, upf_15, upf_25, plant_15, plant_25, co2_15, co2_25 in forecast_meta:
+def fit_holt_ets(series_vals: list[float], alpha: float = 0.55, beta: float = 0.35, phi: float = 1.0):
+    level = series_vals[0]
+    trend = series_vals[1] - series_vals[0]
+    fitted = [round(level, 2)]
+    for val in series_vals[1:]:
+        prev_level = level
+        level = alpha * val + (1.0 - alpha) * (level + phi * trend)
+        trend = beta * (level - prev_level) + (1.0 - beta) * phi * trend
+        fitted.append(round(level, 2))
+    return level, trend, fitted
+
+
+def holt_forecast(level: float, trend: float, horizon: int, phi: float = 1.0) -> float:
+    if phi == 1.0:
+        return level + horizon * trend
+    damped_sum = sum(phi ** j for j in range(1, horizon + 1))
+    return level + damped_sum * trend
+
+
+def fit_ridge_trend(series_vals: list[float], lam: float = 1.5):
+    n = len(series_vals)
+    xs = list(range(n))
+    mean_x = sum(xs) / n
+    mean_y = sum(series_vals) / n
+    num = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, series_vals))
+    den = sum((x - mean_x) ** 2 for x in xs) + lam
+    slope = num / max(den, 1e-9)
+    intercept = mean_y - slope * mean_x
+    return intercept, slope
+
+
+def expanding_origin_cv(years_sorted: list[int], vals_sorted: list[float], min_train: int = 5, max_h: int = 3):
+    model_names = ["damped_ets", "holt_ets", "ridge_trend", "naive_drift", "naive_rw"]
+    folds = []
+    n = len(vals_sorted)
+    for k in range(min_train, n):
+        tr = vals_sorted[:k]
+        scale = sum(abs(tr[j] - tr[j - 1]) for j in range(1, k)) / max(1, k - 1)
+        scale = max(scale, 1e-6)
+        l_dmp, t_dmp, _ = fit_holt_ets(tr, alpha=0.55, beta=0.35, phi=0.85)
+        l_ets, t_ets, _ = fit_holt_ets(tr, alpha=0.55, beta=0.35, phi=1.0)
+        r_int, r_slp = fit_ridge_trend(tr, lam=1.5)
+        drift = (tr[-1] - tr[0]) / max(1, k - 1)
+        for h in range(1, min(max_h, n - k) + 1):
+            t_idx = k - 1 + h
+            actual = vals_sorted[t_idx]
+            preds = {
+                "damped_ets": round(holt_forecast(l_dmp, t_dmp, h, phi=0.85), 2),
+                "holt_ets": round(holt_forecast(l_ets, t_ets, h, phi=1.0), 2),
+                "ridge_trend": round(r_int + r_slp * t_idx, 2),
+                "naive_drift": round(tr[-1] + h * drift, 2),
+                "naive_rw": round(tr[-1], 2),
+            }
+            folds.append({"origin_year": years_sorted[k - 1], "target_year": years_sorted[t_idx], "horizon": h, "actual": actual, "scale": scale, "preds": preds})
+
+    def _agg(sub_folds, m_id):
+        if not sub_folds:
+            return {"count": 0, "mae": None, "rmse": None, "smape_pct": None, "mase": None}
+        aes = [abs(f["actual"] - f["preds"][m_id]) for f in sub_folds]
+        ses = [(f["actual"] - f["preds"][m_id]) ** 2 for f in sub_folds]
+        smapes = [200.0 * abs(f["actual"] - f["preds"][m_id]) / max(abs(f["actual"]) + abs(f["preds"][m_id]), 1e-9) for f in sub_folds]
+        mases = [abs(f["actual"] - f["preds"][m_id]) / f["scale"] for f in sub_folds]
+        cnt = len(sub_folds)
+        return {
+            "count": cnt,
+            "mae": round(sum(aes) / cnt, 3),
+            "rmse": round(math.sqrt(sum(ses) / cnt), 3),
+            "smape_pct": round(sum(smapes) / cnt, 2),
+            "mase": round(sum(mases) / cnt, 3),
+        }
+
+    overall = {m: _agg(folds, m) for m in model_names}
+    by_horizon = {str(h): {m: _agg([f for f in folds if f["horizon"] == h], m) for m in model_names} for h in range(1, max_h + 1)}
+    tie_order = ["naive_rw", "naive_drift", "ridge_trend", "holt_ets", "damped_ets"]
+    best_model = min(tie_order, key=lambda m: overall[m]["mae"] if overall[m]["mae"] is not None else float("inf"))
+    return folds, overall, by_horizon, best_model
+
+
+forecast_rows = []
+expanding_cv_reports = []
+
+for c_code, c_label in forecast_meta:
     c_hicp = hicp_live.get(c_code, hicp_live["EU27_2020"])
     cp01 = c_hicp["CP01"]
     cp_fruit = c_hicp["CP0116"]
@@ -784,146 +910,154 @@ for c_code, c_label, upf_15, upf_25, plant_15, plant_25, co2_15, co2_25 in forec
     cp_bread = c_hicp["CP0111"]
     cp_meat = c_hicp["CP0112"]
     cp_dairy = c_hicp["CP0114"]
-    cp_sugar = c_hicp.get("CP0118", cp01)
-    cp_nec = c_hicp.get("CP0119", cp01)
 
-    # Construct the 4 empirical 2015-2025 historical series for this specific country
-    hist_series_map = {}
-
-    # Series 1: Healthy Whole-Food CPI (2015=100) from real Eurostat/ONS sub-indices (Fruit, Veg, Fish, Wholegrain Cereals)
-    s_cpi = {}
-    for yr in range(2015, 2026):
-        s_cpi[yr] = round(
-            0.35 * cp_fruit.get(yr, 100.0)
-            + 0.35 * cp_veg.get(yr, 100.0)
-            + 0.15 * cp_fish.get(yr, 100.0)
-            + 0.15 * cp_bread.get(yr, 100.0),
-            2
+    # Only forecast genuinely observed annual HICP/CPIH price series (2015=100)
+    s_healthy = {
+        yr: round(
+            0.35 * cp_fruit[yr] + 0.35 * cp_veg[yr] + 0.15 * cp_fish[yr] + 0.15 * cp_bread[yr],
+            2,
         )
-    hist_series_map["Healthy Whole-Food CPI (2015=100)"] = s_cpi
+        for yr in range(2015, 2026)
+        if all(yr in s for s in (cp_fruit, cp_veg, cp_fish, cp_bread))
+    }
 
-    # Series 2: NOVA 4 Ultra-Processed Share (% kcal) modulated by real countryHealthy-vs-UPF relative price wedge
-    s_upf = {}
-    for yr in range(2015, 2026):
-        t_frac = (yr - 2015) / 10.0
-        healthy_yr = s_cpi[yr]
-        upf_cpi_yr = 0.50 * cp_sugar.get(yr, 100.0) + 0.50 * cp_nec.get(yr, 100.0)
-        wedge_yr = (healthy_yr - upf_cpi_yr) / 100.0  # When healthy food inflates faster than UPF, NOVA 4 share accelerates
-        s_upf[yr] = round(upf_15 + t_frac * (upf_25 - upf_15) + wedge_yr * 2.8, 2)
-    hist_series_map["NOVA 4 Ultra-Processed Share (% kcal)"] = s_upf
+    observed_series_map = {
+        "Healthy Whole-Food CPI Basket (2015=100)": s_healthy,
+        "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)": {yr: round(cp01[yr], 2) for yr in range(2015, 2026) if yr in cp01},
+        "Meat HICP (CP0112, 2015=100)": {yr: round(cp_meat[yr], 2) for yr in range(2015, 2026) if yr in cp_meat},
+        "Milk, Cheese & Eggs HICP (CP0114, 2015=100)": {yr: round(cp_dairy[yr], 2) for yr in range(2015, 2026) if yr in cp_dairy},
+        "Vegetables HICP (CP0117, 2015=100)": {yr: round(cp_veg[yr], 2) for yr in range(2015, 2026) if yr in cp_veg},
+    }
 
-    # Series 3: Plant-Protein Dietary Share (%) modulated by real Meat/Dairy vs. Vegetable/Pulse price ratio
-    s_plant = {}
-    for yr in range(2015, 2026):
-        t_frac = (yr - 2015) / 10.0
-        animal_cpi_yr = 0.60 * cp_meat.get(yr, 100.0) + 0.40 * cp_dairy.get(yr, 100.0)
-        plant_cpi_yr = 0.50 * cp_veg.get(yr, 100.0) + 0.50 * cp_bread.get(yr, 100.0)
-        rel_animal_inflation = (animal_cpi_yr - plant_cpi_yr) / 100.0
-        s_plant[yr] = round(plant_15 + t_frac * (plant_25 - plant_15) + rel_animal_inflation * 3.4, 2)
-    hist_series_map["Plant-Protein Dietary Share (%)"] = s_plant
-
-    # Series 4: Dietary Carbon Footprint (kg CO2eq/d) coupled to country plant-protein substitution & meat CPI shock
-    s_co2 = {}
-    for yr in range(2015, 2026):
-        t_frac = (yr - 2015) / 10.0
-        meat_shock = max(0.0, (cp_meat.get(yr, 100.0) - 110.0) / 100.0)
-        s_co2[yr] = round(co2_15 + t_frac * (co2_25 - co2_15) - meat_shock * 0.22, 2)
-    hist_series_map["Dietary Carbon Footprint (kg CO2eq/d)"] = s_co2
-
-    # Fit chronological models on TRAIN (2015-2022), evaluate on VALIDATION (2023-2025), and project FORECAST (2026-2030)
-    for ind_name, obs_dict in hist_series_map.items():
-        # 1. Ridge Linear Autoregression fit on 2015-2022
+    for ind_name, obs_dict in observed_series_map.items():
+        if len(obs_dict) < 11:
+            continue
         train_yrs = list(range(2015, 2023))
         train_vals = [obs_dict[y] for y in train_yrs]
-        mean_x = sum(y - 2015 for y in train_yrs) / len(train_yrs)
-        mean_y = sum(train_vals) / len(train_vals)
-        num = sum(((y - 2015) - mean_x) * (obs_dict[y] - mean_y) for y in train_yrs)
-        den = sum(((y - 2015) - mean_x) ** 2 for y in train_yrs) + 1.5  # L2 Ridge penalty lambda=1.5
-        ridge_slope = num / den
-        ridge_intercept = mean_y - ridge_slope * mean_x
+        full_yrs = list(range(2015, 2026))
+        full_vals = [obs_dict[y] for y in full_yrs]
 
-        # 2. Holt-Winters Double Exponential Smoothing (alpha=0.55, beta=0.45) fit on 2015-2022
-        level = obs_dict[2015]
-        trend = obs_dict[2016] - obs_dict[2015]
-        ets_in_sample = {2015: level}
-        for y in range(2016, 2023):
-            val = obs_dict[y]
-            prev_level = level
-            level = 0.55 * val + 0.45 * (level + trend)
-            trend = 0.45 * (level - prev_level) + 0.55 * trend
-            ets_in_sample[y] = round(level, 2)
+        # Models fit ONLY on 2015-2022 for strictly leak-free 2023-2025 out-of-sample evaluation
+        r_int_tr, r_slp_tr = fit_ridge_trend(train_vals)
+        l_ets_tr, t_ets_tr, fit_ets_tr = fit_holt_ets(train_vals, alpha=0.55, beta=0.35, phi=1.0)
+        l_dmp_tr, t_dmp_tr, fit_dmp_tr = fit_holt_ets(train_vals, alpha=0.55, beta=0.35, phi=0.85)
+        drift_tr = (train_vals[-1] - train_vals[0]) / max(1, len(train_vals) - 1)
 
-        # Recent momentum (2021->2025) for TimesFM 2.0 foundation model context patch
-        recent_slope = (obs_dict[2025] - obs_dict[2021]) / 4.0
-        long_slope = (obs_dict[2025] - obs_dict[2015]) / 10.0
-        tfm_horizon_slope = 0.48 * recent_slope + 0.52 * long_slope
-        if "CPI" in ind_name:
-            tfm_horizon_slope = max(1.6, min(4.2, recent_slope * 0.42))
+        # Models re-fit on full 2015-2025 observations for 2026-2030 forward projection
+        r_int_full, r_slp_full = fit_ridge_trend(full_vals)
+        l_ets_full, t_ets_full, _ = fit_holt_ets(full_vals, alpha=0.55, beta=0.35, phi=1.0)
+        l_dmp_full, t_dmp_full, _ = fit_holt_ets(full_vals, alpha=0.55, beta=0.35, phi=0.85)
+        drift_full = (full_vals[-1] - full_vals[0]) / max(1, len(full_vals) - 1)
 
-        # Volatility sigma from 2015-2025 first differences
-        diffs = [abs(obs_dict[y] - obs_dict[y - 1]) for y in range(2016, 2026)]
-        sigma = max(0.05, sum(diffs) / len(diffs) * 0.55)
+        # Pre-compute 2023-2025 validation errors for empirical interval width
+        val_errs_dmp = []
+        for yr in range(2023, 2026):
+            h = yr - 2022
+            pred = holt_forecast(l_dmp_tr, t_dmp_tr, h, phi=0.85)
+            val_errs_dmp.append(obs_dict[yr] - pred)
+        val_rmse_dmp = math.sqrt(sum(e ** 2 for e in val_errs_dmp) / len(val_errs_dmp))
+        in_sample_diffs = [abs(full_vals[k] - full_vals[k - 1]) for k in range(1, len(full_vals))]
+        base_sigma = max(sum(in_sample_diffs) / len(in_sample_diffs), val_rmse_dmp * 0.55, 0.5)
 
         temp_rows = []
         for yr in range(2015, 2031):
             t = yr - 2015
+            actual_v = obs_dict.get(yr, None)
             if yr <= 2022:
                 split_role = "TRAIN (2015-2022)"
+                damped_p50 = fit_dmp_tr[t]
+                ets_pred = fit_ets_tr[t]
+                ridge_pred = round(r_int_tr + r_slp_tr * t, 2)
+                naive_pred = round(obs_dict[yr - 1] + drift_tr, 2) if yr > 2015 else actual_v
+                rw_pred = round(obs_dict[yr - 1], 2) if yr > 2015 else actual_v
+                p10 = damped_p50
+                p90 = damped_p50
             elif yr <= 2025:
                 split_role = "VALIDATION (2023-2025)"
+                h = yr - 2022
+                damped_p50 = round(holt_forecast(l_dmp_tr, t_dmp_tr, h, phi=0.85), 2)
+                ets_pred = round(holt_forecast(l_ets_tr, t_ets_tr, h, phi=1.0), 2)
+                ridge_pred = round(r_int_tr + r_slp_tr * t, 2)
+                naive_pred = round(train_vals[-1] + h * drift_tr, 2)
+                rw_pred = round(train_vals[-1], 2)
+                half_w = 1.2816 * base_sigma * math.sqrt(h)
+                p10 = round(damped_p50 - half_w, 2)
+                p90 = round(damped_p50 + half_w, 2)
             else:
                 split_role = "FORECAST (2026-2030)"
-
-            actual_v = obs_dict.get(yr, None)
-            ridge_pred = round(ridge_intercept + ridge_slope * t, 2)
-            ets_pred = ets_in_sample[yr] if yr <= 2022 else round(level + (yr - 2022) * trend * 1.15, 2)
-
-            if yr <= 2022:
-                tfm_p50 = actual_v
-            elif yr <= 2025:
-                # TimesFM 2.0 zero-shot patch-decoder tracks the post-2022 inflation/consumption inflection closely
-                one_step_context = obs_dict[yr - 1] + (obs_dict[yr - 1] - obs_dict[yr - 2]) * 0.65
-                tfm_p50 = round(0.76 * actual_v + 0.24 * one_step_context, 2)
-            else:
-                tfm_p50 = round(obs_dict[2025] + (yr - 2025) * tfm_horizon_slope, 2)
-
-            spread = (0.65 + max(0, yr - 2022) * 0.28) * sigma
-            p10 = round(tfm_p50 - 1.28 * spread, 2)
-            p90 = round(tfm_p50 + 1.28 * spread, 2)
+                h = yr - 2025
+                damped_p50 = round(holt_forecast(l_dmp_full, t_dmp_full, h, phi=0.85), 2)
+                ets_pred = round(holt_forecast(l_ets_full, t_ets_full, h, phi=1.0), 2)
+                ridge_pred = round(r_int_full + r_slp_full * t, 2)
+                naive_pred = round(full_vals[-1] + h * drift_full, 2)
+                rw_pred = round(full_vals[-1], 2)
+                half_w = 1.2816 * base_sigma * math.sqrt(h)
+                p10 = round(damped_p50 - half_w, 2)
+                p90 = round(damped_p50 + half_w, 2)
 
             temp_rows.append({
-                "series_id": f"{c_code}_{ind_name[:12]}",
+                "series_id": f"{c_code}_{ind_name[:16]}",
                 "country_code": c_code,
                 "country_label": c_label,
                 "indicator_name": ind_name,
                 "year": yr,
                 "split_role": split_role,
                 "actual_value": actual_v,
-                "timesfm_p50": tfm_p50,
-                "timesfm_p10": p10,
-                "timesfm_p90": p90,
+                "damped_ets_p50": damped_p50,
+                "damped_ets_p10": p10,
+                "damped_ets_p90": p90,
                 "ets_baseline": ets_pred,
                 "ridge_linear_baseline": ridge_pred,
+                "naive_drift_baseline": naive_pred,
+                "naive_rw_baseline": rw_pred,
             })
 
-        # Compute true held-out validation MAE and RMSE across 2023, 2024, 2025 for this exact country & indicator
         val_rows = [r for r in temp_rows if r["split_role"] == "VALIDATION (2023-2025)"]
-        tfm_mae = round(sum(abs(r["actual_value"] - r["timesfm_p50"]) for r in val_rows) / len(val_rows), 3)
+        dmp_mae = round(sum(abs(r["actual_value"] - r["damped_ets_p50"]) for r in val_rows) / len(val_rows), 3)
         ets_mae = round(sum(abs(r["actual_value"] - r["ets_baseline"]) for r in val_rows) / len(val_rows), 3)
         rdg_mae = round(sum(abs(r["actual_value"] - r["ridge_linear_baseline"]) for r in val_rows) / len(val_rows), 3)
+        niv_mae = round(sum(abs(r["actual_value"] - r["naive_drift_baseline"]) for r in val_rows) / len(val_rows), 3)
+        rw_mae = round(sum(abs(r["actual_value"] - r["naive_rw_baseline"]) for r in val_rows) / len(val_rows), 3)
 
-        tfm_rmse = round(math.sqrt(sum((r["actual_value"] - r["timesfm_p50"]) ** 2 for r in val_rows) / len(val_rows)), 3)
+        dmp_rmse = round(math.sqrt(sum((r["actual_value"] - r["damped_ets_p50"]) ** 2 for r in val_rows) / len(val_rows)), 3)
         ets_rmse = round(math.sqrt(sum((r["actual_value"] - r["ets_baseline"]) ** 2 for r in val_rows) / len(val_rows)), 3)
         rdg_rmse = round(math.sqrt(sum((r["actual_value"] - r["ridge_linear_baseline"]) ** 2 for r in val_rows) / len(val_rows)), 3)
+        niv_rmse = round(math.sqrt(sum((r["actual_value"] - r["naive_drift_baseline"]) ** 2 for r in val_rows) / len(val_rows)), 3)
+        rw_rmse = round(math.sqrt(sum((r["actual_value"] - r["naive_rw_baseline"]) ** 2 for r in val_rows) / len(val_rows)), 3)
+
+        cv_folds, cv_overall, cv_by_h, best_cv_m = expanding_origin_cv(full_yrs, full_vals, min_train=5, max_h=3)
+        expanding_cv_reports.append({
+            "series_id": f"{c_code}_{ind_name[:16]}",
+            "country_code": c_code,
+            "country_label": c_label,
+            "indicator_name": ind_name,
+            "best_cv_model": best_cv_m,
+            "overall": cv_overall,
+            "by_horizon": cv_by_h,
+            "fold_count": len(cv_folds),
+        })
 
         for r in temp_rows:
-            r["timesfm_val_mae"] = tfm_mae
+            r["damped_ets_val_mae"] = dmp_mae
             r["ets_val_mae"] = ets_mae
             r["ridge_val_mae"] = rdg_mae
-            r["timesfm_val_rmse"] = tfm_rmse
+            r["naive_val_mae"] = niv_mae
+            r["naive_rw_val_mae"] = rw_mae
+            r["damped_ets_val_rmse"] = dmp_rmse
             r["ets_val_rmse"] = ets_rmse
             r["ridge_val_rmse"] = rdg_rmse
-            timesfm_rows.append(r)
+            r["naive_val_rmse"] = niv_rmse
+            r["naive_rw_val_rmse"] = rw_rmse
+            r["damped_ets_cv_mae"] = cv_overall["damped_ets"]["mae"]
+            r["damped_ets_cv_mase"] = cv_overall["damped_ets"]["mase"]
+            r["damped_ets_cv_smape"] = cv_overall["damped_ets"]["smape_pct"]
+            r["naive_drift_cv_mae"] = cv_overall["naive_drift"]["mae"]
+            r["naive_rw_cv_mae"] = cv_overall["naive_rw"]["mae"]
+            r["best_cv_model"] = best_cv_m
+            r["best_cv_mae"] = cv_overall[best_cv_m]["mae"]
+            r["best_cv_mase"] = cv_overall[best_cv_m]["mase"]
+            r["data_source"] = "ONS MM23 CPIH" if c_code == "GBR" else "Eurostat prc_hicp_aind (2015=100)"
+            forecast_rows.append(r)
 
 # Save JSON & Parquet files
 with open("public/data/crosswalk_rosetta.json", "w", encoding="utf-8") as f:
@@ -932,12 +1066,20 @@ with open("public/data/crosswalk_rosetta.json", "w", encoding="utf-8") as f:
 with open("public/data/nsi_subnational_quintiles.json", "w", encoding="utf-8") as f:
     json.dump({
         "silhouette_scores": silhouette_curve,
+        "pca_explained_variance_pct": pca_explained_pct,
         "optimal_k": 4,
         "rows": nsi_rows
     }, f, ensure_ascii=False, indent=2)
 
-with open("public/data/ml_timesfm_forecasts.json", "w", encoding="utf-8") as f:
-    json.dump(timesfm_rows, f, ensure_ascii=False, indent=2)
+with open("public/data/statistical_price_forecasts.json", "w", encoding="utf-8") as f:
+    json.dump(forecast_rows, f, ensure_ascii=False, indent=2)
+
+with open("public/data/forecast_validation_summary.json", "w", encoding="utf-8") as f:
+    json.dump(expanding_cv_reports, f, ensure_ascii=False, indent=2)
+
+for legacy_file in ("public/data/ml_timesfm_forecasts.json", "public/data/parquet/ml_timesfm_forecasts.parquet"):
+    if os.path.exists(legacy_file):
+        os.remove(legacy_file)
 
 con = duckdb.connect()
 con.execute("CREATE TABLE crosswalk_rosetta AS SELECT * FROM read_json_auto('public/data/crosswalk_rosetta.json')")
@@ -948,10 +1090,10 @@ with open("public/data/nsi_rows_only.json", "w", encoding="utf-8") as f:
 con.execute("CREATE TABLE nsi_subnational_quintiles AS SELECT * FROM read_json_auto('public/data/nsi_rows_only.json')")
 con.execute("COPY nsi_subnational_quintiles TO 'public/data/parquet/nsi_subnational_quintiles.parquet' (FORMAT PARQUET, COMPRESSION ZSTD)")
 
-con.execute("CREATE TABLE ml_timesfm_forecasts AS SELECT * FROM read_json_auto('public/data/ml_timesfm_forecasts.json')")
-con.execute("COPY ml_timesfm_forecasts TO 'public/data/parquet/ml_timesfm_forecasts.parquet' (FORMAT PARQUET, COMPRESSION ZSTD)")
+con.execute("CREATE TABLE statistical_price_forecasts AS SELECT * FROM read_json_auto('public/data/statistical_price_forecasts.json')")
+con.execute("COPY statistical_price_forecasts TO 'public/data/parquet/statistical_price_forecasts.parquet' (FORMAT PARQUET, COMPRESSION ZSTD)")
 
-print("6. Created updated Parquet tables in public/data/parquet/:")
+print(f"6. Created updated Parquet tables ({len(forecast_rows)} leak-free forecast rows) in public/data/parquet/:")
 for fn in sorted(os.listdir("public/data/parquet")):
     sz = os.path.getsize(os.path.join("public/data/parquet", fn)) / 1024
     print(f"   - {fn}: {sz:.1f} KB")

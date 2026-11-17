@@ -2,8 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import ReactECharts from './ThemedEChart';
 import * as echarts from 'echarts';
 import { Award, ExternalLink, Filter, Globe2, Layers, MapPin, ZoomIn } from 'lucide-react';
-import { assetUrl } from '../utils/assetPath';
+import { fetchCachedJson, fetchGiTerroirBundle } from '../services/dataProvider';
 import { COUNTRY_PROFILES, type CountryDietaryProfile } from '../types/research';
+import { classifyResourceError, type ResourceDisclosure } from '../utils/resourceAvailability';
+import { DataNatureBadge } from './DataNatureBadge';
+import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
 
 export type MapMetric =
   | 'dailyCarbonKg'
@@ -67,7 +70,7 @@ export function InteractiveChoroplethMap({
   onSelectCountry,
   compact = false,
 }: InteractiveChoroplethMapProps) {
-  const [geoLoaded, setGeoLoaded] = useState(false);
+  const [geoLoaded, setGeoLoaded] = useState(() => Boolean(echarts.getMap('world_dietshift')));
   const [metric, setMetric] = useState<MapMetric>('dailyCarbonKg');
   const [focusView, setFocusView] = useState<'europe' | 'world'>('europe');
   const [giRecords, setGiRecords] = useState<GICartographyItem[]>([]);
@@ -78,44 +81,87 @@ export function InteractiveChoroplethMap({
   const [selectedGiItem, setSelectedGiItem] = useState<GICartographyItem | null>(null);
   const [countryGiSearch, setCountryGiSearch] = useState<string>('');
   const [countryGiPage, setCountryGiPage] = useState<number>(1);
+  const [mapDisclosures, setMapDisclosures] = useState<ResourceDisclosure[]>([]);
+  const [retryCount, setRetryCount] = useState<number>(0);
 
   useEffect(() => {
-    if (echarts.getMap('world_dietshift')) {
-      setGeoLoaded(true);
-    } else {
-      fetch(assetUrl('data/world.geojson'))
-        .then((r) => r.json())
-        .then((geoJson) => {
-          echarts.registerMap('world_dietshift', geoJson);
-          setGeoLoaded(true);
-        })
-        .catch((err) => console.error('GeoJSON load error:', err));
+    let cancelled = false;
+    const forceRetry = retryCount > 0;
+    const tasks: Array<Promise<void>> = [];
+    const pushDisclosure = (d: ResourceDisclosure) => {
+      setMapDisclosures((prev) =>
+        prev.some((x) => x.category === d.category && x.resourceLabel === d.resourceLabel)
+          ? prev
+          : [...prev, d]
+      );
+    };
+
+    if (!echarts.getMap('world_dietshift')) {
+      tasks.push(
+        fetchCachedJson<Parameters<typeof echarts.registerMap>[1]>('data/world.geojson', { forceRetry })
+          .then((geoJson) => {
+            if (!cancelled) {
+              echarts.registerMap('world_dietshift', geoJson);
+              setGeoLoaded(true);
+            }
+          })
+          .catch((err: unknown) => {
+            if (!cancelled) {
+              pushDisclosure(
+                classifyResourceError(err, {
+                  resourcePath: 'data/world.geojson',
+                  resourceLabel: 'World Natural Earth Vector Boundaries',
+                })
+              );
+            }
+          })
+      );
     }
-  }, []);
 
-  useEffect(() => {
-    fetch(assetUrl('data/gi_terroir_bundle.json'))
-      .then((r) => r.json())
-      .then((d) => {
-        if (d?.gi_terroir_records) {
-          setGiRecords(d.gi_terroir_records);
-        }
-      })
-      .catch(() => {
-        // Ignore if not loaded yet
-      });
+    tasks.push(
+      fetchGiTerroirBundle<{ gi_terroir_records?: GICartographyItem[] }>({ forceRetry })
+        .then((d) => {
+          if (!cancelled && d?.gi_terroir_records) {
+            setGiRecords(d.gi_terroir_records);
+          }
+        })
+        .catch((err: unknown) => {
+          if (!cancelled) {
+            pushDisclosure(
+              classifyResourceError(err, {
+                resourcePath: 'data/gi_terroir_bundle.json',
+                availableSummary:
+                  'Natural Earth choropleth cartography, national dietary profiles, and 150+ World Bank CoHD economies remain interactive.',
+              })
+            );
+          }
+        })
+    );
 
-    fetch(assetUrl('data/global_benchmarks.json'))
-      .then((r) => r.json())
-      .then((d) => {
-        if (d?.cohd_latest_by_country) {
-          setCohdRecords(d.cohd_latest_by_country);
-        }
-      })
-      .catch(() => {
-        // Ignore if not loaded yet
-      });
-  }, []);
+    tasks.push(
+      fetchCachedJson<{ cohd_latest_by_country?: CohdCountryRecord[] }>('data/global_benchmarks.json', { forceRetry })
+        .then((d) => {
+          if (!cancelled && d?.cohd_latest_by_country) {
+            setCohdRecords(d.cohd_latest_by_country);
+          }
+        })
+        .catch((err: unknown) => {
+          if (!cancelled) {
+            pushDisclosure(
+              classifyResourceError(err, {
+                resourcePath: 'data/global_benchmarks.json',
+                resourceLabel: 'World Bank CoHD & Poore global benchmarks (global_benchmarks.json)',
+              })
+            );
+          }
+        })
+    );
+
+    void Promise.all(tasks);
+    return () => {
+      cancelled = true;
+    };
+  }, [retryCount]);
 
   const foodGiCount = useMemo(
     () => giRecords.filter((r) => (r.product_sector || 'FOOD') === 'FOOD').length,
@@ -484,10 +530,10 @@ export function InteractiveChoroplethMap({
                   ${gi.eu_class}
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px;color:#2d3643;font-family:'IBM Plex Mono',monospace;margin-bottom:5px;">
-                  <span>Processing: <b>NOVA ${gi.nova_group}</b></span>
-                  <span>Carbon: <b>${gi.co2_kg_per_kg} kg CO₂</b></span>
-                  <span>Water: <b>${gi.water_L_per_kg} L/kg</b></span>
-                  <span>Premium: <b>+${gi.price_premium_pct}%</b></span>
+                  <span>Processing: <b>NOVA ${gi.nova_group} (Class Proxy)</b></span>
+                  <span>Carbon (est. proxy): <b>${gi.co2_kg_per_kg} kg CO₂</b></span>
+                  <span>Water (est. proxy): <b>${gi.water_L_per_kg} L/kg</b></span>
+                  <span>Premium (est.): <b>+${gi.price_premium_pct}%</b></span>
                 </div>
                 <div style="font-size:10px;color:#3d4654;font-family:'IBM Plex Mono',monospace;">
                   Source: ${gi.data_source} (Click pin to inspect dossier)
@@ -597,7 +643,7 @@ export function InteractiveChoroplethMap({
           : []),
       ],
     };
-  }, [geoLoaded, metric, focusView, selectedCountry, METRIC_META, giCountryStats, showGiPins, filteredGiPins, compact]);
+  }, [geoLoaded, metric, focusView, selectedCountry, METRIC_META, giCountryStats, showGiPins, filteredGiPins, compact, cohdRecords, cohdByGeoName]);
 
   const onEvents = useMemo(
     () => ({
@@ -625,13 +671,36 @@ export function InteractiveChoroplethMap({
 
   return (
     <div className="almanac-sheet p-4 flex flex-col space-y-3">
+      {mapDisclosures.map((d, idx) => (
+        <ResourceDisclosureBanner
+          key={`${d.category}-${d.resourceLabel}-${idx}`}
+          disclosure={d}
+          onRetry={
+            d.isRetryable
+              ? () => {
+                  setMapDisclosures([]);
+                  setRetryCount((n) => n + 1);
+                }
+              : undefined
+          }
+          retryLabel="Retry"
+          compact
+        />
+      ))}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 rule-firm">
         <div>
-          <h2 className="text-base font-semibold flex items-center gap-2">
+          <h2 className="text-base font-semibold flex flex-wrap items-center gap-2">
             <Globe2 className="w-4 h-4" />
             Plate I. European &amp; global dietary choropleth + GI terroir spatial layer (
-            {foodGiCount > 0 ? foodGiCount.toLocaleString() : '3,037'} Food GIs /{' '}
-            {giRecords.length > 0 ? giRecords.length.toLocaleString() : '6,845'} total)
+            {giRecords.length > 0
+              ? `${foodGiCount.toLocaleString()} Food GIs / ${giRecords.length.toLocaleString()} total`
+              : mapDisclosures.some((d) => d.isExcludedTrackB)
+              ? 'GI pin overlay omitted in Track A'
+              : '0 GI pins loaded'}
+            )
+            <DataNatureBadge
+              nature={metric === 'cohdCostPpp' || metric === 'cohdUnaffordablePct' ? 'Observed' : 'Estimated'}
+            />
           </h2>
           <p className="almanac-label">
             Defaults to Agro-Foodstuffs (<code>FOOD</code>: {foodGiCount.toLocaleString()}) so Wine, Spirits &amp; Craft
@@ -659,13 +728,25 @@ export function InteractiveChoroplethMap({
           </select>
 
           <button
+            type="button"
             onClick={() => setShowGiPins(!showGiPins)}
-            className={`almanac-btn flex items-center gap-1 ${showGiPins ? 'almanac-btn--primary' : ''}`}
+            disabled={giRecords.length === 0}
+            aria-disabled={giRecords.length === 0}
+            title={
+              giRecords.length === 0
+                ? 'GI Terroir spatial overlay unavailable or excluded in this distribution'
+                : 'Toggle Agro-Foodstuffs GI Terroir spatial pins'
+            }
+            className={`almanac-btn flex items-center gap-1 disabled:opacity-45 disabled:cursor-not-allowed ${
+              showGiPins ? 'almanac-btn--primary' : ''
+            }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            {showGiPins
+            {giRecords.length === 0
+              ? 'Food GI Pins Unavailable'
+              : showGiPins
               ? `GI Terroir Pins ON (${filteredGiPins.length.toLocaleString()})`
-              : `Overlay Food GI Pins (${foodGiCount > 0 ? foodGiCount.toLocaleString() : '3,037'})`}
+              : `Overlay Food GI Pins (${foodGiCount.toLocaleString()})`}
           </button>
 
           <div className="flex items-center border border-[var(--color-ink)]">
@@ -759,8 +840,8 @@ export function InteractiveChoroplethMap({
               {selectedGiItem.file_number || selectedGiItem.gi_id})
             </div>
             <div className="text-[var(--color-muted)] mt-0.5">
-              {selectedGiItem.eu_class} | <b>NOVA {selectedGiItem.nova_group}</b> | Carbon:{' '}
-              <b className="font-mono-num">{selectedGiItem.co2_kg_per_kg} kg CO₂/kg</b> | Water:{' '}
+              {selectedGiItem.eu_class} | <b>NOVA {selectedGiItem.nova_group}</b> | Class Proxy Carbon (est.):{' '}
+              <b className="font-mono-num">{selectedGiItem.co2_kg_per_kg} kg CO₂/kg</b> | Class Proxy Water (est.):{' '}
               <b className="font-mono-num">{selectedGiItem.water_L_per_kg} L/kg</b> | {selectedGiItem.disciplinare_note}
             </div>
           </div>

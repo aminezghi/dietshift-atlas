@@ -20,6 +20,31 @@ let dbInstance: duckdb.AsyncDuckDB | null = null;
 let connInstance: duckdb.AsyncDuckDBConnection | null = null;
 let initPromise: Promise<duckdb.AsyncDuckDBConnection> | null = null;
 
+const VIEW_DEFINITIONS: Array<[string, string]> = [
+  ['agribalyse', 'agribalyse_31.parquet'],
+  ['openfoodfacts', 'openfoodfacts_eu.parquet'],
+  ['efsa_foodex2', 'efsa_foodex2_surveys.parquet'],
+  ['crosswalk_rosetta', 'crosswalk_rosetta.parquet'],
+  ['classification_mappings', 'classification_mappings.parquet'],
+  ['nsi_subnational_quintiles', 'nsi_subnational_quintiles.parquet'],
+  ['statistical_price_forecasts', 'statistical_price_forecasts.parquet'],
+  ['consumer_behavior_pulse', 'consumer_behavior_pulse.parquet'],
+  ['social_discourse_velocity', 'social_discourse_velocity.parquet'],
+  ['gi_terroir_registry', 'gi_terroir_registry.parquet'],
+  ['gs1_immagino_observatory', 'gs1_immagino_observatory.parquet'],
+  ['scrapling_retail_claims', 'scrapling_retail_claims.parquet'],
+  ['pan_eu_retail_scanner', 'pan_eu_retail_scanner.parquet'],
+  ['time_use_cooking_friction', 'time_use_cooking_friction.parquet'],
+  ['clinical_biomarker_grounding', 'clinical_biomarker_grounding.parquet'],
+  ['school_meals_procurement', 'school_meals_procurement.parquet'],
+  ['cultural_climate_inertia', 'cultural_climate_inertia.parquet'],
+  ['global_poore_nemecek_lca', 'global_poore_nemecek_lca.parquet'],
+  ['global_healthy_diet_affordability', 'global_healthy_diet_affordability.parquet'],
+];
+
+const registeredViews = new Set<string>();
+const unavailableViews = new Set<string>();
+
 export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnection> {
   if (connInstance) return connInstance;
   if (initPromise) return initPromise;
@@ -31,28 +56,7 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
     const db = new duckdb.AsyncDuckDB(logger, worker);
     await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
-    const parquetFiles = [
-      'agribalyse_31.parquet',
-      'openfoodfacts_eu.parquet',
-      'efsa_foodex2_surveys.parquet',
-      'crosswalk_rosetta.parquet',
-      'nsi_subnational_quintiles.parquet',
-      'ml_timesfm_forecasts.parquet',
-      'consumer_behavior_pulse.parquet',
-      'social_discourse_velocity.parquet',
-      'gi_terroir_registry.parquet',
-      'gs1_immagino_observatory.parquet',
-      'scrapling_retail_claims.parquet',
-      'pan_eu_retail_scanner.parquet',
-      'time_use_cooking_friction.parquet',
-      'clinical_biomarker_grounding.parquet',
-      'school_meals_procurement.parquet',
-      'cultural_climate_inertia.parquet',
-      'global_poore_nemecek_lca.parquet',
-      'global_healthy_diet_affordability.parquet',
-    ];
-
-    for (const file of parquetFiles) {
+    for (const [, file] of VIEW_DEFINITIONS) {
       await db.registerFileURL(
         file,
         absoluteAssetUrl(`data/parquet/${file}`),
@@ -63,26 +67,16 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
 
     const conn = await db.connect();
 
-    await conn.query(`
-      CREATE VIEW IF NOT EXISTS agribalyse AS SELECT * FROM parquet_scan('agribalyse_31.parquet');
-      CREATE VIEW IF NOT EXISTS openfoodfacts AS SELECT * FROM parquet_scan('openfoodfacts_eu.parquet');
-      CREATE VIEW IF NOT EXISTS efsa_foodex2 AS SELECT * FROM parquet_scan('efsa_foodex2_surveys.parquet');
-      CREATE VIEW IF NOT EXISTS crosswalk_rosetta AS SELECT * FROM parquet_scan('crosswalk_rosetta.parquet');
-      CREATE VIEW IF NOT EXISTS nsi_subnational_quintiles AS SELECT * FROM parquet_scan('nsi_subnational_quintiles.parquet');
-      CREATE VIEW IF NOT EXISTS ml_timesfm_forecasts AS SELECT * FROM parquet_scan('ml_timesfm_forecasts.parquet');
-      CREATE VIEW IF NOT EXISTS consumer_behavior_pulse AS SELECT * FROM parquet_scan('consumer_behavior_pulse.parquet');
-      CREATE VIEW IF NOT EXISTS social_discourse_velocity AS SELECT * FROM parquet_scan('social_discourse_velocity.parquet');
-      CREATE VIEW IF NOT EXISTS gi_terroir_registry AS SELECT * FROM parquet_scan('gi_terroir_registry.parquet');
-      CREATE VIEW IF NOT EXISTS gs1_immagino_observatory AS SELECT * FROM parquet_scan('gs1_immagino_observatory.parquet');
-      CREATE VIEW IF NOT EXISTS scrapling_retail_claims AS SELECT * FROM parquet_scan('scrapling_retail_claims.parquet');
-      CREATE VIEW IF NOT EXISTS pan_eu_retail_scanner AS SELECT * FROM parquet_scan('pan_eu_retail_scanner.parquet');
-      CREATE VIEW IF NOT EXISTS time_use_cooking_friction AS SELECT * FROM parquet_scan('time_use_cooking_friction.parquet');
-      CREATE VIEW IF NOT EXISTS clinical_biomarker_grounding AS SELECT * FROM parquet_scan('clinical_biomarker_grounding.parquet');
-      CREATE VIEW IF NOT EXISTS school_meals_procurement AS SELECT * FROM parquet_scan('school_meals_procurement.parquet');
-      CREATE VIEW IF NOT EXISTS cultural_climate_inertia AS SELECT * FROM parquet_scan('cultural_climate_inertia.parquet');
-      CREATE VIEW IF NOT EXISTS global_poore_nemecek_lca AS SELECT * FROM parquet_scan('global_poore_nemecek_lca.parquet');
-      CREATE VIEW IF NOT EXISTS global_healthy_diet_affordability AS SELECT * FROM parquet_scan('global_healthy_diet_affordability.parquet');
-    `);
+    for (const [viewName, file] of VIEW_DEFINITIONS) {
+      try {
+        await conn.query(
+          `CREATE VIEW IF NOT EXISTS ${viewName} AS SELECT * FROM parquet_scan('${file}');`
+        );
+        registeredViews.add(viewName);
+      } catch {
+        unavailableViews.add(viewName);
+      }
+    }
 
     dbInstance = db;
     connInstance = conn;
@@ -90,6 +84,16 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
   })();
 
   return initPromise;
+}
+
+export function getDuckDBViewAvailability(): {
+  registeredViews: string[];
+  unavailableViews: string[];
+} {
+  return {
+    registeredViews: Array.from(registeredViews),
+    unavailableViews: Array.from(unavailableViews),
+  };
 }
 
 export async function runDuckDBQuery(sql: string): Promise<{

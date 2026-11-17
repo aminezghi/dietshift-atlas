@@ -16,6 +16,13 @@ import {
   type AgribalyseItem,
   type CustomBasketItem,
 } from '../types/research';
+import {
+  fromAgribalyseToBasketItem,
+  parseSurveyCsvRows,
+  serializeBasketCsv,
+  summarizeCustomBasket,
+} from '../analytics/sandboxLedger';
+import { DataNatureBadge } from './DataNatureBadge';
 
 const DEFAULT_BASKET: CustomBasketItem[] = [
   {
@@ -124,67 +131,11 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
 
   const baselineProfile = COUNTRY_PROFILES[selectedCountry] || COUNTRY_PROFILES.IT;
 
-  const basketSummary = useMemo(() => {
-    let totalGrams = 0;
-    let totalCarbonKg = 0;
-    let totalWaterL = 0;
-    let totalLandM2 = 0;
-    let totalKcal = 0;
-    let totalProteinG = 0;
-    let totalCostEur = 0;
-    let nova4Kcal = 0;
-
-    const catGrams: Record<string, number> = {
-      'Red Meat': 0,
-      Dairy: 0,
-      'Legumes & Nuts': 0,
-      'Whole Grains': 0,
-      'Vegetables & Fruits': 0,
-      'Ultra-Processed': 0,
-    };
-
-    basket.forEach((item) => {
-      const kg = item.gramsPerDay / 1000.0;
-      const itemKcal = (item.gramsPerDay / 100.0) * item.kcalPer100g;
-      const itemProt = (item.gramsPerDay / 100.0) * item.proteinPer100g;
-
-      totalGrams += item.gramsPerDay;
-      totalCarbonKg += kg * item.carbonPerKg;
-      totalWaterL += kg * item.waterM3PerKg * 1000.0;
-      totalLandM2 += kg * item.landPtPerKg * 0.25;
-      totalKcal += itemKcal;
-      totalProteinG += itemProt;
-      totalCostEur += kg * item.costEurPerKg;
-
-      if (item.novaGroup === 4) {
-        nova4Kcal += itemKcal;
-      }
-      catGrams[item.foodEx2Category] = (catGrams[item.foodEx2Category] || 0) + item.gramsPerDay;
-    });
-
-    const upfSharePct = totalKcal > 0 ? Math.round((nova4Kcal / totalKcal) * 100) : 0;
-
-    const eatLancetBasket = {
-      redMeat: Math.min(400, Math.round((catGrams['Red Meat'] / 28.0) * 100)),
-      dairy: Math.min(300, Math.round((catGrams.Dairy / 250.0) * 100)),
-      legumesNuts: Math.min(150, Math.round((catGrams['Legumes & Nuts'] / 125.0) * 100)),
-      wholeGrains: Math.min(150, Math.round((catGrams['Whole Grains'] / 232.0) * 100)),
-      vegetablesFruits: Math.min(150, Math.round((catGrams['Vegetables & Fruits'] / 500.0) * 100)),
-      ultraProcessedShare: Math.min(70, upfSharePct),
-    };
-
-    return {
-      totalGrams: Math.round(totalGrams),
-      totalCarbonKg: +totalCarbonKg.toFixed(2),
-      totalWaterL: Math.round(totalWaterL),
-      totalLandM2: +totalLandM2.toFixed(2),
-      totalKcal: Math.round(totalKcal),
-      totalProteinG: +totalProteinG.toFixed(1),
-      totalCostEur: +totalCostEur.toFixed(2),
-      upfSharePct,
-      eatLancetBasket,
-    };
-  }, [basket]);
+  const basketResult = useMemo(
+    () => summarizeCustomBasket(basket, baselineProfile),
+    [basket, baselineProfile]
+  );
+  const basketSummary = basketResult.data;
 
   const addAgribalyseToBasket = () => {
     const agb = agribalyseCatalog.find((a) => a.Code_AGB === selectedAgbCode);
@@ -193,38 +144,7 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
   };
 
   const appendAgribalyseItem = (agb: AgribalyseItem) => {
-    const grp = (agb.Groupe_aliment || agb["Groupe_d'aliment"] || '').toLowerCase();
-    let cat = 'Vegetables & Fruits';
-    let nova = 1;
-    if (grp.includes('viande') || grp.includes('meat')) cat = 'Red Meat';
-    else if (grp.includes('lait') || grp.includes('fromage')) cat = 'Dairy';
-    else if (grp.includes('céréal')) cat = 'Whole Grains';
-    else if (grp.includes('légumineuse') || grp.includes('oléagineux')) cat = 'Legumes & Nuts';
-    else if (grp.includes('plat') || grp.includes('sucr')) {
-      cat = 'Ultra-Processed';
-      nova = 4;
-    }
-
-    const co2 = Number(agb.Changement_climatique_kg_CO2eq ?? agb.Changement_climatique ?? 2.0);
-    const water = Number(agb.Eau_m3 ?? agb['Épuisement_des_ressources_eau'] ?? 0.3);
-    const land = Number(agb.Sol_Pt ?? agb.Utilisation_du_sol ?? 5.0);
-
-    setBasket((prev) => [
-      ...prev,
-      {
-        id: `agb-${Date.now()}`,
-        foodName: agb.LCI_Name || agb.Nom_du_Produit_en_Francais || 'Agribalyse item',
-        foodEx2Category: cat,
-        gramsPerDay: 85,
-        novaGroup: nova,
-        carbonPerKg: +co2.toFixed(2),
-        waterM3PerKg: +water.toFixed(2),
-        landPtPerKg: +land.toFixed(1),
-        kcalPer100g: 165,
-        proteinPer100g: 9.0,
-        costEurPerKg: 5.5,
-      },
-    ]);
+    setBasket((prev) => [...prev, fromAgribalyseToBasketItem(agb)]);
   };
 
   const handleCsvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -235,62 +155,35 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        const parsedItems: CustomBasketItem[] = results.data
-          .map((row, idx) => ({
-            id: `csv-${idx}-${Date.now()}`,
-            foodName: row.food_name || row.FoodName || row.product_name || `Survey item ${idx + 1}`,
-            foodEx2Category: row.category || row.FoodEx2_Category || 'Vegetables & Fruits',
-            gramsPerDay: Number(row.grams_per_day || row.GramsPerDay || 100),
-            novaGroup: Number(row.nova_group || row.NOVA || 1),
-            carbonPerKg: Number(row.carbon_kg_per_kg || row.CarbonPerKg || 1.8),
-            waterM3PerKg: Number(row.water_m3_per_kg || row.WaterM3PerKg || 0.25),
-            landPtPerKg: Number(row.land_pt_per_kg || row.LandPtPerKg || 2.0),
-            kcalPer100g: Number(row.kcal_100g || 140),
-            proteinPer100g: Number(row.protein_100g || 6.5),
-            costEurPerKg: Number(row.cost_eur_per_kg || 4.5),
-          }))
-          .filter((it) => it.gramsPerDay > 0);
-
-        if (parsedItems.length > 0) {
-          setBasket(parsedItems);
-          setUploadStatus(`Loaded ${parsedItems.length} dietary survey rows from "${file.name}"`);
+        const parsed = parseSurveyCsvRows(results.data);
+        if (parsed.items.length > 0) {
+          setBasket(parsed.items);
+          const notes = [
+            `Loaded ${parsed.items.length} dietary survey rows from "${file.name}"`,
+          ];
+          if (parsed.skippedInvalidGramsCount > 0) {
+            notes.push(`excluded ${parsed.skippedInvalidGramsCount} rows without valid grams_per_day`);
+          }
+          if (parsed.importedMissingFieldCount > 0) {
+            notes.push(`preserved ${parsed.importedMissingFieldCount} blank cells as NULL (no imputation)`);
+          }
+          setUploadStatus(`${notes.join(' · ')}.`);
+        } else {
+          setUploadStatus(`No valid positive grams_per_day rows found in "${file.name}".`);
         }
       },
     });
   };
 
   const downloadSampleTemplateCsv = () => {
-    const headers = [
-      'food_name',
-      'category',
-      'grams_per_day',
-      'nova_group',
-      'carbon_kg_per_kg',
-      'water_m3_per_kg',
-      'land_pt_per_kg',
-      'kcal_100g',
-      'protein_100g',
-      'cost_eur_per_kg',
-    ];
-    const rows = basket.map((b) => [
-      `"${b.foodName.replace(/"/g, '""')}"`,
-      `"${b.foodEx2Category}"`,
-      b.gramsPerDay,
-      b.novaGroup,
-      b.carbonPerKg,
-      b.waterM3PerKg,
-      b.landPtPerKg,
-      b.kcalPer100g,
-      b.proteinPer100g,
-      b.costEurPerKg,
-    ]);
-    const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const csv = serializeBasketCsv(basket);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'dietshift_researcher_survey_template.csv';
     a.click();
+    URL.revokeObjectURL(url);
   };
 
   const sandboxRadarOption = useMemo(() => {
@@ -345,7 +238,7 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
                 b.legumesNuts,
                 b.wholeGrains,
                 b.vegetablesFruits,
-                b.ultraProcessedShare,
+                b.ultraProcessedShare ?? 0,
               ],
               name: 'Custom survey basket',
               itemStyle: { color: '#8a1253' },
@@ -383,13 +276,14 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
       <div className="almanac-sheet p-5">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-3 rule-firm">
           <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2">
+            <h2 className="text-lg font-semibold flex flex-wrap items-center gap-2">
               <ShoppingBasket className="w-4 h-4" />
-              Section V. Researcher Dietary Survey Upload and Custom Basket Ledger
+              Section VI. Researcher Dietary Survey Upload and Custom Basket Ledger
+              <DataNatureBadge nature="Simulated" label="Interactive Ledger" />
+              <DataNatureBadge nature="Model Output" label="Agribalyse LCI" />
             </h2>
             <p className="almanac-label">
-              Upload a dietary recall or household basket CSV, or append items from the 2,451-entry Agribalyse 3.1
-              inventory.
+              Upload a dietary recall CSV or append ADEME Agribalyse 3.1.1 LCA items (missing nutrition, NOVA, and price fields remain NULL—never imputed—and native AWARE m³ eq / PEF Pt units are preserved).
             </p>
           </div>
 
@@ -471,7 +365,24 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
           </div>
         )}
 
-        {/* Ruled Summary Stat Row (Hallmark data-viz.md: stat row, no card boxes) */}
+        {(basketSummary.missingness.importedLcaOnlyItems > 0 ||
+          basketSummary.missingness.kcalMissing > 0 ||
+          basketSummary.missingness.costMissing > 0 ||
+          basketSummary.missingness.novaMissing > 0) && (
+          <div className="mt-3 p-2.5 border border-[#8a1253]/40 bg-[var(--color-well)] text-xs text-[var(--color-ink)]">
+            <b>Partial Measurement Disclosure:</b>{' '}
+            {basketSummary.missingness.importedLcaOnlyItems > 0 && (
+              <span>
+                {basketSummary.missingness.importedLcaOnlyItems} Agribalyse LCI item(s) supply Model Output carbon, AWARE water, and PEF land impacts only; nutrition (kcal/protein), NOVA, and retail price are preserved as <b>NULL</b>.{' '}
+              </span>
+            )}
+            Known sums cover {basket.length - basketSummary.missingness.kcalMissing}/{basket.length} energy,{' '}
+            {basket.length - basketSummary.missingness.costMissing}/{basket.length} price, and{' '}
+            {basket.length - basketSummary.missingness.novaMissing}/{basket.length} NOVA items.
+          </div>
+        )}
+
+        {/* Ruled Summary Stat Row (strict native units, no Pt->m2 or AWARE m3->L conversion) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 divide-x divide-[var(--color-rule)] pt-4">
           <div className="px-3 first:pl-0">
             <div className="almanac-label">Basket carbon</div>
@@ -479,39 +390,45 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
               {basketSummary.totalCarbonKg} kg
             </div>
             <div className="almanac-label text-xs">
-              vs. {baselineProfile.code}: {baselineProfile.dailyCarbonKg} kg/d
+              vs. {baselineProfile.code}: {baselineProfile.dailyCarbonKg} kg CO₂eq/d
             </div>
           </div>
           <div className="px-3">
-            <div className="almanac-label">Daily energy</div>
+            <div className="almanac-label">Known energy</div>
             <div className="text-xl font-semibold num text-[var(--color-ink)]">
-              {basketSummary.totalKcal} kcal
+              {basketSummary.totalKcal !== null ? `${basketSummary.totalKcal} kcal` : 'N/A'}
             </div>
-            <div className="almanac-label text-xs num">{basketSummary.totalProteinG} g protein/d</div>
+            <div className="almanac-label text-xs num">
+              {basketSummary.totalProteinG !== null ? `${basketSummary.totalProteinG} g protein/d` : 'Protein N/A'} ({basket.length - basketSummary.missingness.kcalMissing}/{basket.length})
+            </div>
           </div>
           <div className="px-3">
-            <div className="almanac-label">NOVA 4 share</div>
-            <div className="text-xl font-semibold num text-[var(--color-ink)]">{basketSummary.upfSharePct}%</div>
+            <div className="almanac-label">NOVA 4 share (known)</div>
+            <div className="text-xl font-semibold num text-[var(--color-ink)]">
+              {basketSummary.upfSharePct !== null ? `${basketSummary.upfSharePct}%` : 'N/A'}
+            </div>
             <div className="almanac-label text-xs">
-              vs. {baselineProfile.code}: {baselineProfile.eatLancetIndex.ultraProcessedShare}%
+              {basketSummary.missingness.novaMissing} unknown NOVA · {baselineProfile.code}: {baselineProfile.eatLancetIndex.ultraProcessedShare}%
             </div>
           </div>
           <div className="px-3">
-            <div className="almanac-label">Daily basket cost</div>
-            <div className="text-xl font-semibold num text-[var(--color-ink)]">€{basketSummary.totalCostEur}</div>
+            <div className="almanac-label">Known basket cost</div>
+            <div className="text-xl font-semibold num text-[var(--color-ink)]">
+              {basketSummary.totalCostEur !== null ? `€${basketSummary.totalCostEur}` : 'N/A'}
+            </div>
             <div className="almanac-label text-xs">
-              vs. {baselineProfile.code}: €{baselineProfile.dailyBasketCostEur}/d
+              {basket.length - basketSummary.missingness.costMissing}/{basket.length} priced · {baselineProfile.code}: €{baselineProfile.dailyBasketCostEur}/d
             </div>
           </div>
           <div className="px-3">
-            <div className="almanac-label">Deprived water</div>
-            <div className="text-xl font-semibold num text-[var(--color-ink)]">{basketSummary.totalWaterL} L</div>
-            <div className="almanac-label text-xs">Agribalyse PEF index</div>
+            <div className="almanac-label">Deprived water (AWARE)</div>
+            <div className="text-xl font-semibold num text-[var(--color-ink)]">{basketSummary.totalWaterAwareM3} m³ eq</div>
+            <div className="almanac-label text-xs">AWARE world-eq (not L)</div>
           </div>
           <div className="px-3">
-            <div className="almanac-label">Edible mass</div>
-            <div className="text-xl font-semibold num text-[var(--color-ink)]">{basketSummary.totalGrams} g/d</div>
-            <div className="almanac-label text-xs">{basket.length} ledger entries</div>
+            <div className="almanac-label">Land impact (PEF Pt)</div>
+            <div className="text-xl font-semibold num text-[var(--color-ink)]">{basketSummary.totalLandPt} Pt</div>
+            <div className="almanac-label text-xs">{basketSummary.totalGrams} g/d · not m²</div>
           </div>
         </div>
       </div>
@@ -606,13 +523,30 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
               </thead>
               <tbody>
                 {basket.map((item) => {
-                  const itemCarbonG = Math.round((item.gramsPerDay / 1000) * item.carbonPerKg * 1000);
-                  const itemCost = ((item.gramsPerDay / 1000) * item.costEurPerKg).toFixed(2);
+                  const itemCarbonG =
+                    item.carbonPerKg !== null
+                      ? Math.round((item.gramsPerDay / 1000) * item.carbonPerKg * 1000)
+                      : null;
+                  const itemCost =
+                    item.costEurPerKg !== null
+                      ? ((item.gramsPerDay / 1000) * item.costEurPerKg).toFixed(2)
+                      : null;
                   return (
                     <tr key={item.id}>
-                      <td className="font-semibold text-[var(--color-ink)]">{item.foodName}</td>
+                      <td className="font-semibold text-[var(--color-ink)]">
+                        <div>{item.foodName}</div>
+                        {item.itemOrigin && (
+                          <div className="font-mono-num text-[10px] font-normal text-[var(--color-muted)]">
+                            {item.itemOrigin === 'agribalyse_lca_import'
+                              ? 'Agribalyse Model Output (LCA only)'
+                              : item.itemOrigin === 'user_csv_import'
+                              ? 'User CSV upload'
+                              : 'Cohort Preset'}
+                          </div>
+                        )}
+                      </td>
                       <td>{item.foodEx2Category}</td>
-                      <td className="num text-right">{item.novaGroup}</td>
+                      <td className="num text-right">{item.novaGroup ?? 'N/A'}</td>
                       <td>
                         <div className="flex items-center gap-2">
                           <input
@@ -632,8 +566,12 @@ export function ResearcherSandbox({ selectedCountry, agribalyseCatalog }: Resear
                           <span className="num w-12 text-right">{item.gramsPerDay} g</span>
                         </div>
                       </td>
-                      <td className="num text-right text-[var(--color-accent)]">{itemCarbonG}</td>
-                      <td className="num text-right">€{itemCost}</td>
+                      <td className="num text-right text-[var(--color-accent)]">
+                        {itemCarbonG !== null ? itemCarbonG : 'N/A'}
+                      </td>
+                      <td className="num text-right">
+                        {itemCost !== null ? `€${itemCost}` : 'N/A'}
+                      </td>
                       <td className="text-right">
                         <button
                           onClick={() => setBasket((prev) => prev.filter((b) => b.id !== item.id))}

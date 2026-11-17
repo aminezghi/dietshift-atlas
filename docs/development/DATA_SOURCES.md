@@ -1,0 +1,27 @@
+# DietShift Atlas — Data Sources & Provenance Ledger
+
+Every dataset (`19/19`) registered in [`public/data/datasets_registry.json`](../../public/data/datasets_registry.json) is classified by **Data Nature**, **Update Policy**, and **Governance Track** (see [`docs/phase6/PHASE6B_DATA_GOVERNANCE.md`](../phase6/PHASE6B_DATA_GOVERNANCE.md) for detailed license clearance notes):
+
+| Dataset (`view_name`) | Rows | Data Nature | Tier | Update Policy | Primary Source, Attribution & License Status |
+| :--- | :---: | :--- | :--- | :--- | :--- |
+| `agribalyse` | 2,451 | **Model Output** | processed | `auto_api` | ADEME / INRAE Agribalyse 3.1.1 LCA Model — cradle-to-consumer FR mix; AWARE `m³ world eq/kg`, PEF `Pt/kg` (Etalab Open Licence v2.0) |
+| `openfoodfacts` | 3,197 | **Observed** | processed | `auto_api` | Open Food Facts Search-a-licious API — preserves genuine NULLs & zeros (`100%` missing `serving_quantity_g`) (ODbL 1.0 / CC-BY-SA) |
+| `scrapling_retail_claims` | 1,355 | **Observed** | harmonized | `auto_api` | Open Prices EU + Open Food Facts (`1,036` `g`, `187` `ml`, `132` missing qty; `1,023` observed/`8` partial/`324` missing nutrition) (ODbL 1.0) |
+| `global_healthy_diet_affordability` | 1,399 | **Observed** | processed | `auto_api` | World Bank & FAO *Food Prices for Nutrition* via OWID (`ICP PPP USD/day`, preserving NULLs) (CC-BY 4.0) |
+| `global_poore_nemecek_lca` | 45 | **Estimated** | processed | `static_reference` | Poore & Nemecek (*Science* 2018) meta-analysis (`38,700` farms / `119` countries) via OWID; farm-to-retail boundary (CC-BY 4.0) |
+| `clinical_biomarker_grounding` | 5 | **Estimated** | analytical | `auto_api` | CDC NHANES 2021–2023 `.XPT` (`WTDRD1` empirical `Total-C`, `HDL-C`, `Non-HDL-C`, `hs-CRP`, `SBP` mixed with derived `LDL`/`TG` ratios & fixed constants `96.0`/`5.5`/`28.4`; US-to-EU caveat) (Public Domain) |
+| `social_discourse_velocity` | 129 | **Observed** | processed | `auto_api` | Hacker News Algolia API & Google News RSS (**Redistribution Restricted**: YC/Google TOS & publisher copyrights; retain locally only) |
+| `statistical_price_forecasts` | 560 | **Forecast** | forecast | `auto_api` | Eurostat `prc_hicp_aind` & UK ONS `MM23`; causal expanding-origin Damped ETS / Holt ETS / Ridge / Drift / RW (`h=1..3` residual intervals; `h=4..5` Unavailable) (CC-BY 4.0 / OGL v3) |
+| `gi_terroir_registry` | 6,845 | **Estimated** | harmonized | `auto_api` | EUIPO GIview (`VERIFIED — ATTRIBUTION REQUIRED`) + Qualigeo (`PERMISSION REQUIRED` / Fondazione Qualivita ©); `3,037` `FOOD`-only default; LCA/NOVA/premium values are keyword class proxies (`isClassProxy`) |
+| `nsi_subnational_quintiles` | 150 | **Model Output** | analytical | `manual` | INE Spain & Eurostat HBS/EHIS/HICP anchors + modeled NUTS-2 disaggregation & SVD PCA / K-means (`k=4`) (CC-BY 4.0) |
+| `crosswalk_rosetta` | 15 | **Manually Compiled** | harmonized | `manual` | Eurostat COICOP × EFSA FoodEx2 × ADEME Agribalyse 3.1.1 canonical conceptual bridge `v2.0.0` (CC-BY 4.0) |
+| `classification_mappings` | 161 | **Manually Compiled** | harmonized | `manual` | ADEME Agribalyse 3.1.1 × EFSA FoodEx2 × Open Food Facts × Eurostat COICOP 2018 concordance `v3.0.0-phase3a` (`6` exact, `70` hierarchical, `16` approximate, `34` ambiguous, `35` unmatched) (CC-BY 4.0 / ODbL 1.0) |
+| `efsa_foodex2` | 1,080 | **Estimated** | analytical | `manual` | Stylized baseline (`v2.0-stylized`): 15 FoodEx2 template categories scaled by country/age multipliers pending direct EFSA respondent microdata (CC-BY 4.0 taxonomy ref) |
+| `consumer_behavior_pulse` | 8 | **Estimated** | analytical | `manual` | Eurobarometer / BEUC / NSI / Wikimedia synthesized behavioral cascade & elasticities (`v3.5`, not raw survey microdata) (CC-BY 4.0) |
+| `gs1_immagino_observatory` | 61 | **Manually Compiled** | processed | `manual` | Transcribed summary statistics from GS1 Italy *Osservatorio Immagino* (19th Ed. 2026-1) (**Permission Required**; underlying NielsenIQ microdata proprietary) |
+| `pan_eu_retail_scanner` | 88 | **Estimated** | analytical | `manual` | Stylized Pan-EU benchmark built on GS1 Immagino IT report summaries + modeled EU country estimates (**Permission Required** for IT GS1 reuse) |
+| `time_use_cooking_friction` | 60 | **Estimated** | analytical | `credentials_required` | Stylized quintile multipliers (`v1.0-stylized`) referencing MTUS / IPUMS Time Use (**Redistribution Restricted / Permission Required**) |
+| `school_meals_procurement` | 7 | **Manually Compiled** | processed | `manual` | Global Child Nutrition Foundation (GCNF) & national statutory legal frameworks (`EGALIM`, `CAM`, `DGE`) (CC-BY 4.0) |
+| `cultural_climate_inertia` | 11 | **Estimated** | analytical | `manual` | European Social Survey (ESS ERIC) & TISP composite indices (**Redistribution Restricted: ESS data licensed `CC BY-NC-SA 4.0` non-commercial ShareAlike**, overriding legacy `"CC-BY 4.0"` registry label) |
+
+> **Transparency Note:** DietShift Atlas separates **Observed** institutional/crowdsourced measurements from **Estimated** proxies/syntheses, **Model Outputs** (Agribalyse PEF LCI, NUTS-2 SVD disaggregation, `per_100kcal` ratios), chronological **Forecasts**, **Manually Compiled** concordances/`COUNTRY_PROFILES`, and **Simulated** analyst-defined policy heuristics (`ANALYST_POLICY_COEFFICIENTS`). Never pool incompatible evidence tiers or present heuristic outputs as calibrated statistical predictions.

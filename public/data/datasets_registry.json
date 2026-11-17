@@ -1,0 +1,2720 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at_utc": "2026-11-16T14:32:17.443076+00:00",
+  "total_datasets": 19,
+  "total_records": 17627,
+  "total_bytes": 944545,
+  "summary_by_tier": {
+    "raw": 0,
+    "processed": 7,
+    "harmonized": 4,
+    "analytical": 7,
+    "forecast": 1
+  },
+  "summary_by_nature": {
+    "Observed": 4,
+    "Estimated": 8,
+    "Model Output": 2,
+    "Forecast": 1,
+    "Simulated": 0,
+    "Manually Compiled": 4
+  },
+  "validation_summary": {
+    "pass": 19,
+    "warn": 0,
+    "fail": 0
+  },
+  "version_diff": [],
+  "datasets": [
+    {
+      "id": "agribalyse_31",
+      "name": "ADEME Agribalyse 3.1.1 Life-Cycle Assessment",
+      "view_name": "agribalyse",
+      "tier": "processed",
+      "data_nature": "Model Output",
+      "update_policy": "auto_api",
+      "update_cadence": "On release via ADEME Data-Fair API",
+      "source_name": "ADEME / INRAE Agribalyse 3.1.1",
+      "source_urls": [
+        "https://data.ademe.fr/datasets/agribalyse-31-synthese"
+      ],
+      "license": "Licence Ouverte / Open Licence v2.0 (Etalab)",
+      "retrieved_at": "2026-11-08",
+      "version": "3.1.1",
+      "geographic_coverage": "France / EU LCA reference",
+      "temporal_coverage": "2022–2024 (v3.1.1)",
+      "primary_key": [
+        "Code_AGB"
+      ],
+      "limitations": "French agricultural & retail mix; PEF single score & water deprivation (AWARE m³ world eq).",
+      "file_path": "data/parquet/agribalyse_31.parquet",
+      "record_count": 2451,
+      "column_count": 14,
+      "bytes": 118170,
+      "sha256": "c64fae40a3aafad59c08bf0e6d663a649f4111eba78dfdd13950a8deee663b5f",
+      "freshness_days": 8,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "Code_AGB",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Code_CIQUAL",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "LCI_Name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Nom_du_Produit_en_Francais",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Groupe_aliment",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Sous_groupe_aliment",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Score_unique_EF",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Changement_climatique_kg_CO2eq",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Eau_m3",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Sol_Pt",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Eutrophisation_terrestre",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Eutrophisation_marine",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Acidification",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "Particules_fines",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "classification_mappings",
+      "name": "Multi-Taxonomy Harmonisation Concordance (FoodEx2 × Agribalyse × OFF × COICOP)",
+      "view_name": "classification_mappings",
+      "tier": "harmonized",
+      "data_nature": "Manually Compiled",
+      "update_policy": "manual",
+      "update_cadence": "Versioned on taxonomy / subgroup updates (build_classification_mappings.py)",
+      "source_name": "ADEME Agribalyse 3.1.1 × EFSA FoodEx2 × Open Food Facts × Eurostat COICOP 2018",
+      "source_urls": [
+        "https://data.ademe.fr/datasets/agribalyse-31-synthese",
+        "https://www.efsa.europa.eu/en/data/data-standardisation"
+      ],
+      "license": "CC-BY 4.0 / ODbL 1.0",
+      "retrieved_at": "2026-11-16",
+      "version": "3.0.0-phase3a",
+      "geographic_coverage": "European Union",
+      "temporal_coverage": "Phase 3A v3.0.0",
+      "primary_key": [
+        "mapping_id"
+      ],
+      "limitations": "Rule-curated semantic concordance separating exact, hierarchical, approximate, ambiguous, and unmatched gaps with qualitative confidence tiers rather than fabricated probabilities.",
+      "file_path": "data/parquet/classification_mappings.parquet",
+      "record_count": 161,
+      "column_count": 19,
+      "bytes": 17612,
+      "sha256": "06ca47e2de6829d8b1e31cb2a4e7466e1602b6971cef9664d7eb1bcfefab82d9",
+      "freshness_days": 0,
+      "missingness_pct": 10.04,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "mapping_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_system",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_label",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_parent_label",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_item_count",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "target_system",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "target_code",
+          "type": "VARCHAR",
+          "null_count": 35,
+          "null_pct": 21.74
+        },
+        {
+          "name": "target_label",
+          "type": "VARCHAR",
+          "null_count": 35,
+          "null_pct": 21.74
+        },
+        {
+          "name": "mapping_type",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "hierarchy_direction",
+          "type": "VARCHAR",
+          "null_count": 85,
+          "null_pct": 52.8
+        },
+        {
+          "name": "confidence_tier",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "is_ambiguous",
+          "type": "BOOLEAN",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "is_unmatched",
+          "type": "BOOLEAN",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "candidate_targets",
+          "type": "VARCHAR",
+          "null_count": 113,
+          "null_pct": 70.19
+        },
+        {
+          "name": "representative_agb_code",
+          "type": "VARCHAR",
+          "null_count": 39,
+          "null_pct": 24.22
+        },
+        {
+          "name": "rationale",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_reference",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mapping_version",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "clinical_biomarker_grounding",
+      "name": "CDC NHANES 2021–2023 Clinical Biomarker Quintiles",
+      "view_name": "clinical_biomarker_grounding",
+      "tier": "analytical",
+      "data_nature": "Estimated",
+      "update_policy": "auto_api",
+      "update_cadence": "Biennial CDC NHANES .XPT release",
+      "source_name": "CDC / NCHS NHANES 2021–2023 (WTDRD1 survey-weighted)",
+      "source_urls": [
+        "https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2021-2023"
+      ],
+      "license": "Public Domain (US Government)",
+      "retrieved_at": "2026-11-13",
+      "version": "2021-2023",
+      "geographic_coverage": "United States (adult respondents >=20y, n=4,262)",
+      "temporal_coverage": "2021–2023",
+      "primary_key": [
+        "pattern_id"
+      ],
+      "limitations": "Mixed empirical & proxy table: Total-C, HDL-C, Non-HDL-C, hs-CRP & SBP are WTDRD1-weighted NHANES 2021-2023 empirical quintile means, whereas LDL (0.82*Non-HDL), TG (0.72*Non-HDL), fasting glucose (96.0), HbA1c (5.5%), BMI (28.4), and CVD risk delta are derived proxies/constants; US-to-EU domain transfer caveat applies.",
+      "file_path": "data/parquet/clinical_biomarker_grounding.parquet",
+      "record_count": 5,
+      "column_count": 24,
+      "bytes": 5518,
+      "sha256": "5937116300ad258100d6f8bc0e91ef3223b3824b12682ebb7dd9c98266311e35",
+      "freshness_days": 3,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "pattern_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "dietary_pattern",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "description",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "n_respondents",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mean_fiber_g_day",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "saturated_fat_pct_kcal",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "plant_protein_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "total_cholesterol_mg_dl",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "total_cholesterol_ci95",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ldl_cholesterol_mg_dl",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "non_hdl_cholesterol_mg_dl",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "non_hdl_ci95",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "hdl_cholesterol_mg_dl",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "triglycerides_mg_dl",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "fasting_glucose_mg_dl",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "hba1c_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "hs_crp_inflammation_mg_l",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "hs_crp_ci95",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "systolic_bp_mmhg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "systolic_bp_ci95",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "diastolic_bp_mmhg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "cardiovascular_risk_delta_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "bmi_mean",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "cohort_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "consumer_behavior_pulse",
+      "name": "European Intention-to-Plate Behavioral Cascade Synthesis",
+      "view_name": "consumer_behavior_pulse",
+      "tier": "analytical",
+      "data_nature": "Estimated",
+      "update_policy": "manual",
+      "update_cadence": "Curated synthesis",
+      "source_name": "Eurobarometer / BEUC / NSI / Wikimedia Synthesis",
+      "source_urls": [
+        "https://wikimedia.org/api/rest_v1/"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-09",
+      "version": "3.5",
+      "geographic_coverage": "8 European countries (ES, IT, FR, DE, NL, GBR, SE, PL)",
+      "temporal_coverage": "2019–2025 synthesis",
+      "primary_key": [
+        "country_code"
+      ],
+      "limitations": "Country behavioral barrier percentages & elasticities are synthesized reference indicators rather than raw survey microdata.",
+      "file_path": "data/parquet/consumer_behavior_pulse.parquet",
+      "record_count": 8,
+      "column_count": 21,
+      "bytes": 5067,
+      "sha256": "36bbd62e97905fe71e1e8bc1b3c024a4cf844f47eab9bc2aabb0df9aef1515fb",
+      "freshness_days": 7,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nsi_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "google_trends_plant_index",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "google_trends_upf_index",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "wiki_attention_growth_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage1_digital_curiosity_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage2_stated_sustainability_intent_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage3_affordability_surviving_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage4_retail_basket_purchase_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage5_efsa_Guideline_adherence_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "barrier_price_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "barrier_habit_taste_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "barrier_clean_label_distrust_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "barrier_time_convenience_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "barrier_social_norm_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "optimal_lag_months",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "search_to_purchase_corr_r",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "price_elasticity_healthy",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "price_elasticity_plant_meat",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "upf_discourse_to_drop_elasticity",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "crosswalk_rosetta",
+      "name": "Rosetta Stone Crosswalk (COICOP × FoodEx2 × Agribalyse)",
+      "view_name": "crosswalk_rosetta",
+      "tier": "harmonized",
+      "data_nature": "Manually Compiled",
+      "update_policy": "manual",
+      "update_cadence": "Curated taxonomy concordance releases",
+      "source_name": "Eurostat COICOP × EFSA FoodEx2 × ADEME Agribalyse 3.1.1",
+      "source_urls": [
+        "https://data.ademe.fr/datasets/agribalyse-31-synthese"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-16",
+      "version": "2.0.0",
+      "geographic_coverage": "European Union",
+      "temporal_coverage": "Reference classification v2.0.0",
+      "primary_key": [
+        "crosswalk_id"
+      ],
+      "limitations": "15 canonical expenditure-to-LCA bridges; many-to-many aggregation introduces proxy uncertainty captured in mapping_type & confidence.",
+      "file_path": "data/parquet/crosswalk_rosetta.parquet",
+      "record_count": 15,
+      "column_count": 19,
+      "bytes": 7474,
+      "sha256": "26bef33343a959f2b7faaac132f1ee6101dafb7697a412958e1833540832caa1",
+      "freshness_days": 0,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "crosswalk_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ecoicop_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ecoicop_label",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_level1",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_level2",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "agb_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "agb_lci_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nova_group",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "allocation_weight",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "edible_yield_factor",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mean_co2_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mean_water_m3",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "eat_lancet_group",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mapping_type",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "confidence",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "explanation",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_reference",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mapping_version",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "cultural_climate_inertia",
+      "name": "ESS / TISP Climate Worry & Culinary Cultural Inertia",
+      "view_name": "cultural_climate_inertia",
+      "tier": "analytical",
+      "data_nature": "Estimated",
+      "update_policy": "manual",
+      "update_cadence": "Updated on ESS / TISP dataset releases",
+      "source_name": "European Social Survey (ESS) & TISP (Nature Sci Data 2024)",
+      "source_urls": [
+        "https://www.europeansocialsurvey.org/"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-09",
+      "version": "1.0",
+      "geographic_coverage": "10 European countries + EU-27",
+      "temporal_coverage": "2022–2024 waves",
+      "primary_key": [
+        "country_code"
+      ],
+      "limitations": "Composite indices harmonizing ESS climate worry with culinary inertia indicators.",
+      "file_path": "data/parquet/cultural_climate_inertia.parquet",
+      "record_count": 11,
+      "column_count": 9,
+      "bytes": 2192,
+      "sha256": "5da1944e3f5adf8c45387a1657b0a286acc3ec68181b9eab7583e50a9d114d72",
+      "freshness_days": 7,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "climate_worry_score_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "personal_responsibility_feel_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "willingness_to_reduce_meat_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "perceived_price_barrier_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "cultural_culinary_inertia_index",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "actual_plant_basket_penetration_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "say_do_divergence_gap_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "efsa_foodex2_surveys",
+      "name": "Harmonized FoodEx2 Intake Matrix (Stylized Country/Age Profiles)",
+      "view_name": "efsa_foodex2",
+      "tier": "analytical",
+      "data_nature": "Estimated",
+      "update_policy": "manual",
+      "update_cadence": "Manual update pending direct EFSA microdata ingestion",
+      "source_name": "EFSA FoodEx2 Hierarchy + Country/Age Scaling Factors",
+      "source_urls": [
+        "https://www.efsa.europa.eu/en/data-report/food-consumption-data"
+      ],
+      "license": "CC-BY 4.0 (Reference taxonomy)",
+      "retrieved_at": "2026-11-08",
+      "version": "2.0-stylized",
+      "geographic_coverage": "24 countries × 3 age strata × 15 FoodEx2 categories",
+      "temporal_coverage": "Stylized baseline",
+      "primary_key": [
+        "country_code",
+        "population_group",
+        "foodex2_code"
+      ],
+      "limitations": "Derived from 15 template FoodEx2 rows scaled by country and age multipliers; not direct EFSA microdata records.",
+      "file_path": "data/parquet/efsa_foodex2_surveys.parquet",
+      "record_count": 1080,
+      "column_count": 13,
+      "bytes": 12790,
+      "sha256": "1195cfaeb87a64622c8e17ed302d2dd206146bfeaa96de0d76b402f481bcc0f1",
+      "freshness_days": 8,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "population_group",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_level1",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_level2",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nova_group",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mean_intake_g_day",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "p95_intake_g_day",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "carbon_intensity_kg_co2_per_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "daily_dietary_carbon_g_co2",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "daily_water_liters",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "land_use_pt_per_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "gi_terroir_registry",
+      "name": "EUIPO GIview & Qualigeo Geographical Indications Registry",
+      "view_name": "gi_terroir_registry",
+      "tier": "harmonized",
+      "data_nature": "Estimated",
+      "update_policy": "auto_api",
+      "update_cadence": "Repeatable via EUIPO GIview & Qualivita endpoints",
+      "source_name": "EUIPO GIview Union Register + Fondazione Qualivita Qualigeo",
+      "source_urls": [
+        "https://www.tmdn.org/giview/",
+        "https://www.qualigeo.eu/"
+      ],
+      "license": "EU Open Data / Public Registry",
+      "retrieved_at": "2026-11-09",
+      "version": "2026-11-09",
+      "geographic_coverage": "EU-27 + 55 international GI origin countries",
+      "temporal_coverage": "1996–2026 registrations",
+      "primary_key": [
+        "gi_id"
+      ],
+      "limitations": "Official GI identities & locations are Observed, but product-level CO2, water, land, NOVA & price premium are Estimated class proxies.",
+      "file_path": "data/parquet/gi_terroir_registry.parquet",
+      "record_count": 6845,
+      "column_count": 24,
+      "bytes": 404856,
+      "sha256": "5557289521e26f6b0d19c3f3d649b9655fc52f5f6641e76aaa155ccb8bed2879",
+      "freshness_days": 7,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "gi_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "file_number",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "product_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "gi_scheme",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "product_sector",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "registration_status",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "protection_date",
+          "type": "DATE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "eu_class",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "dietary_role",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nova_group",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nutriscore_typical",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "co2_kg_per_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "water_L_per_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "land_m2_per_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "price_premium_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "foodex2_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "lat",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "lon",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "data_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_url",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "giview_url",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "qualigeo_url",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "disciplinare_note",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "global_healthy_diet_affordability",
+      "name": "World Bank & FAO Cost & Affordability of a Healthy Diet",
+      "view_name": "global_healthy_diet_affordability",
+      "tier": "processed",
+      "data_nature": "Observed",
+      "update_policy": "auto_api",
+      "update_cadence": "Annual via Our World in Data / World Bank API",
+      "source_name": "World Bank & FAO Food Prices for Nutrition",
+      "source_urls": [
+        "https://ourworldindata.org/diet-affordability"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-13",
+      "version": "2017–2024",
+      "geographic_coverage": "Global (177+ ISO3 territories)",
+      "temporal_coverage": "2017–2024",
+      "primary_key": [
+        "iso3",
+        "year"
+      ],
+      "limitations": "Cost expressed in ICP PPP USD/person/day; unaffordability shares unavailable for some years/economies.",
+      "file_path": "data/parquet/global_healthy_diet_affordability.parquet",
+      "record_count": 1399,
+      "column_count": 9,
+      "bytes": 23530,
+      "sha256": "50e1edef2ae530c6824392cd16359ec3683508a9c1ff33f041fe50c53097d8e7",
+      "freshness_days": 3,
+      "missingness_pct": 12.97,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "iso3",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "geojson_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "year",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "cost_healthy_diet_ppp_usd",
+          "type": "DOUBLE",
+          "null_count": 6,
+          "null_pct": 0.43
+        },
+        {
+          "name": "unaffordable_pct",
+          "type": "DOUBLE",
+          "null_count": 198,
+          "null_pct": 14.15
+        },
+        {
+          "name": "unaffordable_millions",
+          "type": "DOUBLE",
+          "null_count": 198,
+          "null_pct": 14.15
+        },
+        {
+          "name": "cost_to_food_exp_ratio",
+          "type": "DOUBLE",
+          "null_count": 1231,
+          "null_pct": 87.99
+        },
+        {
+          "name": "data_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "global_poore_nemecek_lca",
+      "name": "Poore & Nemecek (2018) Global Supply-Chain LCA",
+      "view_name": "global_poore_nemecek_lca",
+      "tier": "processed",
+      "data_nature": "Estimated",
+      "update_policy": "static_reference",
+      "update_cadence": "Static published meta-analysis (38,700 farms / 119 countries)",
+      "source_name": "Poore & Nemecek (Science 2018) via Our World in Data",
+      "source_urls": [
+        "https://ourworldindata.org/environmental-impacts-of-food"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-13",
+      "version": "2018 (OWID v1)",
+      "geographic_coverage": "Global (119 countries)",
+      "temporal_coverage": "2018 meta-analysis",
+      "primary_key": [
+        "food_item"
+      ],
+      "limitations": "Harmonized global meta-analysis (45 major commodity groups across 38,700 farms / 119 countries) classified as Estimated; missing protein & environmental fields preserved as NULL.",
+      "file_path": "data/parquet/global_poore_nemecek_lca.parquet",
+      "record_count": 45,
+      "column_count": 19,
+      "bytes": 18107,
+      "sha256": "93c18f1153c8c1ae86f5c6ccdc655025dd831c01e968a88eb443b422092b9d42",
+      "freshness_days": 3,
+      "missingness_pct": 5.61,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "food_item",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_land_use",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_farm",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_animal_feed",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_processing",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_transport",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_retail",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_packaging",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "stage_losses",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ghg_kg_co2eq_per_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ghg_kg_per_100g_protein",
+          "type": "DOUBLE",
+          "null_count": 13,
+          "null_pct": 28.89
+        },
+        {
+          "name": "ghg_kg_per_1000kcal",
+          "type": "DOUBLE",
+          "null_count": 7,
+          "null_pct": 15.56
+        },
+        {
+          "name": "land_use_m2_per_kg",
+          "type": "DOUBLE",
+          "null_count": 7,
+          "null_pct": 15.56
+        },
+        {
+          "name": "freshwater_withdrawals_l_per_kg",
+          "type": "DOUBLE",
+          "null_count": 7,
+          "null_pct": 15.56
+        },
+        {
+          "name": "scarcity_water_l_per_kg",
+          "type": "DOUBLE",
+          "null_count": 7,
+          "null_pct": 15.56
+        },
+        {
+          "name": "eutrophying_g_po4_per_kg",
+          "type": "DOUBLE",
+          "null_count": 7,
+          "null_pct": 15.56
+        },
+        {
+          "name": "total_supply_chain_ghg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "transport_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "data_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "gs1_immagino_observatory",
+      "name": "GS1 Italy Osservatorio Immagino 2026-1 Summary",
+      "view_name": "gs1_immagino_observatory",
+      "tier": "processed",
+      "data_nature": "Manually Compiled",
+      "update_policy": "manual",
+      "update_cadence": "Annual GS1 Italy report publication",
+      "source_name": "GS1 Italy Osservatorio Immagino (19th Edition, 2026-1)",
+      "source_urls": [
+        "https://osservatorioimmagino.it/"
+      ],
+      "license": "Published report summary metrics (citation required)",
+      "retrieved_at": "2026-11-08",
+      "version": "19th Edition (2026-1)",
+      "geographic_coverage": "Italy",
+      "temporal_coverage": "2025–2026",
+      "primary_key": [
+        "section",
+        "entity_key"
+      ],
+      "limitations": "Aggregated summary statistics transcribed from GS1 Italy report; raw NielsenIQ/GS1 barcode microdata is proprietary.",
+      "file_path": "data/parquet/gs1_immagino_observatory.parquet",
+      "record_count": 61,
+      "column_count": 9,
+      "bytes": 14697,
+      "sha256": "a50227e8b96d5b54aabbc56bb205e56bb5e8ff77f6f6fc7308031d0eb0fa67fb",
+      "freshness_days": 8,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "section",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "entity_key",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "dimension_1",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "dimension_2",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_primary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_secondary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_tertiary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "delta_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "details_json",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "nsi_subnational_quintiles",
+      "name": "NSI Sub-National & Income Quintile Dietary Equity Model",
+      "view_name": "nsi_subnational_quintiles",
+      "tier": "analytical",
+      "data_nature": "Model Output",
+      "update_policy": "manual",
+      "update_cadence": "Updated on HBS/EHIS survey waves + regional modeling",
+      "source_name": "INE Spain, Eurostat HBS/EHIS/HICP + Modeled NUTS-2 Disaggregation",
+      "source_urls": [
+        "https://ec.europa.eu/eurostat/databrowser/view/hbs_str_t223/default/table"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-16",
+      "version": "3.2-svd",
+      "geographic_coverage": "ES, IT, NL, FR, DE, GBR (30 regions × 5 quintiles)",
+      "temporal_coverage": "2019–2025 reference waves",
+      "primary_key": [
+        "record_id"
+      ],
+      "limitations": "National quintile HBS/EHIS anchors are Observed; NUTS-2 disaggregation, NOVA-4 share & carbon are Model Output estimates.",
+      "file_path": "data/parquet/nsi_subnational_quintiles.parquet",
+      "record_count": 150,
+      "column_count": 23,
+      "bytes": 12764,
+      "sha256": "1133fa2f2d851bab2bc4bb4efa333e58a4d3362b73d9a09dcbfe95efec83644e",
+      "freshness_days": 0,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "record_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nsi_agency",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nsi_api_url",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "region_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "region_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "income_quintile",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "quintile_num",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "food_budget_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "healthy_cpi_index",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "upf_cpi_index",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "price_wedge_healthy_minus_upf",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nova4_energy_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "plant_protein_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "diet_adherence_score",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "obesity_bmi30_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "out_of_home_kcal_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "daily_carbon_kg",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "double_burden_index",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "pca1",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "pca2",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "cluster_label",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "openfoodfacts_eu",
+      "name": "Open Food Facts EU Product Catalog",
+      "view_name": "openfoodfacts",
+      "tier": "processed",
+      "data_nature": "Observed",
+      "update_policy": "auto_api",
+      "update_cadence": "Repeatable via scripts/refresh_off_clean.py",
+      "source_name": "Open Food Facts Search-a-licious API",
+      "source_urls": [
+        "https://search.openfoodfacts.org/"
+      ],
+      "license": "ODbL 1.0 (Database) / CC-BY-SA",
+      "retrieved_at": "2026-11-16",
+      "version": "2026-11-16",
+      "geographic_coverage": "Multi-country EU & global",
+      "temporal_coverage": "Live snapshot (2026-11)",
+      "primary_key": [
+        "code"
+      ],
+      "limitations": "Crowd-sourced nutrition labels; missing Eco-Score, NOVA, or nutrients are preserved as NULL.",
+      "file_path": "data/parquet/openfoodfacts_eu.parquet",
+      "record_count": 3197,
+      "column_count": 22,
+      "bytes": 131308,
+      "sha256": "81917b03d17a2fa1805f2bb7b49dd8ec7da6b89473905df5269c15a11ee3eb28",
+      "freshness_days": 0,
+      "missingness_pct": 15.45,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [
+        {
+          "severity": "info",
+          "message": "534 of 3197 products have NULL ecoscore_score (not imputed)"
+        }
+      ],
+      "schema": [
+        {
+          "name": "code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "brand",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "category",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nutriscore_grade",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nutriscore_score",
+          "type": "DOUBLE",
+          "null_count": 307,
+          "null_pct": 9.6
+        },
+        {
+          "name": "ecoscore_grade",
+          "type": "VARCHAR",
+          "null_count": 1083,
+          "null_pct": 33.88
+        },
+        {
+          "name": "ecoscore_score",
+          "type": "DOUBLE",
+          "null_count": 534,
+          "null_pct": 16.7
+        },
+        {
+          "name": "nova_group",
+          "type": "BIGINT",
+          "null_count": 951,
+          "null_pct": 29.75
+        },
+        {
+          "name": "primary_country",
+          "type": "VARCHAR",
+          "null_count": 16,
+          "null_pct": 0.5
+        },
+        {
+          "name": "countries",
+          "type": "VARCHAR[]",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "serving_size",
+          "type": "\"NULL\"",
+          "null_count": 3197,
+          "null_pct": 100.0
+        },
+        {
+          "name": "serving_quantity_g",
+          "type": "\"NULL\"",
+          "null_count": 3197,
+          "null_pct": 100.0
+        },
+        {
+          "name": "energy_kcal_100g",
+          "type": "DOUBLE",
+          "null_count": 28,
+          "null_pct": 0.88
+        },
+        {
+          "name": "proteins_100g",
+          "type": "DOUBLE",
+          "null_count": 28,
+          "null_pct": 0.88
+        },
+        {
+          "name": "carbohydrates_100g",
+          "type": "DOUBLE",
+          "null_count": 30,
+          "null_pct": 0.94
+        },
+        {
+          "name": "sugars_100g",
+          "type": "DOUBLE",
+          "null_count": 38,
+          "null_pct": 1.19
+        },
+        {
+          "name": "fat_100g",
+          "type": "DOUBLE",
+          "null_count": 28,
+          "null_pct": 0.88
+        },
+        {
+          "name": "saturated_fat_100g",
+          "type": "DOUBLE",
+          "null_count": 57,
+          "null_pct": 1.78
+        },
+        {
+          "name": "fiber_100g",
+          "type": "DOUBLE",
+          "null_count": 1348,
+          "null_pct": 42.16
+        },
+        {
+          "name": "salt_100g",
+          "type": "DOUBLE",
+          "null_count": 28,
+          "null_pct": 0.88
+        },
+        {
+          "name": "nutrition_data_status",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "pan_eu_retail_scanner",
+      "name": "Pan-European Retail Scanner & Claims Harmonized Benchmark",
+      "view_name": "pan_eu_retail_scanner",
+      "tier": "analytical",
+      "data_nature": "Estimated",
+      "update_policy": "manual",
+      "update_cadence": "Manual synthesis",
+      "source_name": "GS1 Immagino Methodology Extrapolated Across 10 EU Markets + EU-27",
+      "source_urls": [
+        "https://osservatorioimmagino.it/"
+      ],
+      "license": "Research benchmark compilation",
+      "retrieved_at": "2026-11-08",
+      "version": "3.5",
+      "geographic_coverage": "IT, FR, DE, ES, NL, BE, PL, SE, AT, PT, EU27",
+      "temporal_coverage": "2025–2026 benchmark",
+      "primary_key": [
+        "record_type",
+        "country_code",
+        "entity_name"
+      ],
+      "limitations": "Non-IT country figures are stylized harmonized benchmarks modeled from retail market literature, not live scanner feeds.",
+      "file_path": "data/parquet/pan_eu_retail_scanner.parquet",
+      "record_count": 88,
+      "column_count": 15,
+      "bytes": 9988,
+      "sha256": "de26ff76187e61dcf457ebc7d28dafafcab7631823efca92b56e54ff2d80c33c",
+      "freshness_days": 8,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "record_type",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "entity_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "category_pillar",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_primary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_secondary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_tertiary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_quaternary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_quinary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "metric_senary",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "delta_primary_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "delta_secondary_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "delta_tertiary_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "notes",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "school_meals_procurement",
+      "name": "GCNF Statutory School Meal Procurement Mandates",
+      "view_name": "school_meals_procurement",
+      "tier": "processed",
+      "data_nature": "Manually Compiled",
+      "update_policy": "manual",
+      "update_cadence": "Updated on GCNF Global Survey cycles",
+      "source_name": "Global Child Nutrition Foundation (GCNF) & National Ministries",
+      "source_urls": [
+        "https://gcnf.org/global-reports/"
+      ],
+      "license": "CC-BY 4.0",
+      "retrieved_at": "2026-11-09",
+      "version": "2026",
+      "geographic_coverage": "FR, IT, DE, ES, SE, UK, EU27",
+      "temporal_coverage": "2024–2026 statutory frameworks",
+      "primary_key": [
+        "country_code"
+      ],
+      "limitations": "7-row policy summary compiled from national legal frameworks (EGALIM, CAM, DGE) and GCNF survey benchmarks.",
+      "file_path": "data/parquet/school_meals_procurement.parquet",
+      "record_count": 7,
+      "column_count": 12,
+      "bytes": 3230,
+      "sha256": "37486387430772621329adeddccfcf5f05b45af7930c66148c544587b2eed3da",
+      "freshness_days": 7,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "legal_framework",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "mandatory_plant_days_per_week",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "voluntary_plant_options_allowed",
+          "type": "BOOLEAN",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "organic_procurement_quota_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "sustainable_quality_quota_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "local_terroir_priority",
+          "type": "BOOLEAN",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "students_served_daily_m",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "annual_procurement_budget_eur_m",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "co2_reduction_target_school_food_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "evaluation_agency",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "scrapling_retail_claims",
+      "name": "Open Prices EU Retail Shelf Receipts & OFF Nutrition",
+      "view_name": "scrapling_retail_claims",
+      "tier": "harmonized",
+      "data_nature": "Observed",
+      "update_policy": "auto_api",
+      "update_cadence": "Repeatable via scripts/harvest_raw_prices_scrapling.py",
+      "source_name": "Open Food Facts Open Prices API + Open Food Facts",
+      "source_urls": [
+        "https://prices.openfoodfacts.org/api/v1/prices"
+      ],
+      "license": "ODbL 1.0",
+      "retrieved_at": "2026-11-16",
+      "version": "2026-11-16",
+      "geographic_coverage": "EU member states (FR, DE, IT, BE, AT, GR, NL, ES, PT)",
+      "temporal_coverage": "2024–2026 receipts",
+      "primary_key": [
+        "barcode",
+        "country_code",
+        "retailer"
+      ],
+      "limitations": "Phenomenon tags are keyword-classified; SKUs without matching OFF records have NULL nutrition.",
+      "file_path": "data/parquet/scrapling_retail_claims.parquet",
+      "record_count": 1355,
+      "column_count": 29,
+      "bytes": 97645,
+      "sha256": "839c65a7a37b4cfe8d983e988f74f063c6c89c4aedf5ab712f75fcb987c21da1",
+      "freshness_days": 0,
+      "missingness_pct": 10.18,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [
+        {
+          "severity": "info",
+          "message": "324 of 1355 SKUs lack OFF nutrition panels (preserved as NULL)"
+        }
+      ],
+      "schema": [
+        {
+          "name": "barcode",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "product_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "brand",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "fenomeno_category",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "primary_claim",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "labels_list",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "energy_kcal",
+          "type": "DOUBLE",
+          "null_count": 327,
+          "null_pct": 24.13
+        },
+        {
+          "name": "proteins_g",
+          "type": "DOUBLE",
+          "null_count": 331,
+          "null_pct": 24.43
+        },
+        {
+          "name": "sugars_g",
+          "type": "DOUBLE",
+          "null_count": 331,
+          "null_pct": 24.43
+        },
+        {
+          "name": "saturated_fats_g",
+          "type": "DOUBLE",
+          "null_count": 334,
+          "null_pct": 24.65
+        },
+        {
+          "name": "carbohydrates_g",
+          "type": "DOUBLE",
+          "null_count": 333,
+          "null_pct": 24.58
+        },
+        {
+          "name": "fiber_g",
+          "type": "DOUBLE",
+          "null_count": 568,
+          "null_pct": 41.92
+        },
+        {
+          "name": "salt_g",
+          "type": "DOUBLE",
+          "null_count": 354,
+          "null_pct": 26.13
+        },
+        {
+          "name": "nutrition_data_status",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "nutriscore",
+          "type": "VARCHAR",
+          "null_count": 250,
+          "null_pct": 18.45
+        },
+        {
+          "name": "ecoscore",
+          "type": "VARCHAR",
+          "null_count": 524,
+          "null_pct": 38.67
+        },
+        {
+          "name": "nova_group",
+          "type": "BIGINT",
+          "null_count": 246,
+          "null_pct": 18.15
+        },
+        {
+          "name": "image_url",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "price_eur",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "price_per",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "product_quantity",
+          "type": "DOUBLE",
+          "null_count": 132,
+          "null_pct": 9.74
+        },
+        {
+          "name": "product_quantity_unit",
+          "type": "VARCHAR",
+          "null_count": 132,
+          "null_pct": 9.74
+        },
+        {
+          "name": "quantity_label",
+          "type": "VARCHAR",
+          "null_count": 138,
+          "null_pct": 10.18
+        },
+        {
+          "name": "retailer",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "city",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "observed_date",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "data_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "scraped_with",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "social_discourse_velocity",
+      "name": "Digital Food-System Discourse Velocity",
+      "view_name": "social_discourse_velocity",
+      "tier": "processed",
+      "data_nature": "Observed",
+      "update_policy": "auto_api",
+      "update_cadence": "Repeatable via HN Algolia & RSS APIs",
+      "source_name": "Hacker News Algolia API & Google News RSS",
+      "source_urls": [
+        "https://hn.algolia.com/api"
+      ],
+      "license": "Public API metadata",
+      "retrieved_at": "2026-11-09",
+      "version": "2026-11-09",
+      "geographic_coverage": "Global English / EU policy feeds",
+      "temporal_coverage": "2016–2026",
+      "primary_key": [
+        "post_id"
+      ],
+      "limitations": "Platform skew toward tech/policy audiences; engagement_velocity is a derived composite index.",
+      "file_path": "data/parquet/social_discourse_velocity.parquet",
+      "record_count": 129,
+      "column_count": 11,
+      "bytes": 26808,
+      "sha256": "c36a2412278b0607a522302e4c5a0ad0fbe408d3c5ad326ef88c1457d47a2a65",
+      "freshness_days": 7,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "post_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "discourse_theme",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "behavioral_frame",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "title",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "created_date",
+          "type": "DATE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "year",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "upvotes_points",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "comments_count",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "engagement_velocity",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "source_url",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "platform",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "statistical_price_forecasts",
+      "name": "Eurostat/ONS HICP Statistical Backtests & Projections",
+      "view_name": "statistical_price_forecasts",
+      "tier": "forecast",
+      "data_nature": "Forecast",
+      "update_policy": "auto_api",
+      "update_cadence": "Re-computed on Eurostat prc_hicp_aind updates",
+      "source_name": "Eurostat prc_hicp_aind & ONS MM23 (Damped ETS / Holt ETS / Ridge / Drift)",
+      "source_urls": [
+        "https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_aind/default/table"
+      ],
+      "license": "CC-BY 4.0 (Eurostat) / OGL v3 (ONS)",
+      "retrieved_at": "2026-11-16",
+      "version": "4.0.0-leakfree",
+      "geographic_coverage": "ES, IT, NL, FR, DE, GBR, EU27_2020",
+      "temporal_coverage": "2015–2025 observed, 2023–2025 out-of-sample validation, 2026–2030 forecast",
+      "primary_key": [
+        "country_code",
+        "indicator_name",
+        "year"
+      ],
+      "limitations": "Annual sample (n=11 obs, 2015–2025); structural inflation shocks limit multi-year extrapolation. Statistical baselines only (no TimesFM inference).",
+      "file_path": "data/parquet/statistical_price_forecasts.parquet",
+      "record_count": 560,
+      "column_count": 33,
+      "bytes": 28184,
+      "sha256": "9de590fac27539b167745108f72eecea88405e10447920547b2a4217150ccca8",
+      "freshness_days": 0,
+      "missingness_pct": 0.95,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "series_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_label",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "indicator_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "year",
+          "type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "split_role",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "actual_value",
+          "type": "DOUBLE",
+          "null_count": 175,
+          "null_pct": 31.25
+        },
+        {
+          "name": "damped_ets_p50",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_p10",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_p90",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ets_baseline",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ridge_linear_baseline",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_drift_baseline",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_rw_baseline",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_val_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ets_val_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ridge_val_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_val_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_rw_val_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_val_rmse",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ets_val_rmse",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "ridge_val_rmse",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_val_rmse",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_rw_val_rmse",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_cv_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_cv_mase",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "damped_ets_cv_smape",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_drift_cv_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "naive_rw_cv_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "best_cv_model",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "best_cv_mae",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "best_cv_mase",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "data_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    },
+    {
+      "id": "time_use_cooking_friction",
+      "name": "MTUS / ATUS Food Preparation & Culinary Time-Poverty Matrix",
+      "view_name": "time_use_cooking_friction",
+      "tier": "analytical",
+      "data_nature": "Estimated",
+      "update_policy": "credentials_required",
+      "update_cadence": "Requires IPUMS/MTUS registration for microdata refresh",
+      "source_name": "Multinational Time Use Study (MTUS) / IPUMS Time Use Reference",
+      "source_urls": [
+        "https://www.timeuse.org/mtus"
+      ],
+      "license": "Academic registration required for raw microdata",
+      "retrieved_at": "2026-11-09",
+      "version": "1.0-stylized",
+      "geographic_coverage": "11 European countries + EU-27 (5 quintiles each)",
+      "temporal_coverage": "MTUS harmonized reference",
+      "primary_key": [
+        "record_id"
+      ],
+      "limitations": "National baseline minutes scaled by quintile multipliers; not direct MTUS respondent microdata.",
+      "file_path": "data/parquet/time_use_cooking_friction.parquet",
+      "record_count": 60,
+      "column_count": 12,
+      "bytes": 4605,
+      "sha256": "aea52660a38f5b827a14a9b24f41b91ade357a2ce8f7aa53088e6e72e5cf39e0",
+      "freshness_days": 7,
+      "missingness_pct": 0.0,
+      "duplicate_key_count": 0,
+      "validation_status": "pass",
+      "issues": [],
+      "schema": [
+        {
+          "name": "record_id",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_code",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "country_name",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "income_quintile",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "daily_cooking_food_prep_min",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "daily_eating_drinking_min",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "daily_grocery_shopping_min",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "total_food_time_min",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "convenience_food_expenditure_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "culinary_time_poverty_rate_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "female_cooking_share_pct",
+          "type": "DOUBLE",
+          "null_count": 0,
+          "null_pct": 0.0
+        },
+        {
+          "name": "data_source",
+          "type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0
+        }
+      ]
+    }
+  ]
+}

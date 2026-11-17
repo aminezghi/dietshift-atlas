@@ -1,264 +1,318 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/aminezghi/dietshift-atlas/main/public/brand/kit/dietshift-symbol-color.svg" width="95" height="95" alt="DietShift Atlas Logo" />
-  <h1 align="center">DietShift Atlas</h1>
-  <p align="center">
-    <strong>European & Global Food Systems Computational Almanac</strong><br/>
-    <em>100% In-Browser SQL · DuckDB-Wasm · Google TimesFM AI Forecasting · Pan-EU Retail Scanner · Zero Cloud Tracking</em>
-  </p>
+# DietShift Atlas
+
+**A Privacy-Preserving, In-Browser Food Systems Computational Almanac & Analytical Platform**
+
+<p align="left">
+  <a href="https://github.com/aminezghi/dietshift-atlas/actions"><img src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=githubactions" alt="CI Status" /></a>
+  <a href="https://aminezghi.github.io/dietshift-atlas/"><img src="https://img.shields.io/badge/Live_Almanac-GitHub_Pages-8a1253?style=for-the-badge" alt="Live Demo" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Code_License-MIT-2d3643?style=for-the-badge" alt="MIT Code License" /></a>
+  <a href="docs/DATA_PROVENANCE_AND_LICENSING.md"><img src="https://img.shields.io/badge/Data_License-Open_Data_%2F_Attribution-blue?style=for-the-badge" alt="Data License" /></a>
+  <a href="https://duckdb.org/docs/api/wasm/overview"><img src="https://img.shields.io/badge/DuckDB--Wasm-1.33.1--dev57.0-FFF100?style=for-the-badge&logo=duckdb&logoColor=black" alt="DuckDB-Wasm" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-%E2%89%A518-339933?style=for-the-badge&logo=node.js" alt="Node.js >= 18" /></a>
 </p>
 
-<p align="center">
-  <a href="https://aminezghi.github.io/dietshift-atlas/"><img src="https://img.shields.io/badge/Live%20Web%20App-aminezghi.github.io%2Fdietshift--atlas-8a1253?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Web App" /></a>
-  <a href="https://github.com/aminezghi/dietshift-atlas/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/aminezghi/dietshift-atlas/deploy.yml?branch=main&label=Pages%20Deploy&style=for-the-badge&logo=githubactions" alt="Deployment Status" /></a>
-  <a href="https://duckdb.org/docs/api/wasm/overview"><img src="https://img.shields.io/badge/DuckDB--Wasm-1.28.0-FFF100?style=for-the-badge&logo=duckdb&logoColor=black" alt="DuckDB-Wasm" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge" alt="License" /></a>
-  <a href="https://www.linkedin.com/in/zouaghi-amine/"><img src="https://img.shields.io/badge/Made%20by-Amine%20Zouaghi-163d4a?style=for-the-badge&logo=linkedin" alt="Author LinkedIn" /></a>
-</p>
+> *"Connecting nutritional epidemiology, environmental life-cycle assessment, retail affordability, multi-taxonomy classification concordance, causal inflation backtesting, and multidimensional sensitivity diagnostics inside a reproducible, 100% client-side WebAssembly analytical engine."*
+
+- **Current Release:** `v1.0.0` (Analytical baseline `v5.2.0-phase5c` · Track A Open Data Resilience `v6.3.0-phase6d`)
+- **Live Observatory:** [https://aminezghi.github.io/dietshift-atlas/](https://aminezghi.github.io/dietshift-atlas/)
+- **Repository:** [`https://github.com/aminezghi/dietshift-atlas`](https://github.com/aminezghi/dietshift-atlas)
 
 ---
 
-## 🌐 Quick Access & Live Interactive Demos
-
-Experience the computational almanac directly in your browser without any installation, sign-up, or cloud backend:
-
-| Resource | Description | Direct Link |
-| :--- | :--- | :---: |
-| **🚀 Live DietShift Atlas Web App** | Full interactive 12-section computational food systems almanac | [**Open Web App**](https://aminezghi.github.io/dietshift-atlas/) |
-| **📖 Public Citizen Guide** | Friendly, jargon-free guide built with the *Understand-Anything* framework | [**Read Public Guide**](https://aminezghi.github.io/dietshift-atlas/public_guide.html) |
-| **📐 Editorial Architecture Blueprint** | Vector-rendered multi-tier pipeline schematic (*diagram-design* engine) | [**View Blueprint**](https://aminezghi.github.io/dietshift-atlas/architecture_blueprint.html) |
-| **🌊 Behavioral Cascade Blueprint** | 5-Stage Intention-to-Plate friction and say-do gap cascade | [**View Cascade**](https://aminezghi.github.io/dietshift-atlas/behavioral_cascade_blueprint.html) |
-| **🗺️ Interactive Codebase Floorplan** | High-density force-directed architectural graph across 33 project files | [**Explore Floorplan**](https://aminezghi.github.io/dietshift-atlas/floorplan.html) |
-
----
-
-## 💡 The Story & Scientific Motivation Behind DietShift Atlas
-
-> *"Modern food systems research faces a profound disconnect: while international climate accords, the EAT-Lancet Commission, and the European Union’s Farm-to-Fork strategy urge a rapid transition toward sustainable, plant-rich diets, real-world shopping carts tell a very different story.*
->
-> *Consumers do not purchase abstract carbon emissions or macro-nutrient targets; they buy packaged groceries constrained by double-digit grocery inflation, cultural culinary heritage (PDO/PGI terroir), household income quintiles, and label claims.*
->
-> *Investigating this friction revealed a computational bottleneck: academic life-cycle assessment (LCA) databases like Agribalyse, public retail repositories like Open Food Facts, and national statistical consumption surveys (EFSA FoodEx2, ISTAT, INSEE, Destatis) are trapped in isolated data silos, opaque spreadsheets, or cloud-hosted platforms that compromise analytical agility and privacy.*
->
-> *DietShift Atlas was created to solve this challenge: **a high-performance, 100% local-first computational observatory** running entirely in modern web browsers via DuckDB-Wasm. By unifying micro-level retail scanner data with macro-level environmental impact and zero-shot AI forecasting, it brings macroeconomic food targets and microeconomic consumer plate realities into one transparent, instant workbench."*
+## Table of Contents
+1. [Overview & Target Audiences](#1-overview--target-audiences)
+2. [The 13 Analytical Observatories & Sections](#2-the-13-analytical-observatories--sections)
+3. [Evidence Classification Framework](#3-evidence-classification-framework)
+4. [Data Architecture: Dual-Path Execution](#4-data-architecture-dual-path-execution)
+5. [Complete Datasets Inventory](#5-complete-datasets-inventory)
+6. [Quick Start & Local Reproduction](#6-quick-start--local-reproduction)
+7. [Data Export Capabilities](#7-data-export-capabilities)
+8. [Scientific Caveats & Limitations](#8-scientific-caveats--limitations)
+9. [Licensing & Redistribution Policy](#9-licensing--redistribution-policy)
+10. [Citation](#10-citation)
+11. [Documentation Directory](#11-documentation-directory)
 
 ---
 
-## 👤 About the Author & Current Research
+## 1. Overview & Target Audiences
 
-**Amine Zouaghi** is a Doctoral Researcher and **FutureData4EU Fellow** funded under the European Union’s **Marie Skłodowska-Curie Actions (MSCA COFUND / Horizon Europe)**, carrying out research affiliated with the **University of Parma** (Department of Food and Drugs) and the **University of Bologna**. His research bridges Big Data, Artificial Intelligence, Computational Food Systems, and the Digital Transition:
+**DietShift Atlas** is an open-source computational platform that evaluates European and global food systems transitions across three core dimensions: **human nutrition**, **environmental sustainability**, and **economic affordability**.
 
-- 🏛️ **Doctoral Fellowship Profile:** [FutureData4EU MSCA Fellow — Amine Zouaghi](https://site.unibo.it/futuredata4eu/en/fellows/thematic-area-5-food-bioeconomy-natural-resources-agriculture-and-environment)
-- 🎓 **Institutional Faculty Page:** [University of Parma Profile](https://personale.unipr.it/en/ugovdocenti/person/270639)
-- 📖 **Google Scholar:** [Amine Zouaghi on Google Scholar](https://scholar.google.com/citations?user=KeVyb90AAAAJ&hl=en)
-- 🔬 **ResearchGate:** [Amine Zouaghi on ResearchGate](https://www.researchgate.net/profile/Amine-Zouaghi)
-- 💼 **LinkedIn:** [linkedin.com/in/zouaghi-amine](https://www.linkedin.com/in/zouaghi-amine/)
-- 💻 **Vellum Academic Studio:** [github.com/aminezghi/vellum](https://github.com/aminezghi/vellum)
+Traditional food systems models often operate as closed, server-side black boxes or isolate single indicators (e.g. greenhouse gas emissions alone, or calorie intake alone). DietShift Atlas addresses this fragmentation by:
+1. **Running entirely in the user's browser:** Zero data leaves your machine. Calculations execute client-side via DuckDB-Wasm and in-memory TypeScript analytical engines.
+2. **Preventing composite score distortions:** Environmental footprints, nutritional profiles, and monetary costs are never collapsed into an arbitrary weighted single score. Each dimension maintains independent rankings, units, and uncertainty bounds.
+3. **Enforcing strict evidence transparency:** Every metric is labeled with its evidentiary nature (Empirical Microdata vs. Institutional Registry vs. Manually Compiled vs. Model Output).
+4. **Resilient Open Data Delivery:** The application operates seamlessly on open/attribution data (Track A) and gracefully discloses data availability boundaries when commercial/proprietary samples (Track B) are excluded.
 
----
-
-## 🌟 Key Capabilities & Highlights
-
-- **100% In-Browser SQL Analytics**: Powered by **DuckDB-Wasm 1.28**, querying 18 compressed columnar Parquet files via asynchronous web workers with HTTP range requests—zero server dependencies, zero recurring cloud costs.
-- **Section XII: Pan-European Retail Scanner Observatory**: Modeled after GS1 Italy's Immagino methodology and harmonized across 10 EU member states (IT, FR, DE, ES, NL, BE, PL, SE, AT, PT + EU-27 benchmark) across 6 universal food phenomena (*100% Italian/Local*, *Plant-Based/Veg*, *Free-From*, *Rich-In Protein*, *Sustainability/Eco*, *Traditional/PDO/PGI*).
-- **On-Demand D4Vinci Scrapling Harvester**: Real-world retail product scraper targeting major retailers (Carrefour, Coop, Esselunga, Rewe), extracting 13 meta-product nutrition dimensions and packaging claims.
-- **AI Forecasting Engine (Google TimesFM)**: Pre-computed zero-shot foundation model time-series projections through 2030 across 5 income quintiles and 7 food categories (mean forecast + 80% confidence intervals).
-- **Interactive Choropleth & Terroir Registry**: Vector cartography mapping national dietary footprints alongside 6,845 European Commission eAmbrosia geographical indications (PDO, PGI, TSG).
-- **Triple Trilemma & LCA Engine**: Multidimensional trade-off explorer harmonizing nutritional quality (Nutri-Score, NOVA), carbon footprint (Agribalyse 3.1.1), and daily basket cost.
-- **Canonical Rosetta Stone Crosswalk**: Machine-readable mapping table bridging EFSA FoodEx2, ADEME Agribalyse, Open Food Facts, and Eurostat COICOP taxonomies.
+### Target Audiences
+- **Nutritional & Environmental Researchers:** Conduct counterfactual dietary shifts, compare life-cycle impact databases (Agribalyse 3.1.1 vs. Poore & Nemecek 2018), and export raw data dossiers.
+- **Agricultural & Food Policy Analysts:** Evaluate the nutritional and carbon impacts of public procurement policies (e.g., school fruit schemes, organic mandates).
+- **Consumer Advocates & Economists:** Inspect food price inflation indices (HICP) and explore price forecasts with rigorous expanding-origin cross-validation.
+- **Data Engineers & Bioinformaticians:** Query 19 columnar Parquet tables in real time using SQL in DuckDB-Wasm directly inside the browser.
 
 ---
 
-## 📊 In-Memory Parquet Tables (DuckDB-Wasm)
+## 2. The 13 Analytical Observatories & Sections
 
-| Table | Records | Data Source / Description | Schema Scope |
-| :--- | :---: | :--- | :--- |
-| `pan_eu_retail_scanner` | 88 | Harmonized Pan-EU retail scanner observatory across 11 territories (10 countries + EU-27) | Turnover, volume, growth rates, household penetration, price index |
-| `gs1_immagino_observatory` | 61 | GS1 Italy Immagino metasystem (138k barcodes, €45.4B turnover, 6 macro-phenomena) | Barcode count, market share, YoY demand, inflation elasticity |
-| `scrapling_retail_claims` | 1,355 | Live pan-EU retail receipts & barcodes harvested via D4Vinci Scrapling (`prices.openfoodfacts.org`) | Country, city, retailer, EUR price, price_per, NOVA group, packaging claims |
-| `nsi_subnational_quintiles` | 150 | Subnational household budget surveys (INSEE, ISTAT, Destatis, INE, CBS) | Regional food budget shares across 5 income quintiles |
-| `ml_timesfm_forecasts` | 448 | Google TimesFM 200M foundation model projections through 2030 | Category time-series, projected consumption, 80% CI bands |
-| `consumer_behavior_pulse` | 8 | Behavioral friction indicators & intention-to-action say-do gap scores | Plant-based search velocity, price sensitivity, intention dropoff |
-| `social_discourse_velocity` | 129 | Social sentiment & discourse velocity (Mastodon/Bluesky/Twitter corpora) | Topic volumes, polarity scores, weekly velocity trends |
-| `gi_terroir_registry` | 6,845 | European Commission / EUIPO GIview + Qualigeo GIs (`3,037 FOOD` + `3,808 Wine/Spirit/Craft` across 82 countries) | Sector, scheme, registration status, protection date, LCA mapping |
-| `global_healthy_diet_affordability` | 1,399 | World Bank & FAO *Food Prices for Nutrition* (2017–2024 across 177 countries) | Cost of a healthy diet (ICP PPP $/day), unaffordable share %, headcount, food-expenditure ratio |
-| `global_poore_nemecek_lca` | 45 | Poore & Nemecek (*Science* 2018 — 38,700 farms in 119 countries) | 8-stage supply chain GHG, land use, freshwater withdrawals, scarcity water, eutrophication |
-| `time_use_cooking_friction` | 60 | Multinational Time Use Study (MTUS/ATUS & IPUMS Time Use) | Daily cooking/food prep minutes, convenience food expenditure share, time-poverty rate across income quintiles |
-| `clinical_biomarker_grounding` | 5 | CDC NHANES 2021–2023 `.XPT` weighted adult microdata (`n=4,262` respondents) | Total-C, Non-HDL-C, LDL-C, hs-CRP inflammation, systolic BP with complex-survey 95% CIs across 5 fiber-density quintiles |
-| `school_meals_procurement` | 7 | GCNF Global Survey of School Meal Programs (Data in Brief 2026) | France EGALIM, Italy CAM, Germany DGE statutory plant days, organic quotas, student volumes |
-| `cultural_climate_inertia` | 11 | European Social Survey (ESS) & TISP (Nature Sci Data 2024) | Climate worry score vs culinary cultural inertia index vs actual plant basket penetration |
-| `agribalyse_31` | 2,451 | ADEME Agribalyse 3.1.1 life cycle assessments | CO2 eq, water scarcity, land use, PEF single score |
-| `openfoodfacts_eu` | 3,740 | Open Food Facts European product dataset | Nutri-Score (A-E), NOVA group (1-4), Eco-Score, protein |
-| `efsa_foodex2_surveys` | 1,080 | EFSA Comprehensive European Food Consumption Database | Grams/day consumption, age groups, survey methodologies |
-| `crosswalk_rosetta` | 15 | Canonical crosswalk mapping FoodEx2, Agribalyse, OFF, and COICOP | Standardized category identifiers, conversion factors |
+The application is structured into 13 specialized sections, accessible from the left control navigation deck:
+
+| # | Section Name | Empirical & Methodological Foundation | Primary Metrics & Units |
+| :-: | :--- | :--- | :--- |
+| **I** | **Overview & Macroeconomic Context** | Eurostat HICP (`2015=100`), Purchasing Power Parities (PLI `EU27=100`), and 25 manually compiled baseline profiles with explicit fallback disclosures. | Headline inflation rates, price level indices, baseline food baskets. |
+| **II** | **Researcher Sandbox** | Dynamic basket construction over `2,451` ADEME Agribalyse 3.1.1 food items. Supports custom item definition and user CSV upload with blank-preserving NULL semantics. | $\text{kg CO}_2\text{eq}$, $\text{m}^3\text{ world-eq}$ (AWARE deprivation), PEF Land Use $\text{Pt}$, kcal, protein, cost. |
+| **III** | **Nutrition Comparison** | EFSA Comprehensive European Food Consumption Database (FoodEx2 surveys) and Open Food Facts (`3,197` SKUs). Denominator switching between `per_100g` and `per_100kcal`. | Nutri-Score (A–E), NOVA ultra-processing groups (1–4), macronutrient distributions, energy density. |
+| **IV** | **Environmental Comparison** | Poore & Nemecek (2018, *Science*) meta-analysis covering `45` global agricultural commodities across farm gate, processing, transport, packaging, and retail. | GHG emissions ($\text{kg CO}_2\text{eq/kg}$), Freshwater withdrawals ($\text{L/kg}$), Land use ($\text{m}^2\text{/kg}$), Acidifying & Eutrophying emissions. |
+| **V** | **DuckDB-Wasm Parquet Workbench** | Interactive SQL query engine running WebAssembly DuckDB in a dedicated web worker over all 19 columnar Parquet tables. | Real-time SQL execution, tabular results, live CSV exports, execution timing. |
+| **VI** | **Affordability & Food Security** | World Bank & FAO Cost and Affordability of a Healthy Diet (CoHD 2024) across 170+ economies, paired with Eurostat regional income quintiles. | Cost of a healthy diet (2021 PPP USD/day), % population unable to afford a healthy diet. |
+| **VII** | **Empirical Sensitivity Analysis** | 20 deterministic one-at-a-time (OAT) parameter variation scenarios across 6 dimensions (LCA allocation, elasticities, waste rates, transport margins, caloric floors, GI weights). | Relative percentage shift ($\Delta\%$) across nutritional and environmental outcomes. |
+| **VIII** | **Integrated Robustness** | 12 multidimensional compounded stress-test scenarios evaluating dietary shift stability under simultaneous economic, climatic, and behavioral shocks. | Compass quadrant shifts (Win-Win, Trade-off, Regret), composite robustness confidence. |
+| **IX** | **Consumer Behavior Pulse** | Real-time consumer sentiment and social discourse velocity tracking food system transition trends. *(Track A discloses restricted data boundary).* | Discourse volume, sentiment polarity, temporal momentum index. |
+| **X** | **Empirical Social Microdata Plate** | Household time-use budgets (cooking friction) and cultural inertia modeling across EU demographic segments. *(Track A discloses restricted data boundary).* | Preparation time (minutes/day), convenience sensitivity, demographic adoption friction. |
+| **XI** | **GS1 Italy Immagino Observatory** | Retail packaging claims, eco-labels, and front-of-pack nutritional declarations across packaged Italian fast-moving consumer goods. | Label prevalence (%), certified organic share, claim co-occurrence. |
+| **XII** | **Pan-EU Retail Scanner & Open Prices** | Crowdsourced shelf receipts from Open Prices EU (`1,036` EUR/kg, `187` EUR/L) and Open Food Facts retail price distributions. | Unit prices ($\text{EUR/kg}$, $\text{EUR/L}$), interquartile ranges, retailer price dispersion. |
+| **XIII** | **Cross-Taxonomy Concordance** | 161 concordance rules bridging EFSA FoodEx2, ADEME Agribalyse, Open Food Facts, and UN COICOP 2018 with explicit match-quality ratings. | Match fidelity (Exact, Hierarchical, Approximate, Ambiguous, Unmatched). |
 
 ---
 
-## 🏛️ System Architecture
+## 3. Evidence Classification Framework
+
+To protect researchers from confusing raw empirical data with synthetic model projections, every data element rendered in the Atlas carries a standardized visual `DataNatureBadge`:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        DIETSHIFT ATLAS WORKBENCH                       │
-└────────────────────────────────────────────────────────────────────────┘
-                                    │
-    ┌───────────────────────────────┼───────────────────────────────┐
-    ▼                               ▼                               ▼
-┌───────────────────────┐   ┌───────────────────────┐   ┌───────────────────────┐
-│     TIER 1: DATA      │   │   TIER 2: ANALYTICS   │   │     TIER 3: PRESENT   │
-│  Ingestion & Scrape   │   │  In-Browser DuckDB    │   │  Hallmark UI & Charts │
-├───────────────────────┤   ├───────────────────────┤   ├───────────────────────┤
-│ • D4Vinci Scrapling   │   │ • DuckDB-Wasm 1.28    │   │ • React 19 + Vite 6   │
-│ • GS1 / Retail APIs   │──▶│ • HTTP Range Requests │──▶│ • Apache ECharts      │
-│ • Agribalyse 3.1.1    │   │ • 18 Parquet Tables   │   │ • Tailwind CSS v4     │
-│ • TimesFM AI Forecast │   │ • Sub-10ms SQL Joins  │   │ • Responsive Layouts  │
-└───────────────────────┘   └───────────────────────┘   └───────────────────────┘
++-----------------------------------------------------------------------------------+
+|                       DATA NATURE CLASSIFICATION MATRIX                           |
++-----------------------------------------------------------------------------------+
+| Badge Label           | Scientific Characterization        | Example Datasets     |
++-----------------------+------------------------------------+----------------------+
+| Empirical Microdata   | Direct measurements, surveys, or   | EFSA FoodEx2,        |
+|                       | retail price receipts without      | Open Prices EU,      |
+|                       | synthetic model imputation.        | NHANES WTDRD1        |
++-----------------------+------------------------------------+----------------------+
+| Institutional Registry| Official statutory classifications | Eurostat HICP / PPP, |
+|                       | and administrative records.        | World Bank CoHD,     |
+|                       |                                    | EUIPO Geographical   |
++-----------------------+------------------------------------+----------------------+
+| Manually Compiled     | Expert analyst compilations lacking| COUNTRY_PROFILES     |
+|                       | harmonized uncertainty bounds.     | (25 baseline diets)  |
++-----------------------+------------------------------------+----------------------+
+| Model Output /        | Algorithmic projections, LCA proxy | ADEME Agribalyse 3.1,|
+| Estimated             | matches, or statistical forecasts. | Poore & Nemecek meta,|
+|                       |                                    | Expanding-Origin ETS |
++-----------------------+------------------------------------+----------------------+
 ```
 
 ---
 
-## ⚙️ Engineering Principles (Andrej Karpathy Guidelines)
+## 4. Data Architecture: Dual-Path Execution
 
-DietShift Atlas strictly adheres to the engineering framework defined in [`multica-ai/andrej-karpathy-skills`](https://github.com/multica-ai/andrej-karpathy-skills) and formalized in [`AGENTS.md`](AGENTS.md):
+DietShift Atlas uses an optimized dual-path client-side data delivery architecture:
 
-1. **Don't Assume; Don't Hide Confusion**: Zero silent assumptions regarding data schemas, column naming, or API contracts. If an edge case is ambiguous, data is inspected directly.
-2. **Minimum Code That Solves the Problem**: Pure, lean, dependency-conscious implementations. No unnecessary abstractions, bloated wrappers, or heavy backend runtimes.
-3. **Touch Only What You Must**: Laser precision on task scope. Never pollute git diffs with speculative out-of-scope refactoring.
-4. **Define Success Criteria and Loop Until Verified**: Every deliverable is verified with an automated build pass (`tsc -b && vite build`), data integrity checks, and live HTTP `200 OK` validation.
+```mermaid
+flowchart TD
+    subgraph Browser Client [Client-Side Browser Environment]
+        subgraph Delivery [Data Ingestion & Routing]
+            DP[dataProvider.ts<br/>Deduplicated In-Memory JSON Bundles]
+            DB[duckdbEngine.ts<br/>WebAssembly SQL Engine]
+        end
+
+        subgraph CoreEngines [Analytical Engines (src/analytics/)]
+            NE[Nutrition Engine]
+            EE[Environment Engine]
+            AE[Affordability Engine]
+            SE[Sensitivity Engine 4C]
+            RE[Integrated Robustness 4D]
+            FE[Forecasting Engine ETS]
+        end
+
+        subgraph UI [Interactive User Interface]
+            Views[13 Observatories & Workbenches]
+            Export[exportDownload.ts<br/>Parity-Checked CSV / JSON / SQL]
+            Banner[ResourceDisclosureBanner.tsx<br/>Track A / Track B Status]
+        end
+    end
+
+    subgraph StaticStorage [Static HTTP Distribution (public/data/)]
+        P_JSON[(19 JSON Caches)]
+        P_PARQUET[(19 ZSTD Parquet Tables)]
+        P_GEO[(world.geojson)]
+    end
+
+    P_JSON -->|fetch on demand| DP
+    P_PARQUET -->|HTTP Range Requests| DB
+    P_GEO -->|GeoJSON fetch| Views
+
+    DP --> CoreEngines
+    DB --> Views
+    CoreEngines --> Views
+    Views --> Export
+    DP -.->|Missing Track B Asset| Banner
+```
+
+1. **Analytical Path (`src/services/dataProvider.ts`):** High-speed in-memory analytical operations (sensitivity sweeps, counterfactual diets, radar comparisons) execute directly against pre-indexed JSON caches. Requests are single-flight deduplicated, memoized, and protected by resilient 404 handlers.
+2. **Columnar SQL Path (`src/services/duckdbEngine.ts`):** Deep analytical exploration executes inside DuckDB-Wasm via Web Workers. All 19 Parquet tables are registered as virtual views (`v_agribalyse`, `v_poore_nemecek`, `v_off`, etc.), allowing arbitrary user SQL queries with zero server round-trips.
 
 ---
 
-## 📁 Repository Structure
+## 5. Complete Datasets Inventory
 
-```
-dietshift-atlas/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml            ← Automated GitHub Pages deployment pipeline
-├── docs/
-│   └── PUBLIC_GUIDE.md           ← Citizen public guide markdown source
-├── public/
-│   ├── brand/                    ← Production vector brand kit (symbols, lockups, icons)
-│   ├── data/
-│   │   ├── parquet/              ← 16 compressed columnar Parquet files
-│   │   ├── *.json                ← Pre-compiled JSON research bundles
-│   │   └── world.geojson         ← European & global boundary cartography
-│   ├── architecture_blueprint.html ← Editorial SVG system schematic
-│   ├── behavioral_cascade_blueprint.html ← 5-stage behavioral cascade blueprint
-│   ├── floorplan.html            ← Interactive codebase floorplan (force graph)
-│   └── public_guide.html         ← Standalone citizen public guide companion
-├── scripts/
-│   ├── build_empirical_social_microdata.py ← Empirical MTUS, NHANES, GCNF & ESS compiler
-│   ├── build_consumer_pulse_and_scale_off.py
-│   ├── build_gi_terroir_and_social_scrapling.py
-│   ├── build_gs1_immagino_parquet.py
-│   ├── build_nsi_and_ml_parquet.py
-│   ├── build_pan_eu_retail_parquet.py  ← Pan-EU 11-territory Parquet generator
-│   ├── harvest_pan_eu_retail_claims.py ← D4Vinci Scrapling live crawler
-│   └── enrich_gi_coordinates.py
-├── src/
-│   ├── components/
-│   │   ├── ConsumerBehaviorPulse.tsx    ← Section VIII: Behavioral cascade
-│   │   ├── EmpiricalSocialMicrodataPlate.tsx ← MTUS, NHANES, GCNF & ESS microdata plate
-│   │   ├── DuckDBParquetWorkbench.tsx   ← Section IX: In-browser SQL workbench
-│   │   ├── GS1ImmaginoObservatory.tsx   ← Section XII: Pan-EU scanner & Scrapling
-│   │   ├── InteractiveChoroplethMap.tsx ← Section II: Cartography & GI terroir
-│   │   ├── NSIMLObservatory.tsx         ← Section VII: NSI surveys & TimesFM
-│   │   └── ResearcherSandbox.tsx        ← Section X: Custom simulation sandbox
-│   ├── services/
-│   │   └── duckdbEngine.ts              ← DuckDB-Wasm connection & range query engine
-│   ├── types/
-│   │   └── research.ts                  ← Strict TypeScript interfaces
-│   ├── utils/
-│   │   └── assetPath.ts                 ← Relative & subpath asset resolver
-│   ├── App.tsx                          ← Main 12-section almanac orchestrator
-│   └── main.tsx                         ← Application entry point
-├── AGENTS.md                            ← Andrej Karpathy engineering principles
-├── LICENSE                              ← MIT License
-├── package.json                         ← Dependencies & scripts
-├── README.md                            ← Main documentation
-└── vite.config.ts                       ← Vite configuration (base: './')
-```
+The Atlas integrates 19 core tables and auxiliary bundles. For full redistribution details, see [`docs/DATA_PROVENANCE_AND_LICENSING.md`](docs/DATA_PROVENANCE_AND_LICENSING.md).
+
+| Dataset Name | Source Institution / Reference | Format | License | Distribution Track |
+| :--- | :--- | :--- | :--- | :---: |
+| `agribalyse_31` | ADEME / INRAE (France) | Parquet / JSON | French Open Licence 2.0 | **Track A (Open)** |
+| `global_poore_nemecek_lca` | Poore & Nemecek (2018, *Science*) | Parquet / JSON | Open Research Synthesis | **Track A (Open)** |
+| `openfoodfacts_eu` | Open Food Facts Community | Parquet / JSON | Open Database License (ODbL) | **Track A (Open)** |
+| `efsa_foodex2_surveys` | European Food Safety Authority (EFSA) | Parquet / JSON | Open Data Attribution | **Track A (Open)** |
+| `global_healthy_diet_affordability` | World Bank / FAO (CoHD 2024) | Parquet / JSON | CC-BY-4.0 International | **Track A (Open)** |
+| `scrapling_retail_claims` | Open Prices EU / Web Harvest | Parquet / JSON | ODbL / Attribution | **Track A (Open)** |
+| `nsi_subnational_quintiles` | Eurostat Regional Statistics | Parquet / JSON | Eurostat Open Data | **Track A (Open)** |
+| `classification_mappings` | DietShift Multi-Taxonomy Concordance | Parquet / JSON | MIT / CC-BY-4.0 | **Track A (Open)** |
+| `statistical_price_forecasts` | Eurostat HICP / Expanding ETS Model | Parquet / JSON | Open Model Output | **Track A (Open)** |
+| `clinical_biomarker_grounding` | CDC NHANES / Research Synthesis | Parquet / JSON | Public Domain | **Track A (Open)** |
+| `crosswalk_rosetta` | FoodEx2 / Agribalyse Crosswalk | Parquet / JSON | CC-BY-4.0 | **Track A (Open)** |
+| `pan_eu_retail_scanner` | Synthetic Pan-EU Retail Aggregates | Parquet / JSON | CC-BY-4.0 | **Track A (Open)** |
+| `school_meals_procurement` | EU Public Procurement Records | Parquet / JSON | Open Government Licence | **Track A (Open)** |
+| `social_discourse_velocity` | Social Trends / Algolia Hacker News | Parquet / JSON | Open Aggregates | **Track A (Open)** |
+| `world.geojson` | Natural Earth v5.1.1 (1:110m Admin 0) | GeoJSON | Public Domain | **Track A (Open)** |
+| `gi_terroir_registry` | EUIPO / Qualigeo Consortium | Parquet / JSON | Proprietary / Restricted | **Track B (Excluded)** |
+| `time_use_cooking_friction` | MTUS / IPUMS Time Use Microdata | Parquet / JSON | Academic Restricted | **Track B (Excluded)** |
+| `cultural_climate_inertia` | European Social Survey (ESS) Round 10 | Parquet / JSON | Academic Restricted | **Track B (Excluded)** |
+| `scanner_derived_retail_sample` | Commercial Scanner Sample | Parquet / JSON | Commercial Proprietary | **Track B (Excluded)** |
+| `eu_subnational_hicp_quintiles` | Eurostat Micro-aggregates | Parquet / JSON | Restricted Distribution | **Track B (Excluded)** |
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## 6. Quick Start & Local Reproduction
 
-### Prerequisites
+DietShift Atlas is an entirely static client-side web application. **You do not need Python or a database server to run the application locally.**
 
-- **Node.js**: v18.0.0 or later (v20 LTS recommended)
-- **npm**: v9.0.0 or later
-- **Python**: 3.10+ (optional, only needed for executing Parquet compilation scripts in `scripts/`)
+### 6.1 Web Application Setup (Node.js Only)
 
-### Setup & Run
+**Prerequisites:** Node.js `>= 18.0.0` and npm `>= 9.0.0`
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/aminezghi/dietshift-atlas.git
 cd dietshift-atlas
 
-# 2. Install dependencies
-npm install
+# 2. Install exact locked dependencies
+npm ci
 
-# 3. Start local Vite development server
-npm run dev
+# 3. Verify static hygiene and run automated tests
+npm run lint    # Oxlint (0 errors, 0 warnings across 63 files)
+npm test        # Vitest engine and component suite (87 passed tests)
+
+# 4. Compile the production application
+npm run build   # TypeScript compilation (tsc -b) + Vite bundling into dist/
+
+# 5. Preview the production build locally
+npm run preview # Serves production build at http://localhost:4173
 ```
 
-Open `http://localhost:5173` in your browser.
+Open your browser to `http://localhost:4173` to explore the full Atlas.
 
-### Production Build & Preview
+### 6.2 Developer & QA Setup (With Python)
+
+If you wish to run the full automated cross-engine quality gate, verify Parquet checksums, or run the Playwright headless browser suite:
+
+**Prerequisites:** Python `>= 3.10`
 
 ```bash
-# Typecheck and compile production bundle
-npm run build
+# 1. Create and activate a Python virtual environment
+python -m venv .venv
+# On Linux/macOS:
+source .venv/bin/activate
+# On Windows PowerShell:
+.\.venv\Scripts\Activate.ps1
 
-# Preview production build locally
-npm run preview
+# 2. Install developer test requirements
+pip install -r requirements-dev.txt
+
+# 3. Install Playwright browser binary
+python -m playwright install chromium --with-deps
+
+# 4. Run the 5-stage automated QA gate
+npm run qa
 ```
 
----
-
-## 🔒 Security & Privacy Notice
-
-DietShift Atlas is architected with strict privacy guarantees:
-- **Zero Sensitive Data**: No API keys, credentials, private tokens, or proprietary datasets are stored in this repository.
-- **100% Client-Side Execution**: All analytical operations, SQL queries, and visual calculations execute locally in your browser session via WebAssembly. No search queries or telemetry are transmitted to third-party tracking services.
-
----
-
-## 🙏 Acknowledgments & Design Credits
-
-DietShift Atlas was built on the shoulders of open-science data providers, institutional research bodies, and open-source tooling:
-
-- **Almanac Aesthetic**:
-  > *Designed following the classical Hallmark Almanac aesthetic (deep Prussian blue `#163d4a`, imperial bordeaux `#8a1253`, crisp parchment `#eaedf2`, and typographic pairings of Newsreader, Hanken Grotesk, and IBM Plex Mono), the Atlas provides researchers, policymakers, retail analysts, and citizens with zero-latency querying over European food systems.*
-- **Data & Scientific Providers**:
-  - **GS1 Italy & Osservatorio Immagino**: For pioneering barcode-level retail claims and meta-product nutritional monitoring.
-  - **ADEME (France)**: For the Agribalyse 3.1.1 life-cycle assessment environmental database.
-  - **Open Food Facts**: For community-driven global packaged food transparency and Nutri-Score / NOVA annotations.
-  - **European Food Safety Authority (EFSA)**: For the Comprehensive European Food Consumption Database.
-  - **National Statistical Institutes**: ISTAT (Italy), INSEE (France), Destatis (Germany), INE (Spain), and CBS (Netherlands) for subnational household consumption surveys.
-  - **European Commission DG AGRI**: For the eAmbrosia geographical indications database (PDO, PGI, TSG).
-  - **Todd R. Jones**: For the curated empirical microdata repository ([`toddrjones/datasets`](https://github.com/toddrjones/datasets/)) linking time use, demographic, and cohort surveys.
-  - **Multinational Time Use Study (MTUS) & IPUMS Time Use / ATUS**: For objective daily minutes allocated to food preparation, grocery shopping, and culinary time-poverty across income quintiles.
-  - **CDC National Health and Nutrition Examination Survey (NHANES)**: For objective clinical biomarkers (LDL-C, hs-CRP, HbA1c, blood pressure, Framingham/ASCVD CVD risk) grounding dietary archetypes.
-  - **Global Child Nutrition Foundation (GCNF)**: For the Global Survey of School Meal Programs (Data in Brief 2026) documenting statutory school canteen plant-based quotas and sustainable procurement mandates.
-  - **European Social Survey (ESS) & TISP (Nature Scientific Data 2024)**: For pan-European climate worry scores, culinary cultural inertia indices, and public food system transition support metrics.
-  - **Google Research**: For the zero-shot TimesFM 200M foundation model.
-- **Open-Source Technologies**:
-  - **DuckDB Foundation**: For the groundbreaking [DuckDB-Wasm](https://github.com/duckdb/duckdb-wasm) in-browser analytical database engine.
-  - **D4Vinci / Scrapling**: For high-performance, resilient web scraping capabilities.
-  - **Apache ECharts**: For publication-grade interactive data visualizers.
-  - **Cathryn Lavery**: For the [diagram-design](https://github.com/cathrynlavery/diagram-design) vector blueprint framework.
-  - **Egonex-AI**: For the [Understand-Anything](https://github.com/Egonex-AI/Understand-Anything) public guide scaffolding framework.
-  - **Multica-AI**: For the [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) engineering principles.
+The quality gate executes:
+- **Stage 1:** `oxlint` static code hygiene.
+- **Stage 2:** `vitest` mathematical engine and React component parity tests.
+- **Stage 3:** `tsc -b && vite build` production compilation.
+- **Stage 4:** `pytest tests/test_empirical_pipeline.py` (Parquet schema, SHA-256 hashes, nullability audits).
+- **Stage 5:** `pytest tests/e2e` (Playwright headless Chromium testing all 13 sections and export downloads).
 
 ---
 
-## 🤝 Contributing
+## 7. Data Export Capabilities
 
-Contributions, issues, and feature proposals are welcome! Please feel free to open an issue or submit a pull request following the guidelines in [`AGENTS.md`](AGENTS.md).
+All data displayed within DietShift Atlas can be exported immediately without registration or server authentication:
+1. **CSV Export:** Every table, sensitivity run, robustness score, and basket breakdown includes a dedicated **Download CSV** button with standardized ISO-8601 timestamps, explicit metric units in column headers, and NULL value retention.
+2. **JSON Dossier Export:** Full analytical state (scenarios, baseline parameters, and multi-indicator results) can be exported as structured JSON for archival or script processing.
+3. **Parquet SQL Query Results:** Results from Section V (DuckDB-Wasm) can be exported directly to CSV or copied to clipboard with a single click.
+4. **BibTeX Citation Export:** In-app modal exports formatted BibTeX and APA citations for the application, specific analytical engines, and underlying datasets.
 
 ---
 
-## 📄 License
+## 8. Scientific Caveats & Limitations
 
-This project is licensed under the [MIT License](LICENSE) — free and open for researchers, policymakers, and citizens worldwide.
+Users should review [`docs/LIMITATIONS_AND_RESPONSIBLE_USE.md`](docs/LIMITATIONS_AND_RESPONSIBLE_USE.md) before drawing policy or clinical conclusions. Key caveats include:
+
+1. **No Universal Composite Scores:** Dietary sustainability cannot be represented by a single scalar without introducing unscientific subjective weighting. The Atlas isolates carbon, water, land, nutritional quality, and cost into separate axes.
+2. **AWARE Water Interpretation:** Water impact in Agribalyse is reported in AWARE deprivation-weighted $\text{m}^3\text{ world-eq}$, which measures relative regional water scarcity rather than consumed physical litres.
+3. **PEF Land Use Interpretation:** Land impact in Agribalyse uses the European Commission Product Environmental Footprint (PEF 3.1) land use point score ($\text{Pt}$), which reflects soil quality degradation and cannot be converted linearly into square metres without site-specific soil data.
+4. **HICP Macroeconomic Fallback:** When a country-specific HICP inflation series is unavailable, the application substitutes the `EU27_2020` aggregate, labeled prominently with an `[EU27_2020 FALLBACK]` indicator.
+5. **No Clinical Generalization:** DietShift Atlas models population-level dietary cohorts and macro-nutrient balances. It is not an individual diagnostic tool, metabolic prescription engine, or medical device.
+
+---
+
+## 9. Licensing & Redistribution Policy
+
+DietShift Atlas is governed by a **Dual-Track Distribution Architecture**:
+
+- **Software Source Code:** Licensed under the [MIT License](LICENSE) (`Copyright (c) 2026 Amine Zouaghi`). You are free to inspect, modify, fork, and deploy the code.
+- **Documentation & Specifications:** Licensed under Creative Commons Attribution 4.0 International ([CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)).
+- **Track A (Open Data Assets):** Includes 33 pre-compiled datasets (13 Parquets + 19 JSONs + Natural Earth GeoJSON) distributed under open public licenses (ADEME Open Licence 2.0, ODbL, CC-BY-4.0, Public Domain).
+- **Track B (Restricted Datasets):** Excluded from public distribution tarballs to respect commercial data agreements, proprietary licenses, and third-party terms of service. When absent, the application gracefully degrades and identifies missing resources via `ResourceDisclosureBanner.tsx`.
+- **Academic Manuscripts (`paper/`):** Draft preprints and journal submissions in `paper/` remain under separate academic copyright and are reserved for formal peer review.
+
+---
+
+## 10. Citation
+
+If you use DietShift Atlas in academic research, policy modeling, teaching, or data engineering, please cite the software as follows:
+
+### BibTeX
+```bibtex
+@software{zouaghi2026dietshift,
+  author       = {Zouaghi, Amine},
+  title        = {{DietShift Atlas: A Privacy-Preserving, In-Browser Food Systems Computational Almanac & Analytical Platform}},
+  month        = nov,
+  year         = 2026,
+  publisher    = {GitHub},
+  version      = {v1.0.0},
+  url          = {https://github.com/aminezghi/dietshift-atlas}
+}
+```
+
+### APA Style
+> Zouaghi, A. (2026). *DietShift Atlas: A Privacy-Preserving, In-Browser Food Systems Computational Almanac & Analytical Platform* (Version 1.0.0) [Computer software]. GitHub. https://github.com/aminezghi/dietshift-atlas
+
+See [`CITATION.cff`](CITATION.cff) for complete machine-readable citation metadata.
+
+---
+
+## 11. Documentation Directory
+
+For deeper methodological, technical, and governance details, consult the specialized documentation suite:
+
+| Guide / Specification | Topic & Scope |
+| :--- | :--- |
+| [`docs/SCIENTIFIC_METHODOLOGY.md`](docs/SCIENTIFIC_METHODOLOGY.md) | Comprehensive mathematical formulas, engine specifications, and scenario definitions. |
+| [`docs/DATA_PROVENANCE_AND_LICENSING.md`](docs/DATA_PROVENANCE_AND_LICENSING.md) | Exhaustive 19-table dataset catalog, upstream sources, schemas, and license terms. |
+| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Step-by-step reproduction guide, dependency boundaries, and pipeline execution order. |
+| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | User walkthrough across all 13 sections, filter options, and interpretation tips. |
+| [`docs/LIMITATIONS_AND_RESPONSIBLE_USE.md`](docs/LIMITATIONS_AND_RESPONSIBLE_USE.md) | Formal declaration of 16 scientific, methodological, and data limitations. |
+| [`docs/phase6/GITHUB_REPOSITORY_AUDIT.md`](docs/phase6/GITHUB_REPOSITORY_AUDIT.md) | Complete Git repository, file-tree, security, and credentials audit report. |
+| [`docs/phase6/PUBLIC_DISTRIBUTION_POLICY.md`](docs/phase6/PUBLIC_DISTRIBUTION_POLICY.md) | Dual-track asset policy and step-by-step Git history remediation instructions. |
+| [`docs/development/CHANGELOG.md`](docs/development/CHANGELOG.md) | Full chronological version changelog across all project phases (Phases 1–6). |

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import ReactECharts from './components/ThemedEChart';
 import {
+  AlertTriangle,
   BarChart3,
   BookOpen,
   Compass,
@@ -27,14 +28,66 @@ import {
   Users,
 } from 'lucide-react';
 import { InteractiveChoroplethMap } from './components/InteractiveChoroplethMap';
-import { DuckDBParquetWorkbench } from './components/DuckDBParquetWorkbench';
-import { ResearcherSandbox } from './components/ResearcherSandbox';
-import { NSIMLObservatory } from './components/NSIMLObservatory';
-import { ConsumerBehaviorPulse } from './components/ConsumerBehaviorPulse';
-import { GS1ImmaginoObservatory } from './components/GS1ImmaginoObservatory';
 import { DietShiftLogo } from './components/DietShiftLogo';
+import { DataNatureBadge } from './components/DataNatureBadge';
+import { DataCatalogModal } from './components/DataCatalogModal';
+import { fetchCachedJson, fetchFullAgribalyse, fetchLiveResearchBundle } from './services/dataProvider';
+import { APP_VERSION } from './version';
+import { downloadCsvContent, serializeCsvTable } from './utils/exportDownload';
+import { classifyResourceError } from './utils/resourceAvailability';
+
+const DuckDBParquetWorkbench = lazy(() =>
+  import('./components/DuckDBParquetWorkbench').then((m) => ({ default: m.DuckDBParquetWorkbench }))
+);
+const ResearcherSandbox = lazy(() =>
+  import('./components/ResearcherSandbox').then((m) => ({ default: m.ResearcherSandbox }))
+);
+const NSIMLObservatory = lazy(() =>
+  import('./components/NSIMLObservatory').then((m) => ({ default: m.NSIMLObservatory }))
+);
+const ConsumerBehaviorPulse = lazy(() =>
+  import('./components/ConsumerBehaviorPulse').then((m) => ({ default: m.ConsumerBehaviorPulse }))
+);
+const GS1ImmaginoObservatory = lazy(() =>
+  import('./components/GS1ImmaginoObservatory').then((m) => ({ default: m.GS1ImmaginoObservatory }))
+);
+const NutritionComparisonPanel = lazy(() =>
+  import('./components/NutritionComparisonPanel').then((m) => ({ default: m.NutritionComparisonPanel }))
+);
+const EnvironmentComparisonPanel = lazy(() =>
+  import('./components/EnvironmentComparisonPanel').then((m) => ({ default: m.EnvironmentComparisonPanel }))
+);
+const AffordabilityAndIntegratedPanel = lazy(() =>
+  import('./components/AffordabilityAndIntegratedPanel').then((m) => ({ default: m.AffordabilityAndIntegratedPanel }))
+);
+const SensitivityPanel = lazy(() =>
+  import('./components/SensitivityPanel').then((m) => ({ default: m.SensitivityPanel }))
+);
+
+function ModuleLoadingState({ label }: { label: string }) {
+  return (
+    <div className="almanac-sheet p-6 text-xs text-[var(--color-muted)] font-mono-num flex items-center gap-2.5">
+      <RefreshCw className="w-4 h-4 text-[var(--color-accent)] animate-spin shrink-0" />
+      <span>Loading {label}...</span>
+    </div>
+  );
+}
+import {
+  type ComparisonBasis,
+  evaluateProductNutrition,
+  filterProductsWithNovaAudit,
+  fromOFFProduct,
+} from './analytics/nutritionEngine';
+import {
+  type EnvironmentIndicatorKey,
+  ENVIRONMENT_INDICATOR_SPECS,
+  aggregateEnvironmentByCategory,
+  fromAgribalyseItem,
+} from './analytics/environmentEngine';
+import { evaluatePolicyScenario } from './analytics/policyScenarioModel';
 import { assetUrl } from './utils/assetPath';
 import { toggleTheme, useDarkMode } from './utils/chartTheme';
+import { type DatasetsRegistry, resolveDatasetNature } from './types/dataRegistry';
 import {
   COUNTRY_PROFILES,
   type AgribalyseItem,
@@ -54,7 +107,8 @@ type ActiveModule =
   | 'inflation'
   | 'simulator'
   | 'floorplan'
-  | 'gs1_immagino';
+  | 'gs1_immagino'
+  | 'sensitivity';
 
 function GithubIcon({ className = 'w-3.5 h-3.5' }: { className?: string }) {
   return (
@@ -145,8 +199,12 @@ export function App() {
   const [fullAgribalyse, setFullAgribalyse] = useState<AgribalyseItem[]>([]);
   const [calibration, setCalibration] = useState<Record<string, EconometricCalibration>>({});
   const [globalBenchmarks, setGlobalBenchmarks] = useState<GlobalBenchmarksBundle | null>(null);
+  const [datasetsRegistry, setDatasetsRegistry] = useState<DatasetsRegistry | null>(null);
+  const [catalogOpen, setCatalogOpen] = useState(false);
   const [plate4Mode, setPlate4Mode] = useState<'agribalyse' | 'poore'>('agribalyse');
   const [loading, setLoading] = useState(true);
+  const [loadWarnings, setLoadWarnings] = useState<string[]>([]);
+  const [bootRetryTick, setBootRetryTick] = useState(0);
   const initialHash = useMemo(() => {
     const raw = window.location.hash.replace(/^#/, '');
     return new URLSearchParams(raw);
@@ -162,6 +220,7 @@ export function App() {
   const [comparisonCountry, setComparisonCountry] = useState<string>('FR');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedNova, setSelectedNova] = useState<number[]>([1, 2, 3, 4]);
+  const [includeMissingNova, setIncludeMissingNova] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [simPlantShift, setSimPlantShift] = useState<number>(
@@ -172,6 +231,8 @@ export function App() {
   );
   const [copiedNotice, setCopiedNotice] = useState<string | null>(null);
   const [exportDatasetKey, setExportDatasetKey] = useState<string>('off');
+  const [nutritionBasis, setNutritionBasis] = useState<ComparisonBasis>('per_100g');
+  const [agbChartIndicator, setAgbChartIndicator] = useState<EnvironmentIndicatorKey>('climate_co2eq');
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -186,37 +247,53 @@ export function App() {
   const [architectureView, setArchitectureView] = useState<'blueprint' | 'floorplan'>('blueprint');
 
   useEffect(() => {
+    let cancelled = false;
+    const forceRetry = bootRetryTick > 0;
+    const warnings: string[] = [];
+
     Promise.all([
-      fetch(assetUrl('data/live_research_bundle.json')).then((r) => r.json()),
-      fetch(assetUrl('data/agribalyse_full.json'))
-        .then((r) => r.json())
-        .catch(() => []),
-      fetch(assetUrl('data/econometric_calibration.json'))
-        .then((r) => r.json())
-        .catch(() => ({})),
-      fetch(assetUrl('data/global_benchmarks.json'))
-        .then((r) => r.json())
-        .catch(() => null),
-    ])
-      .then(
-        ([bundleData, agbFull, calData, globData]: [
-          LiveResearchBundle,
-          AgribalyseItem[],
-          Record<string, EconometricCalibration>,
-          GlobalBenchmarksBundle | null,
-        ]) => {
-          setBundle(bundleData);
-          setFullAgribalyse(agbFull.length > 0 ? agbFull : bundleData.agribalyse);
-          setCalibration(calData || {});
-          setGlobalBenchmarks(globData);
-          setLoading(false);
+      fetchLiveResearchBundle({ forceRetry }),
+      fetchFullAgribalyse({ forceRetry }).catch((err: unknown) => {
+        warnings.push(`agribalyse_full.json: ${err instanceof Error ? err.message : String(err)}`);
+        return [] as AgribalyseItem[];
+      }),
+      fetchCachedJson<Record<string, EconometricCalibration>>('data/econometric_calibration.json', { forceRetry }).catch(
+        (err: unknown) => {
+          warnings.push(`econometric_calibration.json: ${err instanceof Error ? err.message : String(err)}`);
+          return {} as Record<string, EconometricCalibration>;
         }
-      )
-      .catch((err) => {
-        console.error('Failed to load research bundle:', err);
+      ),
+      fetchCachedJson<GlobalBenchmarksBundle>('data/global_benchmarks.json', { forceRetry }).catch((err: unknown) => {
+        warnings.push(`global_benchmarks.json: ${err instanceof Error ? err.message : String(err)}`);
+        return null;
+      }),
+      fetchCachedJson<DatasetsRegistry>('data/datasets_registry.json', { forceRetry }).catch((err: unknown) => {
+        warnings.push(`datasets_registry.json: ${err instanceof Error ? err.message : String(err)}`);
+        return null;
+      }),
+    ])
+      .then(([bundleData, agbFull, calData, globData, regData]) => {
+        if (cancelled) return;
+        setBundle(bundleData);
+        // Never fall back silently to the deprecated 500-item preview slice inside live_research_bundle (H-06)
+        setFullAgribalyse(agbFull);
+        setCalibration(calData || {});
+        setGlobalBenchmarks(globData);
+        setDatasetsRegistry(regData);
+        setLoadWarnings(warnings);
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        const msg = err instanceof Error ? err.message : String(err);
+        setLoadWarnings([`Core live_research_bundle.json failed: ${msg}`]);
         setLoading(false);
       });
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [bootRetryTick]);
 
   const currentProfile = COUNTRY_PROFILES[selectedCountry] || COUNTRY_PROFILES.IT;
   const compareProfile = COUNTRY_PROFILES[comparisonCountry] || COUNTRY_PROFILES.FR;
@@ -228,19 +305,37 @@ export function App() {
     return Array.from(set);
   }, [bundle]);
 
-  const filteredProducts = useMemo(() => {
-    if (!bundle) return [];
-    return bundle.openfoodfacts.filter((p) => {
-      const matchCat = selectedCategory === 'ALL' || p.category === selectedCategory;
-      const matchNova = selectedNova.includes(p.nova_group);
-      const matchSearch =
-        !searchQuery.trim() ||
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchCat && matchNova && matchSearch;
+  const novaAudit = useMemo(() => {
+    if (!bundle) {
+      return filterProductsWithNovaAudit([], {
+        selectedCategory,
+        selectedNova,
+        includeMissingNova,
+        searchQuery,
+      });
+    }
+    return filterProductsWithNovaAudit(bundle.openfoodfacts, {
+      selectedCategory,
+      selectedNova,
+      includeMissingNova,
+      searchQuery,
     });
-  }, [bundle, selectedCategory, selectedNova, searchQuery]);
+  }, [bundle, selectedCategory, selectedNova, includeMissingNova, searchQuery]);
+
+  const filteredProducts = novaAudit.filtered;
+
+  const plottableTrilemmaProducts = useMemo(
+    () =>
+      filteredProducts.filter(
+        (p) => p.nutriscore_score != null && p.ecoscore_score != null && p.nova_group != null
+      ),
+    [filteredProducts]
+  );
+
+  const filteredNutritionInputs = useMemo(
+    () => filteredProducts.map(fromOFFProduct),
+    [filteredProducts]
+  );
 
   const filteredAgribalyse = useMemo(() => {
     return fullAgribalyse.filter((item) => {
@@ -256,72 +351,17 @@ export function App() {
     });
   }, [fullAgribalyse, searchQuery]);
 
-  const simulatedMetrics = useMemo(() => {
-    const base = currentProfile;
-    const cal = currentCalibration;
-    // Scale carbon tax price response by Eurostat HBS-calibrated own-price elasticity (falls back to -0.65)
-    const elasticityMag = Math.abs(cal?.empirical_own_price_elasticity ?? -0.65);
-    const taxPricePassThrough = (simCarbonTax / 150) * 0.18 * elasticityMag;
-    const carbonFactor =
-      (1 - (simPlantShift / 100) * 0.42) *
-      (1 - (simWasteCut / 100) * 0.18) *
-      (1 - taxPricePassThrough);
-    const newCarbon = +(base.dailyCarbonKg * carbonFactor).toFixed(2);
-    const ci95RelHalfwidth = cal?.empirical_ci95_rel_halfwidth ?? 0.055;
-
-    const waterFactor =
-      (1 - (simPlantShift / 100) * 0.24) * (1 - (simWasteCut / 100) * 0.16);
-    const newWater = Math.round(base.dailyWaterLiters * waterFactor);
-
-    const landFactor =
-      (1 - (simPlantShift / 100) * 0.48) * (1 - (simWasteCut / 100) * 0.15);
-    const newLand = +(base.dailyLandM2 * landFactor).toFixed(2);
-
-    const costDeltaPct =
-      -(simPlantShift * 0.11) -
-      simWasteCut * 0.18 +
-      (simCarbonTax / 100) * 2.5 -
-      simUpfReduction * 0.05;
-    const newCost = +(base.dailyBasketCostEur * (1 + costDeltaPct / 100)).toFixed(2);
-
-    const healthGainPct = Math.min(
-      42,
-      +(simPlantShift * 0.28 + simUpfReduction * 0.35 + (simCarbonTax / 100) * 4.2).toFixed(1)
-    );
-
-    const q1FoodShare = cal?.hbs_q1_food_share_pct ?? 18.3;
-    const q5FoodShare = cal?.hbs_q5_food_share_pct ?? 14.4;
-    const q1TaxExposureRatio = q1FoodShare / Math.max(q5FoodShare, 1);
-
-    return {
-      newCarbon,
-      ci95RelHalfwidth,
-      elasticityMag,
-      q1TaxExposureRatio: +q1TaxExposureRatio.toFixed(2),
-      carbonDeltaPct: +(((newCarbon - base.dailyCarbonKg) / base.dailyCarbonKg) * 100).toFixed(1),
-      newWater,
-      waterDeltaPct: +(((newWater - base.dailyWaterLiters) / base.dailyWaterLiters) * 100).toFixed(1),
-      newLand,
-      landDeltaPct: +(((newLand - base.dailyLandM2) / base.dailyLandM2) * 100).toFixed(1),
-      newCost,
-      costDeltaPct: +costDeltaPct.toFixed(1),
-      healthGainPct,
-      eatLancetSimulated: {
-        redMeat: Math.max(40, Math.round(base.eatLancetIndex.redMeat * (1 - (simPlantShift / 100) * 0.72))),
-        dairy: Math.max(60, Math.round(base.eatLancetIndex.dairy * (1 - (simPlantShift / 100) * 0.35))),
-        legumesNuts: Math.min(130, Math.round(base.eatLancetIndex.legumesNuts * (1 + (simPlantShift / 100) * 1.45))),
-        wholeGrains: Math.min(115, Math.round(base.eatLancetIndex.wholeGrains * (1 + (simUpfReduction / 100) * 0.45))),
-        vegetablesFruits: Math.min(
-          120,
-          Math.round(base.eatLancetIndex.vegetablesFruits * (1 + (simCarbonTax / 100) * 0.22 + (simUpfReduction / 100) * 0.2))
-        ),
-        ultraProcessedShare: Math.max(
-          8,
-          Math.round(base.eatLancetIndex.ultraProcessedShare * (1 - simUpfReduction / 100))
-        ),
-      },
-    };
-  }, [currentProfile, currentCalibration, simPlantShift, simUpfReduction, simCarbonTax, simWasteCut]);
+  const policyScenarioResult = useMemo(
+    () =>
+      evaluatePolicyScenario(currentProfile, currentCalibration, {
+        simPlantShiftPct: simPlantShift,
+        simUpfReductionPct: simUpfReduction,
+        simCarbonTaxEurT: simCarbonTax,
+        simWasteCutPct: simWasteCut,
+      }),
+    [currentProfile, currentCalibration, simPlantShift, simUpfReduction, simCarbonTax, simWasteCut]
+  );
+  const simulatedMetrics = policyScenarioResult.data;
 
   const radarOption = useMemo(() => {
     const c = currentProfile.eatLancetIndex;
@@ -425,11 +465,11 @@ export function App() {
       4: 'NOVA 4 Ultra-processed',
     };
     const seriesByNova = [1, 2, 3, 4].map((nova) => {
-      const items = filteredProducts.filter((p) => p.nova_group === nova);
+      const items = plottableTrilemmaProducts.filter((p) => p.nova_group === nova);
       return {
         name: conciseNovaLabels[nova] || NOVA_LABELS[nova],
         type: 'scatter',
-        symbolSize: (val: number[]) => Math.max(7, Math.min(24, (val[2] || 5) * 1.0)),
+        symbolSize: (val: number[]) => Math.max(7, Math.min(24, (val[2] ?? 5) * 1.0)),
         itemStyle: {
           color: NOVA_COLORS[nova],
           opacity: 0.85,
@@ -437,7 +477,7 @@ export function App() {
           borderWidth: 1,
         },
         data: items.map((p) => ({
-          value: [p.nutriscore_score, p.ecoscore_score, p.proteins_100g],
+          value: [p.nutriscore_score, p.ecoscore_score, p.proteins_100g ?? 5],
           product: p,
         })),
       };
@@ -458,10 +498,10 @@ export function App() {
               <div style="font-family:'Hanken Grotesk',sans-serif;font-weight:600;color:#111827;border-bottom:2px solid #2d3643;padding-bottom:3px;margin-bottom:4px;">${p.name}</div>
               <div style="font-size:11px;color:#3d4654;margin-bottom:5px;">${p.brand} | ${p.category}</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#111827;">
-                <span>Nutri-Score: <b>${p.nutriscore_grade} (${p.nutriscore_score})</b></span>
-                <span>Eco-Score: <b>${p.ecoscore_grade} (${p.ecoscore_score})</b></span>
-                <span>Processing: <b style="color:#8a1253;">NOVA ${p.nova_group}</b></span>
-                <span>Protein: <b>${p.proteins_100g}g</b></span>
+                <span>Nutri-Score: <b>${p.nutriscore_grade} (${p.nutriscore_score ?? 'N/A'})</b></span>
+                <span>Eco-Score: <b>${p.ecoscore_grade ?? 'N/A'} (${p.ecoscore_score ?? 'N/A'})</b></span>
+                <span>Processing: <b style="color:#8a1253;">NOVA ${p.nova_group ?? 'N/A'}</b></span>
+                <span>Protein: <b>${p.proteins_100g != null ? `${p.proteins_100g}g` : 'N/A'}</b></span>
               </div>
             </div>
           `;
@@ -501,19 +541,32 @@ export function App() {
       },
       series: seriesByNova,
     };
-  }, [filteredProducts]);
+  }, [plottableTrilemmaProducts]);
+
+  const hicpSeriesInfo = useMemo(() => {
+    if (!bundle) return { targetCode: 'EU27_2020', isFallback: false, data: null };
+    const exact = bundle.eurostat[selectedCountry];
+    if (exact) {
+      return { targetCode: selectedCountry, isFallback: false, data: exact };
+    }
+    const fallbackCode = bundle.eurostat.EU27_2020 ? 'EU27_2020' : Object.keys(bundle.eurostat)[0];
+    return {
+      targetCode: fallbackCode,
+      isFallback: true,
+      data: bundle.eurostat[fallbackCode] || null,
+    };
+  }, [bundle, selectedCountry]);
 
   const eurostatOption = useMemo(() => {
-    if (!bundle) return {};
-    const countryData =
-      bundle.eurostat[selectedCountry] || bundle.eurostat.EU27_2020 || Object.values(bundle.eurostat)[0];
+    const countryData = hicpSeriesInfo.data;
     if (!countryData) return {};
 
     const years = ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'];
     const palette = ['#8a1253', '#111827', '#163d4a', '#3f6f7d', '#525e70', '#6b4c1b', '#7b8696'];
+    const isFallback = hicpSeriesInfo.isFallback;
 
     const series = Object.entries(countryData.categories).map(([code, cat], idx) => ({
-      name: cat.label,
+      name: isFallback ? `[${hicpSeriesInfo.targetCode} FALLBACK] ${cat.label}` : cat.label,
       type: 'line',
       smooth: false,
       symbolSize: 5,
@@ -524,6 +577,16 @@ export function App() {
 
     return {
       backgroundColor: 'transparent',
+      title: isFallback
+        ? {
+            text: `Eurostat HICP [${hicpSeriesInfo.targetCode} FALLBACK]`,
+            subtext: `No prc_hicp_aind series for [${currentProfile.code}] — showing EU-27 aggregate`,
+            left: 0,
+            top: 0,
+            textStyle: { color: '#8a1253', fontSize: 12, fontWeight: 700, fontFamily: 'Newsreader, Georgia, serif' },
+            subtextStyle: { color: '#3d4654', fontSize: 11, fontFamily: 'IBM Plex Mono, monospace' },
+          }
+        : undefined,
       tooltip: {
         trigger: 'axis',
         backgroundColor: '#eaedf2',
@@ -531,13 +594,13 @@ export function App() {
         textStyle: { color: '#111827', fontSize: 12, fontFamily: 'IBM Plex Mono, monospace' },
       },
       legend: {
-        top: 0,
+        top: isFallback ? 42 : 0,
         itemGap: 10,
         itemWidth: 14,
         itemHeight: 8,
         textStyle: { color: '#2d3643', fontSize: 11, fontFamily: 'Newsreader, Georgia, serif' },
       },
-      grid: { top: 68, right: 20, bottom: 38, left: 60 },
+      grid: { top: isFallback ? 104 : 68, right: 20, bottom: 38, left: 60 },
       xAxis: {
         type: 'category',
         data: years,
@@ -557,7 +620,41 @@ export function App() {
       },
       series,
     };
-  }, [bundle, selectedCountry]);
+  }, [hicpSeriesInfo, currentProfile.code]);
+
+  const radarDataTable = useMemo(() => {
+    const base = currentProfile.eatLancetIndex;
+    const comp = compareProfile.eatLancetIndex;
+    const sim = simulatedMetrics.eatLancetSimulated;
+    return {
+      caption: `Planetary Health Diet alignment (% of EAT-Lancet boundary) — [${currentProfile.code}] vs [${compareProfile.code}]`,
+      headers: ['Dimension', `${currentProfile.code} Baseline (%)`, `${compareProfile.code} Reference (%)`, 'Simulated (%)', 'EAT-Lancet Target (%)'],
+      rows: [
+        ['Whole grains', base.wholeGrains, comp.wholeGrains, sim.wholeGrains, 100],
+        ['Legumes & nuts', base.legumesNuts, comp.legumesNuts, sim.legumesNuts, 100],
+        ['Vegetables & fruit', base.vegetablesFruits, comp.vegetablesFruits, sim.vegetablesFruits, 100],
+        ['Dairy', base.dairy, comp.dairy, sim.dairy, 100],
+        ['Red meat', base.redMeat, comp.redMeat, sim.redMeat, 100],
+        ['NOVA 4 share (% kcal)', base.ultraProcessedShare, comp.ultraProcessedShare, sim.ultraProcessedShare, 15],
+      ],
+    };
+  }, [currentProfile, compareProfile, simulatedMetrics]);
+
+  const eurostatDataTable = useMemo(() => {
+    const countryData = hicpSeriesInfo.data;
+    if (!countryData) return undefined;
+    const years = ['2015', '2018', '2021', '2023', '2025'];
+    return {
+      caption: hicpSeriesInfo.isFallback
+        ? `Eurostat HICP [${hicpSeriesInfo.targetCode} FALLBACK — no prc_hicp_aind series for ${currentProfile.code}] (2015 = 100)`
+        : `[${currentProfile.code}] ${currentProfile.name} Eurostat HICP (prc_hicp_aind, 2015 = 100)`,
+      headers: ['COICOP Category', ...years],
+      rows: Object.values(countryData.categories).map((cat) => [
+        hicpSeriesInfo.isFallback ? `[${hicpSeriesInfo.targetCode} FALLBACK] ${cat.label}` : cat.label,
+        ...years.map((y) => cat.series[y] ?? null),
+      ]),
+    };
+  }, [hicpSeriesInfo, currentProfile.code, currentProfile.name]);
 
   const openalexOption = useMemo(() => {
     if (!bundle) return {};
@@ -610,16 +707,6 @@ export function App() {
   }, [bundle]);
 
   const agribalyseGroupOption = useMemo(() => {
-    const groupStats: Record<string, { count: number; co2: number; water: number; land: number }> = {};
-    filteredAgribalyse.forEach((item) => {
-      const grp = item.Groupe_aliment || item["Groupe_d'aliment"] || 'Other';
-      if (!groupStats[grp]) groupStats[grp] = { count: 0, co2: 0, water: 0, land: 0 };
-      groupStats[grp].count += 1;
-      groupStats[grp].co2 += Number(item.Changement_climatique_kg_CO2eq ?? item.Changement_climatique ?? 0);
-      groupStats[grp].water += Number(item.Eau_m3 ?? item['Épuisement_des_ressources_eau'] ?? 0);
-      groupStats[grp].land += Number(item.Sol_Pt ?? item.Utilisation_du_sol ?? 0);
-    });
-
     const cleanGroupLabel = (raw: string) => {
       const lower = raw.toLowerCase();
       if (lower.includes('viandes') || lower.includes('oeufs') || lower.includes('poissons'))
@@ -637,15 +724,15 @@ export function App() {
       return raw.slice(0, 26);
     };
 
-    const entries = Object.entries(groupStats)
-      .map(([grp, st]) => ({
-        group: cleanGroupLabel(grp),
-        avgCo2: +(st.co2 / st.count).toFixed(2),
-        avgWater: +(st.water / st.count).toFixed(2),
-        avgLand: +(st.land / st.count).toFixed(1),
-        count: st.count,
+    const agg = aggregateEnvironmentByCategory(filteredAgribalyse.map(fromAgribalyseItem), agbChartIndicator);
+    const spec = ENVIRONMENT_INDICATOR_SPECS[agbChartIndicator];
+    const entries = agg.data
+      .filter((row) => row.mean !== null)
+      .map((row) => ({
+        group: `${cleanGroupLabel(row.category)} (n=${row.validDenominator})`,
+        meanVal: +(row.mean as number).toFixed(2),
       }))
-      .sort((a, b) => b.avgCo2 - a.avgCo2)
+      .sort((a, b) => b.meanVal - a.meanVal)
       .slice(0, 10);
 
     return {
@@ -661,11 +748,11 @@ export function App() {
         itemGap: 14,
         textStyle: { color: '#2d3643', fontSize: 11, fontFamily: 'Newsreader, Georgia, serif' },
       },
-      grid: { top: 44, right: 24, bottom: 48, left: 168 },
+      grid: { top: 44, right: 24, bottom: 48, left: 190 },
       xAxis: {
         type: 'value',
         min: 0,
-        name: 'Mean footprint per kg of food product',
+        name: `Mean ${spec.label} (${spec.unit}) · FR LCI Cradle-to-Consumer`,
         nameLocation: 'middle',
         nameGap: 28,
         nameTextStyle: { color: '#3d4654', fontSize: 11, fontFamily: 'Newsreader, Georgia, serif' },
@@ -685,22 +772,18 @@ export function App() {
       },
       series: [
         {
-          name: 'Carbon footprint (kg CO₂eq / kg)',
+          name: `${spec.label} (${spec.unit})`,
           type: 'bar',
           barMaxWidth: 16,
-          itemStyle: { color: '#8a1253', borderRadius: [0, 2, 2, 0] },
-          data: entries.map((e) => e.avgCo2),
-        },
-        {
-          name: 'Water depletion (m³ / kg)',
-          type: 'bar',
-          barMaxWidth: 16,
-          itemStyle: { color: '#163d4a', borderRadius: [0, 2, 2, 0] },
-          data: entries.map((e) => e.avgWater),
+          itemStyle: {
+            color: agbChartIndicator === 'water_aware_m3' ? '#163d4a' : '#8a1253',
+            borderRadius: [0, 2, 2, 0],
+          },
+          data: entries.map((e) => e.meanVal),
         },
       ],
     };
-  }, [filteredAgribalyse]);
+  }, [filteredAgribalyse, agbChartIndicator]);
 
   const pooreLcaOption = useMemo(() => {
     const items = globalBenchmarks?.poore_nemecek_lca || [];
@@ -792,51 +875,63 @@ export function App() {
       return;
     }
     if (exportDatasetKey === 'country_profile') {
-      const headers = ['Country_Code', 'Country_Name', 'Baseline_CO2_kg_d', 'Simulated_CO2_kg_d', 'CO2_Delta_Pct', 'Baseline_Cost_EUR_d', 'Simulated_Cost_EUR_d', 'Plant_Shift_Pct', 'UPF_Reduction_Pct', 'Carbon_Tax_EUR_t'];
+      const headers = [
+        'Country_Code',
+        'Country_Name',
+        'Baseline_Data_Nature',
+        'Baseline_CO2_kg_d',
+        'Simulated_CO2_kg_d',
+        'CO2_Delta_Pct',
+        'Policy_CI95_Available',
+        'Baseline_Cost_EUR_d',
+        'Simulated_Cost_EUR_d',
+        'Cost_Delta_Pct_Unadjusted_Nominal',
+        'PPP_Normalized',
+        'Plant_Shift_Pct',
+        'UPF_Reduction_Pct',
+        'Carbon_Tax_EUR_t',
+      ];
       const row = [
         currentProfile.code,
-        `"${currentProfile.name}"`,
+        currentProfile.name,
+        simulatedMetrics.baselineNature,
         currentProfile.dailyCarbonKg,
         simulatedMetrics.newCarbon,
         simulatedMetrics.carbonDeltaPct,
+        simulatedMetrics.uncertaintyStatus.available,
         currentProfile.dailyBasketCostEur,
         simulatedMetrics.newCost,
+        simulatedMetrics.costDeltaPct,
+        simulatedMetrics.pppStatus.pppNormalized,
         simPlantShift,
         simUpfReduction,
         simCarbonTax,
       ];
-      const csv = [headers.join(','), row.join(',')].join('\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `dietshift_${currentProfile.code}_simulation.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadCsvContent(
+        serializeCsvTable(headers, [row]),
+        `dietshift_${currentProfile.code}_simulation.csv`
+      );
       return;
     }
     if (exportDatasetKey === 'agribalyse') {
-      const headers = ['Code_AGB', 'Name_EN', 'Group', 'CO2_kg_per_kg', 'Water_L_per_kg', 'Land_m2_per_kg', 'EF_Score'];
+      const headers = ['Code_AGB', 'Code_CIQUAL', 'Name_EN', 'Group', 'CO2_kg_per_kg', 'Water_m3_per_kg', 'Land_Pt_per_kg', 'EF_Score'];
       const rows = fullAgribalyse.map((a) => [
         a.Code_AGB,
-        `"${(a.LCI_Name || '').replace(/"/g, '""')}"`,
-        `"${(a["Groupe_d'aliment"] || '').replace(/"/g, '""')}"`,
-        a.Changement_climatique,
-        a['Épuisement_des_ressources_eau'],
-        a.Utilisation_du_sol,
-        a.Score_unique_EF,
+        a.Code_CIQUAL ?? '',
+        a.LCI_Name || '',
+        a.Groupe_aliment || a["Groupe_d'aliment"] || '',
+        a.Changement_climatique_kg_CO2eq ?? a.Changement_climatique ?? '',
+        a.Eau_m3 ?? a['Épuisement_des_ressources_eau'] ?? '',
+        a.Sol_Pt ?? a.Utilisation_du_sol ?? '',
+        a.Score_unique_EF ?? '',
       ]);
-      const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'dietshift_agribalyse_31.csv';
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadCsvContent(
+        serializeCsvTable(headers, rows),
+        'dietshift_agribalyse_31.csv'
+      );
       return;
     }
-    // Empirical microdata JSON -> CSV
+    // Empirical microdata JSON -> CSV (cached via dataProvider)
     const fileMap: Record<string, string> = {
       time_use: 'data/time_use_cooking_friction.json',
       biomarkers: 'data/clinical_biomarker_grounding.json',
@@ -845,42 +940,42 @@ export function App() {
     };
     const path = fileMap[exportDatasetKey];
     if (!path) return;
-    const res = await fetch(assetUrl(path));
-    const json: Record<string, unknown>[] = await res.json();
-    if (!json.length) return;
-    const keys = Object.keys(json[0]);
-    const csv = [
-      keys.join(','),
-      ...json.map((row) => keys.map((k) => `"${String(row[k] ?? '').replace(/"/g, '""')}"`).join(',')),
-    ].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `dietshift_${exportDatasetKey}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    try {
+      const json = await fetchCachedJson<Record<string, unknown>[]>(path);
+      if (!json.length) return;
+      const keys = Object.keys(json[0]);
+      const rows = json.map((row) => keys.map((k) => row[k] as string | number | boolean | null | undefined));
+      downloadCsvContent(
+        serializeCsvTable(keys, rows),
+        `dietshift_${exportDatasetKey}.csv`
+      );
+    } catch (err: unknown) {
+      const disclosure = classifyResourceError(err, { resourcePath: path });
+      const msg = disclosure.isExcludedTrackB
+        ? `${disclosure.resourceLabel}: ${disclosure.headline}. ${disclosure.detail}`
+        : `Export ${path}: ${disclosure.detail}`;
+      setLoadWarnings((prev) => (prev.includes(msg) ? prev : [...prev, msg]));
+    }
   };
 
   const exportFilteredCsv = () => {
-    const headers = ['Code', 'Product_Name', 'Brand', 'Category', 'NutriScore', 'EcoScore', 'NOVA', 'Proteins_100g'];
+    const headers = ['Code', 'Product_Name', 'Brand', 'Category', 'NutriScore', 'EcoScore', 'NOVA', 'Proteins_100g', 'Energy_kcal_100g', 'Primary_Country'];
     const rows = filteredProducts.map((p) => [
       p.code,
-      `"${(p.name || '').replace(/"/g, '""')}"`,
-      `"${(p.brand || '').replace(/"/g, '""')}"`,
-      `"${p.category}"`,
+      p.name || '',
+      p.brand || '',
+      p.category,
       p.nutriscore_grade,
-      p.ecoscore_score,
-      p.nova_group,
-      p.proteins_100g,
+      p.ecoscore_score ?? '',
+      p.nova_group ?? '',
+      p.proteins_100g ?? '',
+      p.energy_kcal_100g ?? '',
+      p.primary_country ?? '',
     ]);
-    const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `dietshift_openfoodfacts_${selectedCountry}.csv`;
-    a.click();
+    downloadCsvContent(
+      serializeCsvTable(headers, rows),
+      `dietshift_openfoodfacts_${selectedCountry}.csv`
+    );
   };
 
   if (loading) {
@@ -907,7 +1002,7 @@ export function App() {
                   DietShift Atlas
                 </h1>
                 <span className="almanac-label">
-                  European & Global Food Systems Almanac — Edition 2026 (v3.5)
+                  European & Global Food Systems Almanac — Edition 2026 (v4.0)
                 </span>
                 <a
                   href="https://www.linkedin.com/in/zouaghi-amine/"
@@ -928,7 +1023,15 @@ export function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setCatalogOpen(true)}
+              className="almanac-btn flex items-center gap-1.5"
+              title="Inspect dataset registry, data nature, schemas, and automated quality checks"
+            >
+              <Database className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+              <span>Data Catalog ({datasetsRegistry?.total_datasets ?? 19})</span>
+            </button>
             <a
               href={assetUrl('public_guide.html')}
               target="_blank"
@@ -996,7 +1099,9 @@ export function App() {
             </button>
             <button
               onClick={() => {
-                const bibtex = `@software{zouaghi2026dietshift,\n  author = {Zouaghi, Amine},\n  title = {DietShift Atlas: European \\& Global Food Systems Computational Almanac},\n  year = {2026},\n  version = {3.4.1},\n  url = {https://aminezghi.github.io/dietshift-atlas/},\n  note = {16 DuckDB-Wasm Parquet tables (15,147 rows); FutureData4EU Fellowship}\n}`;
+                const tableCount = datasetsRegistry?.total_datasets ?? 19;
+                const rowCount = (datasetsRegistry?.total_records ?? 17627).toLocaleString();
+                const bibtex = `@software{zouaghi2026dietshift,\n  author = {Zouaghi, Amine},\n  title = {DietShift Atlas: European \\& Global Food Systems Computational Almanac},\n  year = {2026},\n  version = {${APP_VERSION}},\n  url = {https://aminezghi.github.io/dietshift-atlas/},\n  note = {${tableCount} DuckDB-Wasm Parquet tables (${rowCount} rows); FutureData4EU Fellowship}\n}`;
                 navigator.clipboard.writeText(bibtex);
                 setCopiedNotice('BibTeX copied');
                 setTimeout(() => setCopiedNotice(null), 2500);
@@ -1022,17 +1127,18 @@ export function App() {
         <nav className="flex flex-wrap items-center gap-1.5 pt-3">
           {[
             { id: 'overview', label: 'I. Almanac overview & plate', icon: Compass },
-            { id: 'nsi_ml', label: 'II. NSI & TimesFM 2.0 lab', icon: Cpu },
+            { id: 'nsi_ml', label: 'II. NSI & statistical forecasts', icon: Cpu },
             { id: 'consumer_pulse', label: 'III. Consumer behavior & infodemiology', icon: Users },
             { id: 'map', label: 'IV. Full cartography', icon: Globe2 },
             { id: 'duckdb', label: 'V. DuckDB Parquet SQL', icon: Database },
             { id: 'sandbox', label: 'VI. Researcher survey ledger', icon: ShoppingBasket },
             { id: 'trilemma', label: 'VII. Retail product trilemma', icon: ShoppingBag },
             { id: 'lca', label: 'VIII. Agribalyse 3.1 (2,451)', icon: Layers },
-            { id: 'inflation', label: 'IX. Price & literature', icon: TrendingUp },
+            { id: 'inflation', label: 'IX. Affordability & integrated comparator', icon: TrendingUp },
             { id: 'simulator', label: 'X. Policy intervention model', icon: Sliders },
             { id: 'floorplan', label: 'XI. Code floorplan & architecture', icon: Network },
             { id: 'gs1_immagino', label: 'XII. Pan-EU Retail Scanner & Claims', icon: ShoppingBag },
+            { id: 'sensitivity', label: 'XIII. Empirical sensitivity', icon: Sliders },
           ].map((tab) => {
             const Icon = tab.icon;
             const active = activeModule === tab.id;
@@ -1147,6 +1253,27 @@ export function App() {
                 );
               })}
             </div>
+            <label className="mt-2 flex items-center justify-between gap-2 text-[11px] font-mono-num text-[var(--color-ink-2)] cursor-pointer select-none border border-[var(--color-rule)] px-2 py-1 bg-[var(--color-paper-2)]">
+              <span className="flex items-center gap-1.5">
+                <input
+                  type="checkbox"
+                  checked={includeMissingNova}
+                  onChange={(e) => setIncludeMissingNova(e.target.checked)}
+                  data-testid="toggle-missing-nova"
+                />
+                <span>Include Unknown NOVA (NULL)</span>
+              </span>
+              <span className="font-semibold text-[var(--color-muted)]">
+                {novaAudit.missingNovaMatchedCount}
+              </span>
+            </label>
+            {novaAudit.missingNovaMatchedCount > 0 && (
+              <div className="mt-1 text-[10px] font-mono-num text-[var(--color-muted)]">
+                {includeMissingNova
+                  ? `${novaAudit.missingNovaMatchedCount} NULL-NOVA items included · ${novaAudit.excludedNonMatchingNovaCount} excluded by NOVA group`
+                  : `${novaAudit.excludedMissingNovaCount} NULL-NOVA items excluded · ${novaAudit.excludedNonMatchingNovaCount} non-matching`}
+              </div>
+            )}
           </div>
 
           {/* 3. Policy & Behavioral Levers */}
@@ -1234,99 +1361,72 @@ export function App() {
           {/* 4. Parquet & API Provenance */}
           <div className="almanac-sheet p-4 text-xs space-y-1.5">
             <div className="font-display-head font-semibold pb-1.5 mb-1.5 rule-firm flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
+              <button
+                onClick={() => setCatalogOpen(true)}
+                className="flex items-center gap-1.5 hover:text-[var(--color-accent)] cursor-pointer text-left"
+                title="Open full dataset registry and validation report"
+              >
                 <Database className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-                Registered Parquet tables (18)
+                Registered Parquet tables ({datasetsRegistry?.total_datasets ?? 19})
+              </button>
+              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">
+                {(datasetsRegistry?.total_records ?? 17627).toLocaleString()} rows
               </span>
-              <span className="font-mono-num text-[11px] text-[var(--color-accent)] font-semibold">17,897 rows</span>
             </div>
             <div className="max-h-72 overflow-y-auto space-y-1 pr-1 font-mono-num text-[11px] divide-y divide-[var(--color-parchment-deep)]">
-              <div className="flex justify-between pt-1">
-                <span>agribalyse_31.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">{fullAgribalyse.length > 0 ? fullAgribalyse.length.toLocaleString() : '2,451'} rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>openfoodfacts_eu.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">{bundle?.openfoodfacts.length ? bundle.openfoodfacts.length.toLocaleString() : '3,740'} rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>gi_terroir_registry.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">6,845 rows</span>
-              </div>
-              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
-                <span>global_healthy_diet_affordability.parquet</span>
-                <span className="font-semibold">1,399 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>efsa_foodex2_surveys.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">1,080 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>scrapling_retail_claims.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">1,355 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>ml_timesfm_forecasts.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">448 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>nsi_subnational_quintiles.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">150 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>social_discourse_velocity.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">129 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>pan_eu_retail_scanner.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">88 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>gs1_immagino_observatory.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">61 rows</span>
-              </div>
-              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
-                <span>time_use_cooking_friction.parquet</span>
-                <span className="font-semibold">60 rows</span>
-              </div>
-              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
-                <span>global_poore_nemecek_lca.parquet</span>
-                <span className="font-semibold">45 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>crosswalk_rosetta.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">15 rows</span>
-              </div>
-              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
-                <span>cultural_climate_inertia.parquet</span>
-                <span className="font-semibold">11 rows</span>
-              </div>
-              <div className="flex justify-between pt-1">
-                <span>consumer_behavior_pulse.parquet</span>
-                <span className="font-semibold text-[var(--color-ink)]">8 rows</span>
-              </div>
-              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
-                <span>school_meals_procurement.parquet</span>
-                <span className="font-semibold">7 rows</span>
-              </div>
-              <div className="flex justify-between pt-1 text-[var(--color-primary)]">
-                <span>clinical_biomarker_grounding.parquet</span>
-                <span className="font-semibold">5 rows</span>
-              </div>
+              {(datasetsRegistry?.datasets ?? []).map((ds) => (
+                <div key={ds.id} className="flex items-center justify-between gap-2 pt-1">
+                  <button
+                    onClick={() => setCatalogOpen(true)}
+                    className="truncate text-left hover:text-[var(--color-accent)] cursor-pointer"
+                    title={`${ds.name} (${ds.data_nature}, ${ds.validation_status.toUpperCase()})`}
+                  >
+                    {ds.file_path.replace('data/parquet/', '')}
+                  </button>
+                  <span className="font-semibold text-[var(--color-ink)] shrink-0">
+                    {ds.record_count.toLocaleString()} rows
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </aside>
 
         {/* RIGHT MAIN CANVAS */}
         <main className="flex-1 min-w-0 space-y-5">
+          {loadWarnings.length > 0 && (
+            <div
+              role="alert"
+              className="almanac-sheet p-3.5 border border-[#8a1253] bg-[#8a1253]/10 text-xs flex flex-wrap items-center justify-between gap-2"
+            >
+              <span className="flex items-center gap-2 text-[#8a1253] font-medium">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                Partial data load warning (non-blocking): {loadWarnings.join(' · ')}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setLoadWarnings([]);
+                  setBootRetryTick((t) => t + 1);
+                }}
+                className="almanac-btn text-[11px] flex items-center gap-1"
+              >
+                <RefreshCw className="w-3 h-3" />
+                Retry Failed Streams
+              </button>
+            </div>
+          )}
+
           {/* Hallmark Almanac Stat Row (1 sheet with hairline column dividers instead of floating cards) */}
           <section className="almanac-sheet p-4">
-            <div className="flex items-center justify-between pb-2 mb-3 rule-firm">
-              <span className="font-display-head font-semibold text-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 mb-3 rule-firm">
+              <span className="font-display-head font-semibold text-sm flex flex-wrap items-center gap-2">
                 National dietary and planetary boundary ledger — [{currentProfile.code}] {currentProfile.name}
+                <DataNatureBadge nature="Manually Compiled" label="Baseline" />
+                <DataNatureBadge nature="Simulated" label="Analyst Levers" />
               </span>
               <span className="almanac-label text-xs">
-                Baseline vs. simulated intervention ({simPlantShift}% plant shift, {simUpfReduction}% NOVA 4 cut)
+                Illustrative deterministic perturbation ({simPlantShift}% plant shift, {simUpfReduction}% NOVA 4 cut · uncertainty N/A)
               </span>
             </div>
 
@@ -1338,7 +1438,7 @@ export function App() {
                     {simulatedMetrics.newCarbon}
                   </span>
                   <span className="text-xs num text-[var(--color-muted)]">
-                    ± {(simulatedMetrics.newCarbon * simulatedMetrics.ci95RelHalfwidth).toFixed(2)} kg CO₂/d (95% CI, base {currentProfile.dailyCarbonKg})
+                    kg CO₂eq/d (base {currentProfile.dailyCarbonKg} · Policy CI N/A)
                   </span>
                 </div>
                 <div className="almanac-label text-xs mt-1">
@@ -1347,7 +1447,7 @@ export function App() {
               </div>
 
               <div className="px-3 py-1">
-                <div className="almanac-label">Land & water footprint</div>
+                <div className="almanac-label">Land &amp; water footprint (heuristic)</div>
                 <div className="flex items-baseline gap-2 mt-0.5">
                   <span className="text-2xl font-semibold num text-[var(--color-ink)]">
                     {simulatedMetrics.newLand}
@@ -1357,7 +1457,7 @@ export function App() {
                   </span>
                 </div>
                 <div className="almanac-label text-xs mt-1">
-                  Baseline: <span className="num">{currentProfile.dailyLandM2} m² & {currentProfile.dailyWaterLiters} L</span>
+                  Compiled base: <span className="num">{currentProfile.dailyLandM2} m² &amp; {currentProfile.dailyWaterLiters} L</span>
                 </div>
               </div>
 
@@ -1372,7 +1472,7 @@ export function App() {
                   </span>
                 </div>
                 <div className="almanac-label text-xs mt-1">
-                  Basket delta: <span className="num font-semibold">{simulatedMetrics.costDeltaPct}%</span> (PPP)
+                  Unadjusted nominal Δ: <span className="num font-semibold">{simulatedMetrics.costDeltaPct}%</span> (not PPP)
                 </div>
               </div>
 
@@ -1416,29 +1516,39 @@ export function App() {
 
               <div className="almanac-sheet p-4 flex flex-col">
                 <div className="pb-2.5 mb-2 rule-firm">
-                  <h2 className="text-base font-semibold flex items-center gap-2">
+                  <h2 className="text-base font-semibold flex flex-wrap items-center gap-2">
                     <Compass className="w-4 h-4" />
                     Plate II. Planetary health diet alignment ([{currentProfile.code}] {currentProfile.name} vs. [
                     {compareProfile.code}] {compareProfile.name})
+                    <DataNatureBadge nature="Estimated" />
+                    <DataNatureBadge nature="Simulated" />
                   </h2>
                   <p className="almanac-label">
                     National dietary intake relative to EAT-Lancet reference boundaries (100%).
                   </p>
                 </div>
                 <div className="h-80 w-full">
-                  <ReactECharts option={radarOption} style={{ height: '100%', width: '100%' }} notMerge={true} />
+                  <ReactECharts
+                    option={radarOption}
+                    style={{ height: '100%', width: '100%' }}
+                    notMerge={true}
+                    ariaLabel={`Planetary health diet radar comparing ${currentProfile.name} and ${compareProfile.name}`}
+                    accessibleSummary={`Planetary health radar across Whole grains, Legumes and nuts, Vegetables and fruit, Dairy, Red meat, and NOVA 4 share relative to EAT-Lancet 100% boundaries for ${currentProfile.name}.`}
+                    dataTableFallback={radarDataTable}
+                  />
                 </div>
               </div>
 
               <div className="almanac-sheet p-4 flex flex-col">
                 <div className="flex items-start justify-between pb-2.5 mb-2 rule-firm">
                   <div>
-                    <h2 className="text-base font-semibold flex items-center gap-2">
+                    <h2 className="text-base font-semibold flex flex-wrap items-center gap-2">
                       <ShoppingBag className="w-4 h-4" />
-                      Plate III. Retail product trilemma ({filteredProducts.length} Open Food Facts items)
+                      Plate III. Retail product trilemma ({plottableTrilemmaProducts.length} / {filteredProducts.length} Open Food Facts items)
+                      <DataNatureBadge nature="Observed" />
                     </h2>
                     <p className="almanac-label">
-                      Nutri-Score points vs. Eco-Score sustainability colored by NOVA processing group.
+                      Nutri-Score points vs. Eco-Score sustainability colored by NOVA group ({filteredProducts.length - plottableTrilemmaProducts.length} items with missing Eco-Score/NOVA excluded).
                     </p>
                   </div>
                   <button onClick={() => setActiveModule('trilemma')} className="almanac-btn">
@@ -1453,16 +1563,23 @@ export function App() {
               <div className="almanac-sheet p-4 flex flex-col">
                 <div className="flex flex-wrap items-start justify-between gap-2 pb-2.5 mb-2 rule-firm">
                   <div>
-                    <h2 className="text-base font-semibold flex items-center gap-2">
+                    <h2 className="text-base font-semibold flex flex-wrap items-center gap-2">
                       <BarChart3 className="w-4 h-4" />
                       {plate4Mode === 'poore'
                         ? 'Plate IV. Global Farm LCA by Supply-Chain Stage (Poore & Nemecek 2018)'
                         : `Plate IV. ADEME Agribalyse 3.1 LCA synthesis (${filteredAgribalyse.length.toLocaleString()} items)`}
+                      <DataNatureBadge
+                        nature={resolveDatasetNature(
+                          datasetsRegistry,
+                          plate4Mode === 'poore' ? 'global_poore_nemecek_lca' : 'agribalyse_31',
+                          plate4Mode === 'poore' ? 'Estimated' : 'Model Output'
+                        )}
+                      />
                     </h2>
                     <p className="almanac-label">
                       {plate4Mode === 'poore'
-                        ? '38,700 farms in 119 countries: land use & farm stages dominate over transport (<2%).'
-                        : 'Mean climate change (kg CO₂eq/kg) and water depletion (m³/kg) across food groups.'}
+                        ? 'Harmonized meta-analysis across 38,700 farms in 119 countries: land use & farm stages dominate over transport (<2%).'
+                        : `Mean ${ENVIRONMENT_INDICATOR_SPECS[agbChartIndicator].label} (${ENVIRONMENT_INDICATOR_SPECS[agbChartIndicator].unit}) across ADEME Agribalyse 3.1.1 food groups.`}
                     </p>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -1488,6 +1605,16 @@ export function App() {
                     option={plate4Mode === 'poore' ? pooreLcaOption : agribalyseGroupOption}
                     notMerge={true}
                     style={{ height: '100%', width: '100%' }}
+                    ariaLabel={
+                      plate4Mode === 'poore'
+                        ? 'Plate IV Global Farm LCA by Supply-Chain Stage'
+                        : 'Plate IV ADEME Agribalyse 3.1 LCA synthesis'
+                    }
+                    accessibleSummary={
+                      plate4Mode === 'poore'
+                        ? 'Horizontal stacked bar chart comparing Land use, Farm stage, Processing and packaging, and Transport and retail GHG emissions per kg across global commodities.'
+                        : `Horizontal bar chart of mean ${ENVIRONMENT_INDICATOR_SPECS[agbChartIndicator].label} in ${ENVIRONMENT_INDICATOR_SPECS[agbChartIndicator].unit} across top 10 Agribalyse food groups.`
+                    }
                   />
                 </div>
               </div>
@@ -1515,7 +1642,8 @@ export function App() {
                     <div className="almanac-well p-3">
                       <div className="almanac-label text-[11px]">Q1 (Lowest Income) Budget Impact</div>
                       <div className="text-lg font-semibold font-mono-num text-[var(--color-accent)] mt-0.5">
-                        +{((simCarbonTax / 100) * 1.9 * simulatedMetrics.q1TaxExposureRatio - simPlantShift * 0.04).toFixed(1)}%
+                        {simulatedMetrics.q1BudgetImpactPct >= 0 ? '+' : ''}
+                        {simulatedMetrics.q1BudgetImpactPct}%
                       </div>
                       <div className="text-[11px] text-[var(--color-muted)] mt-0.5">
                         5+ fruit/veg (EHIS):{' '}
@@ -1528,7 +1656,8 @@ export function App() {
                     <div className="almanac-well p-3">
                       <div className="almanac-label text-[11px]">Q5 (Highest Income) Budget Impact</div>
                       <div className="text-lg font-semibold font-mono-num text-[var(--color-primary)] mt-0.5">
-                        +{((simCarbonTax / 100) * 1.4 - simPlantShift * 0.02).toFixed(1)}%
+                        {simulatedMetrics.q5BudgetImpactPct >= 0 ? '+' : ''}
+                        {simulatedMetrics.q5BudgetImpactPct}%
                       </div>
                       <div className="text-[11px] text-[var(--color-muted)] mt-0.5">
                         5+ fruit/veg (EHIS):{' '}
@@ -1562,26 +1691,32 @@ export function App() {
                 </div>
 
                 <div className="almanac-sheet p-4 space-y-3">
-                  <div className="pb-2 rule-firm flex items-center justify-between">
-                    <span className="font-display-head font-semibold text-sm">
-                      Global Sensitivity Analysis (Variance Contribution)
+                  <div className="pb-2 rule-firm flex items-center justify-between gap-2">
+                    <span className="font-display-head font-semibold text-sm flex items-center gap-2">
+                      Policy Lever One-at-a-Time Response
+                      <DataNatureBadge nature="Simulated" label="OAT Levers" />
                     </span>
-                    <span className="almanac-label text-[11px] font-mono-num">Sobol / OAT Ranking</span>
+                    <button
+                      onClick={() => setActiveModule('sensitivity')}
+                      className="almanac-btn text-[11px]"
+                    >
+                      Open Sensitivity Lab
+                    </button>
                   </div>
                   <p className="text-xs text-[var(--color-muted)]">
-                    Share of total variance in dietary CO₂ reduction &amp; Say-Do gap closure explained by each structural lever.
+                    Active policy slider perturbations on [{currentProfile.code}] {currentProfile.name} (baseline {currentProfile.dailyCarbonKg} → simulated {simulatedMetrics.newCarbon} kg CO₂/d, {simulatedMetrics.carbonDeltaPct}%). For empirical data, mapping, proxy &amp; missingness sensitivity across real datasets, open <b>Section XIII</b>.
                   </p>
                   <div className="space-y-2 pt-1 font-mono-num text-xs">
                     {[
-                      { label: '1. Retail Price Parity (Legume/Produce Subsidies)', pct: 38, color: 'bg-[var(--color-primary)]' },
-                      { label: '2. Culinary Time-Poverty Reduction (MTUS)', pct: 27, color: 'bg-[var(--color-accent)]' },
-                      { label: '3. Public School Canteen Mandates (EGALIM / CAM)', pct: 21, color: 'bg-[#2d6a4f]' },
-                      { label: '4. Front-of-Pack Eco/Nutri-Score Labeling', pct: 14, color: 'bg-[#6c757d]' },
+                      { label: '1. Plant Protein Shift Lever', pct: Math.min(100, Math.round((simPlantShift / 60) * 100)), raw: `${simPlantShift}%`, color: 'bg-[var(--color-primary)]' },
+                      { label: '2. NOVA-4 UPF Reduction Lever', pct: Math.min(100, Math.round((simUpfReduction / 75) * 100)), raw: `${simUpfReduction}%`, color: 'bg-[var(--color-accent)]' },
+                      { label: '3. Carbon Price Alignment', pct: Math.min(100, Math.round((simCarbonTax / 150) * 100)), raw: `€${simCarbonTax}/t`, color: 'bg-[#2d6a4f]' },
+                      { label: '4. Household Food Waste Cut', pct: Math.min(100, Math.round((simWasteCut / 50) * 100)), raw: `${simWasteCut}%`, color: 'bg-[#6c757d]' },
                     ].map((item) => (
                       <div key={item.label} className="space-y-1">
                         <div className="flex justify-between text-[11px]">
                           <span>{item.label}</span>
-                          <span className="font-semibold">{item.pct}%</span>
+                          <span className="font-semibold">{item.raw}</span>
                         </div>
                         <div className="w-full h-2 bg-[var(--color-parchment-deep)] overflow-hidden">
                           <div className={`h-full ${item.color}`} style={{ width: `${item.pct}%` }} />
@@ -1594,14 +1729,18 @@ export function App() {
             </div>
           )}
 
-          {/* MODULE II: NSI & TIMESFM 2.0 LAB */}
+          {/* MODULE II: NSI & STATISTICAL FORECASTING LAB */}
           {activeModule === 'nsi_ml' && (
-            <NSIMLObservatory selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+            <Suspense fallback={<ModuleLoadingState label="Section II NSI & Statistical Forecasts" />}>
+              <NSIMLObservatory selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+            </Suspense>
           )}
 
           {/* MODULE III: CONSUMER BEHAVIOR, INTENTION-TO-PLATE CASCADE & INFODEMIOLOGY */}
           {activeModule === 'consumer_pulse' && (
-            <ConsumerBehaviorPulse selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+            <Suspense fallback={<ModuleLoadingState label="Section III Consumer Behavior & Infodemiology" />}>
+              <ConsumerBehaviorPulse selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+            </Suspense>
           )}
 
           {/* MODULE IV: FULL CARTOGRAPHY */}
@@ -1663,11 +1802,17 @@ export function App() {
           )}
 
           {/* MODULE IV: DUCKDB PARQUET SQL */}
-          {activeModule === 'duckdb' && <DuckDBParquetWorkbench selectedCountry={selectedCountry} />}
+          {activeModule === 'duckdb' && (
+            <Suspense fallback={<ModuleLoadingState label="Section V DuckDB Parquet SQL Workbench" />}>
+              <DuckDBParquetWorkbench selectedCountry={selectedCountry} />
+            </Suspense>
+          )}
 
           {/* MODULE V: RESEARCHER BASKET SANDBOX */}
           {activeModule === 'sandbox' && (
-            <ResearcherSandbox selectedCountry={selectedCountry} agribalyseCatalog={fullAgribalyse} />
+            <Suspense fallback={<ModuleLoadingState label="Section VI Researcher Survey Ledger" />}>
+              <ResearcherSandbox selectedCountry={selectedCountry} agribalyseCatalog={fullAgribalyse} />
+            </Suspense>
           )}
 
           {/* MODULE VI: PRODUCT TRILEMMA */}
@@ -1675,12 +1820,13 @@ export function App() {
             <div className="space-y-5">
               <div className="almanac-sheet p-5">
                 <div className="pb-2.5 mb-3 rule-firm">
-                  <h2 className="text-lg font-semibold">
-                    Section VI. Retail Assortment and NOVA Reformulation Ledger ({filteredProducts.length} products)
+                  <h2 className="text-lg font-semibold flex flex-wrap items-center gap-2">
+                    Section VII. Retail Assortment and NOVA Reformulation Ledger ({plottableTrilemmaProducts.length} plotted / {filteredProducts.length} matching)
+                    <DataNatureBadge nature="Observed" />
                   </h2>
                   <p className="almanac-label">
                     Examines the relationship between environmental Eco-Score, nutritional Nutri-Score, and NOVA
-                    industrial processing.
+                    industrial processing ({filteredProducts.length - plottableTrilemmaProducts.length} rows with missing Eco-Score or NOVA excluded from scatter).
                   </p>
                 </div>
                 <div className="h-96 w-full">
@@ -1688,12 +1834,21 @@ export function App() {
                 </div>
               </div>
 
+              <Suspense fallback={<ModuleLoadingState label="Nutrition Comparability Engine" />}>
+                <NutritionComparisonPanel
+                  inputs={filteredNutritionInputs}
+                  basis={nutritionBasis}
+                  onBasisChange={setNutritionBasis}
+                  title="Open Food Facts EU — Nutrition Comparability & Missingness Engine"
+                />
+              </Suspense>
+
               <div className="almanac-sheet p-5">
                 <div className="flex items-center justify-between pb-2.5 mb-3 rule-firm">
                   <h3 className="text-sm font-semibold">
-                    Harmonized Open Food Facts product records (first 100 matching filter)
+                    Harmonized Open Food Facts product records (first 100 matching filter · basis: {nutritionBasis})
                   </h3>
-                  <span className="almanac-label">Tabular numerals right-aligned</span>
+                  <span className="almanac-label">Missing/excluded preserved explicitly as N/A</span>
                 </div>
                 <div className="overflow-x-auto max-h-96">
                   <table className="almanac-table">
@@ -1705,29 +1860,49 @@ export function App() {
                         <th>Nutri-Score</th>
                         <th className="text-right">Eco-Score</th>
                         <th className="text-right">NOVA</th>
-                        <th className="text-right">Protein (g/100g)</th>
-                        <th className="text-right">Salt (g/100g)</th>
+                        <th className="text-right">
+                          Energy ({nutritionBasis === 'per_100g' ? 'kcal/100g' : nutritionBasis === 'per_100kcal' ? 'kcal/100kcal' : 'kcal/serving'})
+                        </th>
+                        <th className="text-right">
+                          Protein ({nutritionBasis === 'per_100g' ? 'g/100g' : nutritionBasis === 'per_100kcal' ? 'g/100kcal' : 'g/serving'})
+                        </th>
+                        <th className="text-right">
+                          Salt ({nutritionBasis === 'per_100g' ? 'g/100g' : nutritionBasis === 'per_100kcal' ? 'g/100kcal' : 'g/serving'})
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredProducts.slice(0, 100).map((p, idx) => (
-                        <tr key={`${p.code}-${idx}`}>
-                          <td className="font-semibold text-[var(--color-ink)]">{p.name}</td>
-                          <td>{p.brand}</td>
-                          <td>{p.category}</td>
-                          <td className="num">
-                            {p.nutriscore_grade} ({p.nutriscore_score})
-                          </td>
-                          <td className="num text-right">
-                            {p.ecoscore_grade} ({p.ecoscore_score})
-                          </td>
-                          <td className="num text-right text-[var(--color-accent)] font-semibold">
-                            NOVA {p.nova_group}
-                          </td>
-                          <td className="num text-right">{p.proteins_100g.toFixed(1)}</td>
-                          <td className="num text-right">{p.salt_100g.toFixed(2)}</td>
-                        </tr>
-                      ))}
+                      {filteredProducts.slice(0, 100).map((p, idx) => {
+                        const evalProd = evaluateProductNutrition(fromOFFProduct(p), nutritionBasis);
+                        const eCell = evalProd.values.energy_kcal;
+                        const pCell = evalProd.values.proteins_g;
+                        const sCell = evalProd.values.salt_g;
+                        return (
+                          <tr key={`${p.code}-${idx}`}>
+                            <td className="font-semibold text-[var(--color-ink)]">{p.name}</td>
+                            <td>{p.brand}</td>
+                            <td>{p.category}</td>
+                            <td className="num">
+                              {p.nutriscore_grade} ({p.nutriscore_score ?? 'N/A'})
+                            </td>
+                            <td className="num text-right">
+                              {p.ecoscore_grade ?? 'N/A'} ({p.ecoscore_score ?? 'N/A'})
+                            </td>
+                            <td className="num text-right text-[var(--color-accent)] font-semibold">
+                              {p.nova_group != null ? `NOVA ${p.nova_group}` : 'N/A'}
+                            </td>
+                            <td className="num text-right" title={eCell.transformation}>
+                              {eCell.value != null ? eCell.value.toFixed(1) : 'N/A'}
+                            </td>
+                            <td className="num text-right" title={pCell.transformation}>
+                              {pCell.value != null ? pCell.value.toFixed(2) : 'N/A'}
+                            </td>
+                            <td className="num text-right" title={sCell.transformation}>
+                              {sCell.value != null ? sCell.value.toFixed(2) : 'N/A'}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -1739,19 +1914,49 @@ export function App() {
           {activeModule === 'lca' && (
             <div className="space-y-5">
               <div className="almanac-sheet p-5">
-                <div className="pb-2.5 mb-3 rule-firm">
-                  <h2 className="text-lg font-semibold">
-                    Section VII. Complete ADEME Agribalyse 3.1 Life-Cycle Inventory (
-                    {filteredAgribalyse.length.toLocaleString()} / 2,451 items)
-                  </h2>
-                  <p className="almanac-label">
-                    Product Environmental Footprint (PEF) synthesis per kilogram of food product at retail/edible stage.
-                  </p>
+                <div className="flex flex-wrap items-start justify-between gap-3 pb-2.5 mb-3 rule-firm">
+                  <div>
+                    <h2 className="text-lg font-semibold flex flex-wrap items-center gap-2">
+                      Section VIII. ADEME Agribalyse 3.1.1 &amp; Environmental Analytical Engine (
+                      {filteredAgribalyse.length.toLocaleString()} / 2,451 items)
+                      <DataNatureBadge nature="Model Output" />
+                    </h2>
+                    <p className="almanac-label">
+                      Unit-consistent Product Environmental Footprint (PEF 3.1) synthesis per 1 kg product at French cradle-to-consumer gate (separate scale per indicator—never mixed).
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Agribalyse single indicator">
+                    {(
+                      [
+                        { k: 'climate_co2eq', lbl: 'CO₂ (kg/kg)' },
+                        { k: 'water_aware_m3', lbl: 'Water (m³/kg)' },
+                        { k: 'land_ef_pt', lbl: 'Land (Pt/kg)' },
+                        { k: 'ef_single_score', lbl: 'PEF Score (mPt/kg)' },
+                      ] as { k: EnvironmentIndicatorKey; lbl: string }[]
+                    ).map((opt) => (
+                      <button
+                        key={opt.k}
+                        onClick={() => setAgbChartIndicator(opt.k)}
+                        className={`almanac-btn text-xs ${agbChartIndicator === opt.k ? 'almanac-btn--primary' : ''}`}
+                      >
+                        {opt.lbl}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="h-88 w-full">
-                  <ReactECharts option={agribalyseGroupOption} style={{ height: '100%', width: '100%' }} />
+                  <ReactECharts option={agribalyseGroupOption} notMerge={true} style={{ height: '100%', width: '100%' }} />
                 </div>
               </div>
+
+              <Suspense fallback={<ModuleLoadingState label="Boundary-Aware Environmental Engine" />}>
+                <EnvironmentComparisonPanel
+                  agribalyseItems={filteredAgribalyse}
+                  pooreItems={globalBenchmarks?.poore_nemecek_lca || []}
+                  selectedAgbIndicator={agbChartIndicator}
+                  onAgbIndicatorChange={setAgbChartIndicator}
+                />
+              </Suspense>
 
               <div className="almanac-sheet p-5">
                 <div className="flex items-center justify-between pb-2.5 mb-3 rule-firm">
@@ -1798,21 +2003,61 @@ export function App() {
             </div>
           )}
 
-          {/* MODULE VIII: PRICE & LITERATURE */}
+          {/* MODULE VIII: PRICE, AFFORDABILITY, INTEGRATED COMPARATOR & LITERATURE */}
           {activeModule === 'inflation' && (
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+            <div className="space-y-5">
+              <Suspense fallback={<ModuleLoadingState label="Section IX Affordability & Integrated Comparator" />}>
+                <AffordabilityAndIntegratedPanel
+                  selectedCountry={currentProfile.code}
+                  countryName={currentProfile.name}
+                  countryGeoName={currentProfile.geoJsonName}
+                  hicpTargetCode={hicpSeriesInfo.targetCode}
+                  isHicpFallback={hicpSeriesInfo.isFallback}
+                  hicpData={hicpSeriesInfo.data}
+                  pppIndexEu27={currentCalibration?.eurostat_food_ppp_index_eu27_100 ?? null}
+                  cohdRecords={globalBenchmarks?.cohd_latest_by_country || []}
+                  offProducts={filteredProducts}
+                  agribalyseItems={filteredAgribalyse}
+                />
+              </Suspense>
+
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
               <div className="almanac-sheet p-5">
                 <div className="pb-2.5 mb-3 rule-firm">
-                  <h2 className="text-base font-semibold flex items-center gap-2">
+                  <h2 className="text-base font-semibold flex flex-wrap items-center gap-2">
                     <TrendingUp className="w-4 h-4" />
-                    Eurostat HICP food price indices ([{currentProfile.code}] {currentProfile.name}, 2015–2025)
+                    Eurostat HICP food price indices (
+                    {hicpSeriesInfo.isFallback
+                      ? `[${hicpSeriesInfo.targetCode}] EU-27 aggregate — no Eurostat series for [${currentProfile.code}]`
+                      : `[${currentProfile.code}] ${currentProfile.name}`}
+                    , 2015–2025)
+                    <DataNatureBadge nature="Observed" />
                   </h2>
                   <p className="almanac-label">
                     Annual Harmonised Index of Consumer Prices (prc_hicp_aind, 2015 = 100, axis starts at 95).
+                    {hicpSeriesInfo.isFallback && (
+                      <span className="text-[var(--color-accent)] font-semibold ml-1">
+                        Displaying EU-27 aggregate because Eurostat prc_hicp_aind does not include [{currentProfile.code}].
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="h-92 w-full">
-                  <ReactECharts option={eurostatOption} style={{ height: '100%', width: '100%' }} />
+                  <ReactECharts
+                    option={eurostatOption}
+                    style={{ height: '100%', width: '100%' }}
+                    ariaLabel={
+                      hicpSeriesInfo.isFallback
+                        ? `Eurostat HICP food price indices using ${hicpSeriesInfo.targetCode} fallback for ${currentProfile.code}`
+                        : `Eurostat HICP food price indices for ${currentProfile.name}`
+                    }
+                    accessibleSummary={
+                      hicpSeriesInfo.isFallback
+                        ? `Showing EU-27 aggregate HICP food price indices (2015 equals 100) because Eurostat prc_hicp_aind has no country series for ${currentProfile.code}.`
+                        : `Observed Eurostat HICP food price indices (2015 equals 100) for ${currentProfile.name} from 2015 to 2025.`
+                    }
+                    dataTableFallback={eurostatDataTable}
+                  />
                 </div>
               </div>
 
@@ -1831,6 +2076,7 @@ export function App() {
                   <ReactECharts option={openalexOption} style={{ height: '100%', width: '100%' }} />
                 </div>
               </div>
+              </div>
             </div>
           )}
 
@@ -1839,9 +2085,10 @@ export function App() {
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
               <div className="xl:col-span-7 almanac-sheet p-5">
                 <div className="pb-2.5 mb-3 rule-firm">
-                  <h2 className="text-base font-semibold flex items-center gap-2">
+                  <h2 className="text-base font-semibold flex flex-wrap items-center gap-2">
                     <Sliders className="w-4 h-4" />
-                    Section IX. Planetary Boundary and Consumer Basket Policy Model
+                    Section X. Planetary Boundary and Consumer Basket Policy Model
+                    <DataNatureBadge nature="Simulated" />
                   </h2>
                   <p className="almanac-label">
                     Adjust the four behavioral and fiscal levers in the left column to test shifts in [
@@ -1898,19 +2145,19 @@ export function App() {
                   </table>
                 </div>
 
-                <div className="mt-4 p-4 almanac-well text-sm leading-relaxed">
-                  <span className="font-display-head font-semibold text-[var(--color-ink)]">Methodological note:</span>{' '}
-                  Pairing a <span className="num font-semibold">{simPlantShift}%</span> plant-protein substitution with a{' '}
-                  <span className="num font-semibold">{simUpfReduction}%</span> reduction in NOVA 4 ultra-processed
-                  intake avoids substituting meat with high-sodium industrial formulations—yielding a{' '}
-                  <span className="num font-semibold text-[var(--color-accent)]">
-                    {Math.abs(simulatedMetrics.carbonDeltaPct)}%
-                  </span>{' '}
-                  carbon reduction and a{' '}
-                  <span className="num font-semibold text-[var(--color-accent)]">
-                    +{simulatedMetrics.healthGainPct}%
-                  </span>{' '}
-                  cardiometabolic health gain.
+                <div className="mt-4 p-4 almanac-well text-sm leading-relaxed space-y-2">
+                  <div>
+                    <span className="font-display-head font-semibold text-[var(--color-ink)]">Methodological &amp; Evidential Disclosure:</span>{' '}
+                    Pairing an analyst-assumed <span className="num font-semibold">{simPlantShift}%</span> plant-protein shift with a{' '}
+                    <span className="num font-semibold">{simUpfReduction}%</span> NOVA 4 reduction produces an illustrative{' '}
+                    <span className="num font-semibold text-[var(--color-accent)]">
+                      {Math.abs(simulatedMetrics.carbonDeltaPct)}%
+                    </span>{' '}
+                    CO₂ change and <span className="num font-semibold text-[var(--color-accent)]">+{simulatedMetrics.healthGainPct}%</span> index change over manually compiled baseline estimates.
+                  </div>
+                  <div className="text-xs font-mono-num text-[var(--color-muted)]">
+                    • {simulatedMetrics.uncertaintyStatus.reason} {simulatedMetrics.pppStatus.note}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1973,12 +2220,11 @@ export function App() {
 
                 {/* Quick Architecture Metadata Pills */}
                 <div className="flex flex-wrap items-center gap-2 pt-3 text-xs font-mono-num text-[var(--color-muted)]">
-                  <span className="almanac-well px-2.5 py-1">4 System Tiers (Ingestion, DuckDB, TimesFM, UI Deck)</span>
-                  <span className="almanac-well px-2.5 py-1">11 In-Memory Parquet Tables</span>
-                  <span className="almanac-well px-2.5 py-1">33 Code Files (100% Described · 0% Unassigned)</span>
+                  <span className="almanac-well px-2.5 py-1">4 System Tiers (Ingestion, DuckDB, Analytics, UI Deck)</span>
+                  <span className="almanac-well px-2.5 py-1">{datasetsRegistry?.total_datasets ?? 18} In-Memory Parquet Tables ({(datasetsRegistry?.total_records ?? 17466).toLocaleString()} rows)</span>
                   <span className="almanac-well px-2.5 py-1">Dual Schematics (Editorial SVG + Floorplan)</span>
                   <span className="almanac-well px-2.5 py-1 text-[var(--color-accent)] font-semibold">
-                    D4Vinci Scrapling 0.5.1 + DuckDB 1.28
+                    D4Vinci Scrapling 0.5.1 + DuckDB-Wasm
                   </span>
                 </div>
               </div>
@@ -2007,9 +2253,9 @@ export function App() {
                     visualizations, and policy simulation models using the Hallmark Almanac design language.
                   </p>
                   <div className="pt-2 text-[11px] font-mono-num text-[var(--color-ink)] space-y-1">
-                    <div>• <b>App.tsx:</b> Root state & policy levers</div>
+                    <div>• <b>App.tsx:</b> Root state &amp; scenario explorer</div>
                     <div>• <b>InteractiveChoroplethMap.tsx:</b> 6,845 GI pins</div>
-                    <div>• <b>NSIMLObservatory.tsx:</b> TimesFM 2.0 & PCA</div>
+                    <div>• <b>NSIMLObservatory.tsx:</b> Expanding-origin CV &amp; PCA</div>
                   </div>
                 </div>
 
@@ -2019,8 +2265,8 @@ export function App() {
                     2. Columnar In-Memory SQL
                   </h3>
                   <p className="text-xs text-[var(--color-muted)] leading-relaxed font-serif-label">
-                    DuckDB-Wasm running inside the browser worker thread, executing SQL queries in client memory across 9
-                    ZSTD Parquet tables without requiring any backend server.
+                    DuckDB-Wasm running inside the browser worker thread, executing SQL queries in client memory across 19
+                    registered ZSTD Parquet tables without requiring any backend server.
                   </p>
                   <div className="pt-2 text-[11px] font-mono-num text-[var(--color-ink)] space-y-1">
                     <div>• <b>duckdbEngine.ts:</b> Wasm singleton worker</div>
@@ -2032,16 +2278,16 @@ export function App() {
                 <div className="almanac-sheet p-5 space-y-2">
                   <h3 className="font-display-head font-semibold text-sm text-[var(--color-ink)] flex items-center gap-2 pb-2 rule-firm">
                     <Cpu className="w-3.5 h-3.5 text-[#6b4c1b]" />
-                    3. Scrapling & AI Pipelines
+                    3. Scrapling &amp; Statistical Pipelines
                   </h3>
                   <p className="text-xs text-[var(--color-muted)] leading-relaxed font-serif-label">
-                    Python harvesting pipelines leveraging Scrapling for high-throughput regulatory extraction (EUIPO,
-                    Qualigeo) and Google TimesFM 2.0 for zero-shot price series backtesting.
+                    Python harvesting pipelines leveraging Scrapling for regulatory extraction (EUIPO,
+                    Qualigeo, Open Prices EU) and causal expanding-origin statistical baselines (ETS, Ridge, Drift).
                   </p>
                   <div className="pt-2 text-[11px] font-mono-num text-[var(--color-ink)] space-y-1">
                     <div>• <b>build_gi_terroir_...py:</b> Scrapling crawler</div>
                     <div>• <b>enrich_gi_coordinates.py:</b> NUTS-2 geocoder</div>
-                    <div>• <b>build_nsi_and_ml_...py:</b> TimesFM ML engine</div>
+                    <div>• <b>build_nsi_and_ml_...py:</b> Statistical CV &amp; PCA</div>
                   </div>
                 </div>
               </div>
@@ -2050,7 +2296,27 @@ export function App() {
 
           {/* MODULE XII: GS1 IMMAGINO & NIELSENIQ LAB */}
           {activeModule === 'gs1_immagino' && (
-            <GS1ImmaginoObservatory />
+            <Suspense fallback={<ModuleLoadingState label="Section XII Pan-EU Retail Scanner & Claims" />}>
+              <GS1ImmaginoObservatory
+                selectedCountry={selectedCountry}
+                onSelectCountry={setSelectedCountry}
+              />
+            </Suspense>
+          )}
+
+          {/* MODULE XIII: EMPIRICAL SENSITIVITY & ROBUSTNESS ANALYSIS */}
+          {activeModule === 'sensitivity' && (
+            <Suspense fallback={<ModuleLoadingState label="Section XIII Empirical Sensitivity" />}>
+              <SensitivityPanel
+                selectedCountry={currentProfile.code}
+                countryName={currentProfile.name}
+                hicpTargetCode={hicpSeriesInfo.targetCode}
+                isHicpFallback={hicpSeriesInfo.isFallback}
+                hicpData={hicpSeriesInfo.data}
+                offProducts={filteredProducts}
+                agribalyseItems={filteredAgribalyse}
+              />
+            </Suspense>
           )}
         </main>
       </div>
@@ -2162,7 +2428,7 @@ export function App() {
                 <b>ADEME & INRAE:</b> Agribalyse 3.1 Life Cycle Assessment database (all 2,451 food products harmonized).
               </li>
               <li>
-                <b>Open Food Facts:</b> Barcode-verified EU retail catalog (3,740 products with Nutri-Score & NOVA 4).
+                <b>Open Food Facts:</b> Barcode-verified EU retail catalog (3,197 cleaned products preserving genuine NULLs).
               </li>
             </ul>
           </div>
@@ -2203,11 +2469,11 @@ export function App() {
 
           <div>
             <h4 className="font-display-head font-semibold text-[var(--color-ink)] uppercase tracking-wider text-[11px] mb-2">
-              Machine Learning & Methodology
+              Econometrics &amp; Empirical Uncertainty
             </h4>
             <ul className="space-y-1.5 leading-relaxed">
               <li>
-                <b>Google Research:</b> TimesFM 2.0 foundation model for zero-shot chronological CPI & plant shift forecasting.
+                <b>Statistical Backtesting Engine:</b> Causal expanding-origin CV across Damped ETS, Holt ETS, Ridge, Drift &amp; RW baselines (`560` rows).
               </li>
               <li>
                 <b>Wikimedia Foundation:</b> Wikipedia Pageview API across 6 European languages for topic infodemiology.
@@ -2220,10 +2486,15 @@ export function App() {
         </div>
 
         <div className="pt-3 rule-soft flex flex-wrap items-center justify-between gap-3 text-[11px] text-[var(--color-muted)] font-mono-num">
-          <span>DietShift Atlas © 2026 · Made by Amine · Default Jurisdiction: [IT] Italy</span>
-          <span>Powered by DuckDB-Wasm & Apache Parquet</span>
+          <span>DietShift Atlas © 2026 · v{APP_VERSION} · Made by Amine · Default Jurisdiction: [IT] Italy</span>
+          <span>Powered by DuckDB-Wasm &amp; Apache Parquet</span>
         </div>
       </footer>
+      <DataCatalogModal
+        registry={datasetsRegistry}
+        open={catalogOpen}
+        onClose={() => setCatalogOpen(false)}
+      />
     </div>
   );
 }

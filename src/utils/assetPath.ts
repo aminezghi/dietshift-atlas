@@ -1,14 +1,15 @@
 /**
- * Asset URL resolver supporting root, subpath, and relative deployments
+ * Asset URL resolver supporting root, multi-segment subpath, and relative deployments
  * (e.g. GitHub Pages https://<user>.github.io/<repo>/ or local dev).
  */
 export function getBasePath(): string {
   if (typeof window !== 'undefined') {
-    const segments = window.location.pathname.split('/').filter(Boolean);
-    // If running on a GitHub Pages repo subpath (e.g. /dietshift-atlas/ or /dietshift-atlas/index.html)
-    if (segments.length > 0 && !segments[0].includes('.')) {
-      return `/${segments[0]}/`;
+    const pathname = window.location.pathname || '/';
+    if (pathname.endsWith('/')) {
+      return pathname;
     }
+    const lastSlash = pathname.lastIndexOf('/');
+    return lastSlash >= 0 ? pathname.slice(0, lastSlash + 1) : '/';
   }
   const base = import.meta.env.BASE_URL || './';
   return base.endsWith('/') ? base : `${base}/`;

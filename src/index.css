@@ -20,6 +20,11 @@
   --color-sheet: oklch(93.5% 0.008 245);
   --color-teal: oklch(42% 0.110 210);
   --color-ochre: oklch(52% 0.130 75);
+  --color-primary: var(--color-teal);
+  --color-parchment: var(--color-paper-2);
+  --color-parchment-deep: var(--color-rule);
+  --color-paper-card: var(--color-sheet);
+  --color-rule-strong: var(--color-rule-2);
 
   --font-display: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Newsreader", ui-serif, Georgia, serif;

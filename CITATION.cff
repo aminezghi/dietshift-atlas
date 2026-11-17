@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "If you use DietShift Atlas or its harmonized Parquet datasets in your research, please cite it as below."
+message: "If you use DietShift Atlas or its open-licensed datasets in your research, please cite it as below."
 title: "DietShift Atlas: European & Global Food Systems Computational Almanac"
-version: "3.4.1"
-date-released: "2026-11-10"
+version: "1.0.0"
+date-released: "2026-11-17"
 url: "https://aminezghi.github.io/dietshift-atlas/"
 repository-code: "https://github.com/aminezghi/dietshift-atlas"
 license: MIT
@@ -17,5 +17,6 @@ keywords:
   - life-cycle-assessment
   - agribalyse
   - open-food-facts
-  - timesfm
+  - statistical-forecasting
+  - reproducible-research
   - sustainable-diets

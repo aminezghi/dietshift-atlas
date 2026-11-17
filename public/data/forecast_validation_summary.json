@@ -1,0 +1,5532 @@
+[
+  {
+    "series_id": "ES_Healthy Whole-Fo",
+    "country_code": "ES",
+    "country_label": "Spain — Eurostat HICP / INE IPC",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 12.207,
+        "rmse": 14.535,
+        "smape_pct": 9.21,
+        "mase": 3.701
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 8.764,
+        "rmse": 11.325,
+        "smape_pct": 6.53,
+        "mase": 2.708
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 11.907,
+        "rmse": 13.667,
+        "smape_pct": 8.85,
+        "mase": 3.466
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 8.065,
+        "rmse": 10.716,
+        "smape_pct": 6.05,
+        "mase": 2.582
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.392,
+        "rmse": 16.82,
+        "smape_pct": 11.0,
+        "mase": 4.39
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.418,
+          "rmse": 8.029,
+          "smape_pct": 4.87,
+          "mase": 1.739
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.335,
+          "rmse": 6.466,
+          "smape_pct": 3.29,
+          "mase": 1.201
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.5,
+          "rmse": 8.998,
+          "smape_pct": 5.57,
+          "mase": 1.888
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 3.71,
+          "rmse": 5.344,
+          "smape_pct": 2.85,
+          "mase": 1.094
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.04,
+          "rmse": 8.168,
+          "smape_pct": 5.38,
+          "mase": 1.947
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 12.238,
+          "rmse": 13.957,
+          "smape_pct": 9.24,
+          "mase": 3.653
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.496,
+          "rmse": 11.005,
+          "smape_pct": 6.35,
+          "mase": 2.606
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.996,
+          "rmse": 13.477,
+          "smape_pct": 8.92,
+          "mase": 3.437
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 7.57,
+          "rmse": 10.347,
+          "smape_pct": 5.71,
+          "mase": 2.428
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.832,
+          "rmse": 16.15,
+          "smape_pct": 11.34,
+          "mase": 4.427
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 20.85,
+          "rmse": 21.261,
+          "smape_pct": 15.69,
+          "mase": 6.704
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 15.742,
+          "rmse": 16.336,
+          "smape_pct": 11.63,
+          "mase": 5.094
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 18.405,
+          "rmse": 18.76,
+          "smape_pct": 13.68,
+          "mase": 5.869
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.217,
+          "rmse": 15.936,
+          "smape_pct": 11.29,
+          "mase": 5.008
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 24.87,
+          "rmse": 25.196,
+          "smape_pct": 19.03,
+          "mase": 8.007
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "ES_All Food & Non-A",
+    "country_code": "ES",
+    "country_label": "Spain — Eurostat HICP / INE IPC",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.413,
+        "rmse": 16.388,
+        "smape_pct": 10.72,
+        "mase": 6.897
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 11.51,
+        "rmse": 14.564,
+        "smape_pct": 9.13,
+        "mase": 6.009
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 14.565,
+        "rmse": 16.879,
+        "smape_pct": 11.51,
+        "mase": 6.948
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.231,
+        "rmse": 13.619,
+        "smape_pct": 8.14,
+        "mase": 5.622
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.324,
+        "rmse": 17.333,
+        "smape_pct": 11.51,
+        "mase": 7.43
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.827,
+          "rmse": 9.093,
+          "smape_pct": 5.49,
+          "mase": 2.824
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.99,
+          "rmse": 8.192,
+          "smape_pct": 4.76,
+          "mase": 2.426
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 9.088,
+          "rmse": 11.068,
+          "smape_pct": 7.14,
+          "mase": 3.265
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.193,
+          "rmse": 6.448,
+          "smape_pct": 3.39,
+          "mase": 1.928
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.657,
+          "rmse": 8.311,
+          "smape_pct": 5.35,
+          "mase": 2.845
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.53,
+          "rmse": 15.873,
+          "smape_pct": 10.81,
+          "mase": 6.745
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 11.136,
+          "rmse": 14.134,
+          "smape_pct": 8.88,
+          "mase": 5.765
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 14.792,
+          "rmse": 16.729,
+          "smape_pct": 11.69,
+          "mase": 6.833
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 10.154,
+          "rmse": 13.167,
+          "smape_pct": 8.11,
+          "mase": 5.441
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.782,
+          "rmse": 16.799,
+          "smape_pct": 11.87,
+          "mase": 7.366
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.148,
+          "rmse": 23.837,
+          "smape_pct": 18.45,
+          "mase": 13.198
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 20.258,
+          "rmse": 21.096,
+          "smape_pct": 15.99,
+          "mase": 11.688
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 22.498,
+          "rmse": 23.126,
+          "smape_pct": 17.83,
+          "mase": 12.614
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 19.385,
+          "rmse": 20.407,
+          "smape_pct": 15.32,
+          "mase": 11.389
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 25.253,
+          "rmse": 25.89,
+          "smape_pct": 20.3,
+          "mase": 14.388
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "ES_Meat HICP (CP011",
+    "country_code": "ES",
+    "country_label": "Spain — Eurostat HICP / INE IPC",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 11.802,
+        "rmse": 13.594,
+        "smape_pct": 9.75,
+        "mase": 6.417
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 10.233,
+        "rmse": 12.117,
+        "smape_pct": 8.46,
+        "mase": 5.774
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 12.848,
+        "rmse": 14.305,
+        "smape_pct": 10.53,
+        "mase": 6.573
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 8.893,
+        "rmse": 11.169,
+        "smape_pct": 7.3,
+        "mase": 5.06
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 12.489,
+        "rmse": 14.592,
+        "smape_pct": 10.32,
+        "mase": 6.728
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.482,
+          "rmse": 7.496,
+          "smape_pct": 5.39,
+          "mase": 3.016
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.355,
+          "rmse": 6.606,
+          "smape_pct": 4.5,
+          "mase": 2.648
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.347,
+          "rmse": 9.4,
+          "smape_pct": 6.83,
+          "mase": 3.479
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 3.877,
+          "rmse": 5.333,
+          "smape_pct": 3.22,
+          "mase": 1.937
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.217,
+          "rmse": 7.211,
+          "smape_pct": 5.12,
+          "mase": 2.848
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 11.848,
+          "rmse": 12.937,
+          "smape_pct": 9.79,
+          "mase": 6.2
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 10.104,
+          "rmse": 11.416,
+          "smape_pct": 8.37,
+          "mase": 5.525
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 12.992,
+          "rmse": 14.017,
+          "smape_pct": 10.64,
+          "mase": 6.394
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.736,
+          "rmse": 10.464,
+          "smape_pct": 7.2,
+          "mase": 4.804
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 12.838,
+          "rmse": 13.981,
+          "smape_pct": 10.61,
+          "mase": 6.601
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 19.725,
+          "rmse": 19.987,
+          "smape_pct": 16.24,
+          "mase": 11.791
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 17.713,
+          "rmse": 17.95,
+          "smape_pct": 14.52,
+          "mase": 10.775
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 19.42,
+          "rmse": 19.729,
+          "smape_pct": 15.93,
+          "mase": 11.439
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 16.615,
+          "rmse": 16.978,
+          "smape_pct": 13.55,
+          "mase": 10.064
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 21.46,
+          "rmse": 21.822,
+          "smape_pct": 17.77,
+          "mase": 12.708
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "ES_Milk, Cheese & E",
+    "country_code": "ES",
+    "country_label": "Spain — Eurostat HICP / INE IPC",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 15.115,
+        "rmse": 19.048,
+        "smape_pct": 12.77,
+        "mase": 14.474
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 14.456,
+        "rmse": 18.638,
+        "smape_pct": 12.28,
+        "mase": 14.411
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 17.894,
+        "rmse": 20.887,
+        "smape_pct": 14.99,
+        "mase": 15.208
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 13.311,
+        "rmse": 17.488,
+        "smape_pct": 11.22,
+        "mase": 13.579
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.81,
+        "rmse": 18.832,
+        "smape_pct": 12.46,
+        "mase": 14.258
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.56,
+          "rmse": 10.957,
+          "smape_pct": 6.4,
+          "mase": 5.377
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.248,
+          "rmse": 10.693,
+          "smape_pct": 6.18,
+          "mase": 5.404
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 11.073,
+          "rmse": 13.791,
+          "smape_pct": 9.17,
+          "mase": 6.254
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 6.155,
+          "rmse": 8.844,
+          "smape_pct": 5.15,
+          "mase": 4.63
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.752,
+          "rmse": 9.756,
+          "smape_pct": 5.66,
+          "mase": 4.919
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 14.964,
+          "rmse": 18.528,
+          "smape_pct": 12.66,
+          "mase": 14.348
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 13.9,
+          "rmse": 18.097,
+          "smape_pct": 11.88,
+          "mase": 14.212
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 18.048,
+          "rmse": 20.662,
+          "smape_pct": 15.11,
+          "mase": 15.145
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 12.972,
+          "rmse": 17.075,
+          "smape_pct": 10.97,
+          "mase": 13.423
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.882,
+          "rmse": 18.388,
+          "smape_pct": 12.53,
+          "mase": 14.185
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 26.635,
+          "rmse": 27.411,
+          "smape_pct": 22.45,
+          "mase": 28.277
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 25.962,
+          "rmse": 26.867,
+          "smape_pct": 21.92,
+          "mase": 28.172
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 27.932,
+          "rmse": 28.585,
+          "smape_pct": 23.56,
+          "mase": 28.717
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 24.467,
+          "rmse": 25.791,
+          "smape_pct": 20.62,
+          "mase": 27.196
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 26.807,
+          "rmse": 27.649,
+          "smape_pct": 22.59,
+          "mase": 28.358
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "ES_Vegetables HICP ",
+    "country_code": "ES",
+    "country_label": "Spain — Eurostat HICP / INE IPC",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.464,
+        "rmse": 17.002,
+        "smape_pct": 9.96,
+        "mase": 4.031
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 10.85,
+        "rmse": 14.039,
+        "smape_pct": 7.96,
+        "mase": 3.319
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 13.285,
+        "rmse": 15.815,
+        "smape_pct": 9.67,
+        "mase": 3.794
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.305,
+        "rmse": 13.428,
+        "smape_pct": 7.58,
+        "mase": 3.217
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 15.451,
+        "rmse": 19.127,
+        "smape_pct": 11.59,
+        "mase": 4.652
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.85,
+          "rmse": 9.748,
+          "smape_pct": 5.09,
+          "mase": 1.799
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.95,
+          "rmse": 8.462,
+          "smape_pct": 4.43,
+          "mase": 1.601
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.443,
+          "rmse": 10.705,
+          "smape_pct": 6.15,
+          "mase": 2.037
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 5.105,
+          "rmse": 7.175,
+          "smape_pct": 3.85,
+          "mase": 1.453
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.15,
+          "rmse": 9.485,
+          "smape_pct": 5.35,
+          "mase": 1.927
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.376,
+          "rmse": 16.59,
+          "smape_pct": 9.88,
+          "mase": 4.028
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 10.636,
+          "rmse": 13.968,
+          "smape_pct": 7.88,
+          "mase": 3.345
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 13.452,
+          "rmse": 15.826,
+          "smape_pct": 9.79,
+          "mase": 3.857
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 10.804,
+          "rmse": 13.591,
+          "smape_pct": 7.99,
+          "mase": 3.392
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 15.758,
+          "rmse": 18.572,
+          "smape_pct": 11.81,
+          "mase": 4.73
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.495,
+          "rmse": 24.443,
+          "smape_pct": 17.35,
+          "mase": 7.384
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 18.468,
+          "rmse": 19.694,
+          "smape_pct": 13.37,
+          "mase": 5.864
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 20.34,
+          "rmse": 21.282,
+          "smape_pct": 14.79,
+          "mase": 6.354
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 17.48,
+          "rmse": 19.186,
+          "smape_pct": 12.66,
+          "mase": 5.644
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 27.518,
+          "rmse": 28.387,
+          "smape_pct": 20.67,
+          "mase": 8.644
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "IT_Healthy Whole-Fo",
+    "country_code": "IT",
+    "country_label": "Italy — Eurostat HICP / ISTAT",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 10.303,
+        "rmse": 12.719,
+        "smape_pct": 8.26,
+        "mase": 4.496
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 8.448,
+        "rmse": 10.786,
+        "smape_pct": 6.72,
+        "mase": 3.743
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 10.045,
+        "rmse": 11.884,
+        "smape_pct": 7.93,
+        "mase": 4.14
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 7.643,
+        "rmse": 10.06,
+        "smape_pct": 6.09,
+        "mase": 3.486
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 11.636,
+        "rmse": 14.138,
+        "smape_pct": 9.42,
+        "mase": 5.117
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.29,
+          "rmse": 7.212,
+          "smape_pct": 4.27,
+          "mase": 2.028
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.722,
+          "rmse": 6.323,
+          "smape_pct": 3.79,
+          "mase": 1.812
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 6.465,
+          "rmse": 7.981,
+          "smape_pct": 5.12,
+          "mase": 2.234
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 3.752,
+          "rmse": 5.215,
+          "smape_pct": 3.06,
+          "mase": 1.57
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 5.48,
+          "rmse": 6.96,
+          "smape_pct": 4.44,
+          "mase": 2.16
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 10.28,
+          "rmse": 12.336,
+          "smape_pct": 8.24,
+          "mase": 4.435
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 7.874,
+          "rmse": 10.552,
+          "smape_pct": 6.28,
+          "mase": 3.535
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 9.976,
+          "rmse": 11.85,
+          "smape_pct": 7.86,
+          "mase": 4.056
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 7.418,
+          "rmse": 9.956,
+          "smape_pct": 5.89,
+          "mase": 3.351
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 11.9,
+          "rmse": 13.686,
+          "smape_pct": 9.62,
+          "mase": 5.134
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 17.853,
+          "rmse": 18.397,
+          "smape_pct": 14.29,
+          "mase": 8.273
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 14.755,
+          "rmse": 15.4,
+          "smape_pct": 11.68,
+          "mase": 6.899
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 15.5,
+          "rmse": 16.08,
+          "smape_pct": 12.25,
+          "mase": 7.104
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 13.763,
+          "rmse": 14.657,
+          "smape_pct": 10.88,
+          "mase": 6.529
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 20.54,
+          "rmse": 21.042,
+          "smape_pct": 16.64,
+          "mase": 9.53
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "IT_All Food & Non-A",
+    "country_code": "IT",
+    "country_label": "Italy — Eurostat HICP / ISTAT",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 10.452,
+        "rmse": 12.885,
+        "smape_pct": 8.77,
+        "mase": 7.599
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.077,
+        "rmse": 11.662,
+        "smape_pct": 7.6,
+        "mase": 6.794
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 11.121,
+        "rmse": 13.129,
+        "smape_pct": 9.23,
+        "mase": 7.442
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 7.986,
+        "rmse": 10.891,
+        "smape_pct": 6.7,
+        "mase": 6.327
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 11.027,
+        "rmse": 13.527,
+        "smape_pct": 9.3,
+        "mase": 8.119
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.35,
+          "rmse": 7.228,
+          "smape_pct": 4.49,
+          "mase": 3.077
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.477,
+          "rmse": 6.583,
+          "smape_pct": 3.77,
+          "mase": 2.674
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 6.985,
+          "rmse": 8.744,
+          "smape_pct": 5.76,
+          "mase": 3.43
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 3.343,
+          "rmse": 5.31,
+          "smape_pct": 2.85,
+          "mase": 2.274
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 5.15,
+          "rmse": 6.65,
+          "smape_pct": 4.33,
+          "mase": 3.087
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 10.478,
+          "rmse": 12.497,
+          "smape_pct": 8.79,
+          "mase": 7.479
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.882,
+          "rmse": 11.31,
+          "smape_pct": 7.44,
+          "mase": 6.614
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.218,
+          "rmse": 13.058,
+          "smape_pct": 9.3,
+          "mase": 7.344
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 7.658,
+          "rmse": 10.576,
+          "smape_pct": 6.44,
+          "mase": 6.077
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 11.28,
+          "rmse": 13.122,
+          "smape_pct": 9.5,
+          "mase": 8.077
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 18.072,
+          "rmse": 18.68,
+          "smape_pct": 15.17,
+          "mase": 14.532
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 16.223,
+          "rmse": 16.883,
+          "smape_pct": 13.53,
+          "mase": 13.197
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 17.202,
+          "rmse": 17.849,
+          "smape_pct": 14.34,
+          "mase": 13.583
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.36,
+          "rmse": 16.209,
+          "smape_pct": 12.8,
+          "mase": 12.718
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 19.525,
+          "rmse": 20.115,
+          "smape_pct": 16.5,
+          "mase": 15.718
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "IT_Meat HICP (CP011",
+    "country_code": "IT",
+    "country_label": "Italy — Eurostat HICP / ISTAT",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 8.369,
+        "rmse": 9.717,
+        "smape_pct": 7.17,
+        "mase": 6.027
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 6.963,
+        "rmse": 8.387,
+        "smape_pct": 5.95,
+        "mase": 5.162
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 8.839,
+        "rmse": 9.954,
+        "smape_pct": 7.52,
+        "mase": 5.98
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 6.198,
+        "rmse": 7.797,
+        "smape_pct": 5.29,
+        "mase": 4.726
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 9.093,
+        "rmse": 10.592,
+        "smape_pct": 7.82,
+        "mase": 6.563
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 4.552,
+          "rmse": 5.376,
+          "smape_pct": 3.9,
+          "mase": 2.764
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 3.58,
+          "rmse": 4.599,
+          "smape_pct": 3.08,
+          "mase": 2.266
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 5.683,
+          "rmse": 6.575,
+          "smape_pct": 4.82,
+          "mase": 3.099
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 2.81,
+          "rmse": 3.819,
+          "smape_pct": 2.41,
+          "mase": 1.862
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 4.55,
+          "rmse": 5.298,
+          "smape_pct": 3.89,
+          "mase": 2.79
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 8.384,
+          "rmse": 9.257,
+          "smape_pct": 7.19,
+          "mase": 5.832
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 6.848,
+          "rmse": 7.935,
+          "smape_pct": 5.86,
+          "mase": 4.933
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 8.92,
+          "rmse": 9.769,
+          "smape_pct": 7.59,
+          "mase": 5.822
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 6.02,
+          "rmse": 7.325,
+          "smape_pct": 5.16,
+          "mase": 4.463
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 9.34,
+          "rmse": 10.148,
+          "smape_pct": 8.03,
+          "mase": 6.463
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 14.078,
+          "rmse": 14.269,
+          "smape_pct": 12.06,
+          "mase": 11.164
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 12.183,
+          "rmse": 12.383,
+          "smape_pct": 10.37,
+          "mase": 9.79
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 13.47,
+          "rmse": 13.69,
+          "smape_pct": 11.48,
+          "mase": 10.501
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 11.503,
+          "rmse": 11.789,
+          "smape_pct": 9.78,
+          "mase": 9.348
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 15.6,
+          "rmse": 15.806,
+          "smape_pct": 13.45,
+          "mase": 12.349
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "IT_Milk, Cheese & E",
+    "country_code": "IT",
+    "country_label": "Italy — Eurostat HICP / ISTAT",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 10.089,
+        "rmse": 12.776,
+        "smape_pct": 8.72,
+        "mase": 9.589
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.168,
+        "rmse": 12.077,
+        "smape_pct": 7.94,
+        "mase": 9.08
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 11.193,
+        "rmse": 13.333,
+        "smape_pct": 9.58,
+        "mase": 9.648
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 8.787,
+        "rmse": 11.436,
+        "smape_pct": 7.56,
+        "mase": 8.762
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 10.34,
+        "rmse": 13.088,
+        "smape_pct": 8.94,
+        "mase": 9.905
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.13,
+          "rmse": 7.498,
+          "smape_pct": 4.43,
+          "mase": 3.799
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.427,
+          "rmse": 7.109,
+          "smape_pct": 3.86,
+          "mase": 3.539
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.048,
+          "rmse": 9.006,
+          "smape_pct": 5.99,
+          "mase": 4.346
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.638,
+          "rmse": 6.226,
+          "smape_pct": 3.96,
+          "mase": 3.481
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 4.967,
+          "rmse": 7.051,
+          "smape_pct": 4.26,
+          "mase": 3.74
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 9.928,
+          "rmse": 12.393,
+          "smape_pct": 8.58,
+          "mase": 9.667
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.838,
+          "rmse": 11.724,
+          "smape_pct": 7.67,
+          "mase": 9.113
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.182,
+          "rmse": 13.223,
+          "smape_pct": 9.56,
+          "mase": 9.74
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.192,
+          "rmse": 11.203,
+          "smape_pct": 7.09,
+          "mase": 8.726
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 10.24,
+          "rmse": 12.684,
+          "smape_pct": 8.87,
+          "mase": 10.014
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 17.73,
+          "rmse": 18.325,
+          "smape_pct": 15.32,
+          "mase": 18.176
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 16.692,
+          "rmse": 17.3,
+          "smape_pct": 14.39,
+          "mase": 17.351
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 17.425,
+          "rmse": 18.066,
+          "smape_pct": 15.0,
+          "mase": 17.485
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.752,
+          "rmse": 16.594,
+          "smape_pct": 13.55,
+          "mase": 16.727
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 18.525,
+          "rmse": 19.149,
+          "smape_pct": 16.07,
+          "mase": 19.015
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "IT_Vegetables HICP ",
+    "country_code": "IT",
+    "country_label": "Italy — Eurostat HICP / ISTAT",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 12.886,
+        "rmse": 16.16,
+        "smape_pct": 10.24,
+        "mase": 3.854
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 11.714,
+        "rmse": 14.763,
+        "smape_pct": 9.26,
+        "mase": 3.526
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 13.011,
+        "rmse": 15.645,
+        "smape_pct": 10.18,
+        "mase": 3.734
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.461,
+        "rmse": 13.664,
+        "smape_pct": 8.24,
+        "mase": 3.227
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 13.52,
+        "rmse": 17.221,
+        "smape_pct": 10.81,
+        "mase": 4.082
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.738,
+          "rmse": 9.288,
+          "smape_pct": 5.36,
+          "mase": 1.795
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.558,
+          "rmse": 8.693,
+          "smape_pct": 5.16,
+          "mase": 1.727
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.118,
+          "rmse": 10.505,
+          "smape_pct": 6.34,
+          "mase": 2.008
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.967,
+          "rmse": 7.029,
+          "smape_pct": 3.96,
+          "mase": 1.408
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 5.967,
+          "rmse": 8.491,
+          "smape_pct": 4.77,
+          "mase": 1.658
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 12.71,
+          "rmse": 15.803,
+          "smape_pct": 10.11,
+          "mase": 3.87
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 11.218,
+          "rmse": 14.476,
+          "smape_pct": 8.91,
+          "mase": 3.489
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 13.124,
+          "rmse": 15.673,
+          "smape_pct": 10.25,
+          "mase": 3.8
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 11.016,
+          "rmse": 13.746,
+          "smape_pct": 8.69,
+          "mase": 3.401
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 13.84,
+          "rmse": 16.893,
+          "smape_pct": 11.05,
+          "mase": 4.191
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 22.327,
+          "rmse": 23.187,
+          "smape_pct": 17.72,
+          "mase": 6.923
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 20.067,
+          "rmse": 21.024,
+          "smape_pct": 15.84,
+          "mase": 6.272
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 20.21,
+          "rmse": 21.101,
+          "smape_pct": 15.84,
+          "mase": 6.239
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 18.01,
+          "rmse": 19.746,
+          "smape_pct": 14.1,
+          "mase": 5.735
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 24.45,
+          "rmse": 25.442,
+          "smape_pct": 19.57,
+          "mase": 7.58
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "NL_Healthy Whole-Fo",
+    "country_code": "NL",
+    "country_label": "Netherlands — Eurostat HICP / CBS",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 9.018,
+        "rmse": 11.566,
+        "smape_pct": 7.17,
+        "mase": 3.24
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 7.529,
+        "rmse": 9.505,
+        "smape_pct": 5.92,
+        "mase": 2.693
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 8.215,
+        "rmse": 10.048,
+        "smape_pct": 6.45,
+        "mase": 2.854
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 7.464,
+        "rmse": 9.379,
+        "smape_pct": 5.86,
+        "mase": 2.69
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 10.173,
+        "rmse": 13.184,
+        "smape_pct": 8.19,
+        "mase": 3.712
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.11,
+          "rmse": 7.109,
+          "smape_pct": 4.08,
+          "mase": 1.643
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.133,
+          "rmse": 6.458,
+          "smape_pct": 4.09,
+          "mase": 1.647
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 5.473,
+          "rmse": 7.188,
+          "smape_pct": 4.33,
+          "mase": 1.669
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.672,
+          "rmse": 5.716,
+          "smape_pct": 3.73,
+          "mase": 1.538
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 4.767,
+          "rmse": 6.864,
+          "smape_pct": 3.86,
+          "mase": 1.615
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 8.938,
+          "rmse": 11.595,
+          "smape_pct": 7.12,
+          "mase": 3.264
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 7.882,
+          "rmse": 9.98,
+          "smape_pct": 6.25,
+          "mase": 2.868
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 8.55,
+          "rmse": 10.315,
+          "smape_pct": 6.73,
+          "mase": 2.999
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.41,
+          "rmse": 10.146,
+          "smape_pct": 6.61,
+          "mase": 2.997
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 10.108,
+          "rmse": 13.022,
+          "smape_pct": 8.11,
+          "mase": 3.704
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 14.98,
+          "rmse": 16.055,
+          "smape_pct": 11.85,
+          "mase": 5.607
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 10.68,
+          "rmse": 12.319,
+          "smape_pct": 8.27,
+          "mase": 4.043
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 11.91,
+          "rmse": 12.966,
+          "smape_pct": 9.28,
+          "mase": 4.452
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 10.47,
+          "rmse": 12.336,
+          "smape_pct": 8.14,
+          "mase": 4.033
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 18.362,
+          "rmse": 19.214,
+          "smape_pct": 14.77,
+          "mase": 6.868
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "NL_All Food & Non-A",
+    "country_code": "NL",
+    "country_label": "Netherlands — Eurostat HICP / CBS",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 11.663,
+        "rmse": 14.409,
+        "smape_pct": 9.24,
+        "mase": 4.989
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.578,
+        "rmse": 12.374,
+        "smape_pct": 7.56,
+        "mase": 4.225
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 11.919,
+        "rmse": 13.999,
+        "smape_pct": 9.32,
+        "mase": 4.815
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 9.025,
+        "rmse": 11.836,
+        "smape_pct": 7.12,
+        "mase": 4.083
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 12.819,
+        "rmse": 15.868,
+        "smape_pct": 10.23,
+        "mase": 5.527
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.218,
+          "rmse": 8.304,
+          "smape_pct": 4.96,
+          "mase": 2.301
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.047,
+          "rmse": 7.336,
+          "smape_pct": 4.07,
+          "mase": 1.969
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.792,
+          "rmse": 9.474,
+          "smape_pct": 6.1,
+          "mase": 2.604
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.582,
+          "rmse": 6.369,
+          "smape_pct": 3.67,
+          "mase": 1.834
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.1,
+          "rmse": 8.094,
+          "smape_pct": 4.85,
+          "mase": 2.305
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 11.434,
+          "rmse": 13.966,
+          "smape_pct": 9.04,
+          "mase": 4.908
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 9.166,
+          "rmse": 12.107,
+          "smape_pct": 7.24,
+          "mase": 4.129
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.796,
+          "rmse": 13.916,
+          "smape_pct": 9.19,
+          "mase": 4.762
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.902,
+          "rmse": 11.805,
+          "smape_pct": 7.08,
+          "mase": 4.145
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 12.93,
+          "rmse": 15.378,
+          "smape_pct": 10.31,
+          "mase": 5.546
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 20.117,
+          "rmse": 20.767,
+          "smape_pct": 15.91,
+          "mase": 9.122
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 16.89,
+          "rmse": 17.615,
+          "smape_pct": 13.19,
+          "mase": 7.73
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 18.262,
+          "rmse": 18.926,
+          "smape_pct": 14.3,
+          "mase": 8.198
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.845,
+          "rmse": 17.037,
+          "smape_pct": 12.35,
+          "mase": 7.38
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 22.76,
+          "rmse": 23.461,
+          "smape_pct": 18.21,
+          "mase": 10.335
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "NL_Meat HICP (CP011",
+    "country_code": "NL",
+    "country_label": "Netherlands — Eurostat HICP / CBS",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 12.587,
+        "rmse": 14.524,
+        "smape_pct": 9.49,
+        "mase": 3.646
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.633,
+        "rmse": 11.535,
+        "smape_pct": 7.25,
+        "mase": 2.881
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 12.26,
+        "rmse": 13.653,
+        "smape_pct": 9.12,
+        "mase": 3.42
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 8.821,
+        "rmse": 10.854,
+        "smape_pct": 6.58,
+        "mase": 2.635
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.699,
+        "rmse": 17.09,
+        "smape_pct": 11.16,
+        "mase": 4.239
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.183,
+          "rmse": 8.635,
+          "smape_pct": 5.47,
+          "mase": 1.945
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.603,
+          "rmse": 7.095,
+          "smape_pct": 4.33,
+          "mase": 1.596
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.237,
+          "rmse": 9.355,
+          "smape_pct": 6.17,
+          "mase": 2.1
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 5.96,
+          "rmse": 6.788,
+          "smape_pct": 4.53,
+          "mase": 1.641
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.785,
+          "rmse": 9.368,
+          "smape_pct": 5.9,
+          "mase": 2.098
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 12.246,
+          "rmse": 13.569,
+          "smape_pct": 9.23,
+          "mase": 3.477
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.868,
+          "rmse": 10.695,
+          "smape_pct": 6.68,
+          "mase": 2.628
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.958,
+          "rmse": 13.152,
+          "smape_pct": 8.86,
+          "mase": 3.256
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 7.29,
+          "rmse": 10.335,
+          "smape_pct": 5.44,
+          "mase": 2.207
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.728,
+          "rmse": 16.205,
+          "smape_pct": 11.17,
+          "mase": 4.136
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 21.118,
+          "rmse": 21.191,
+          "smape_pct": 15.86,
+          "mase": 6.41
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 16.635,
+          "rmse": 16.746,
+          "smape_pct": 12.36,
+          "mase": 5.124
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 18.673,
+          "rmse": 18.749,
+          "smape_pct": 13.85,
+          "mase": 5.606
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.028,
+          "rmse": 15.464,
+          "smape_pct": 11.1,
+          "mase": 4.662
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 25.033,
+          "rmse": 25.206,
+          "smape_pct": 19.05,
+          "mase": 7.578
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "NL_Milk, Cheese & E",
+    "country_code": "NL",
+    "country_label": "Netherlands — Eurostat HICP / CBS",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.546,
+        "rmse": 17.645,
+        "smape_pct": 10.12,
+        "mase": 3.505
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 12.601,
+        "rmse": 15.706,
+        "smape_pct": 9.25,
+        "mase": 3.191
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 12.558,
+        "rmse": 15.672,
+        "smape_pct": 9.22,
+        "mase": 3.15
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 11.797,
+        "rmse": 15.078,
+        "smape_pct": 8.64,
+        "mase": 3.034
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 15.427,
+        "rmse": 19.752,
+        "smape_pct": 11.63,
+        "mase": 3.983
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.017,
+          "rmse": 10.927,
+          "smape_pct": 5.27,
+          "mase": 1.653
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.78,
+          "rmse": 10.319,
+          "smape_pct": 5.71,
+          "mase": 1.732
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.698,
+          "rmse": 11.011,
+          "smape_pct": 5.68,
+          "mase": 1.708
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 7.097,
+          "rmse": 9.321,
+          "smape_pct": 5.21,
+          "mase": 1.612
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.867,
+          "rmse": 10.759,
+          "smape_pct": 5.85,
+          "mase": 1.816
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.286,
+          "rmse": 17.489,
+          "smape_pct": 9.93,
+          "mase": 3.562
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 12.694,
+          "rmse": 16.009,
+          "smape_pct": 9.25,
+          "mase": 3.291
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 12.588,
+          "rmse": 15.828,
+          "smape_pct": 9.26,
+          "mase": 3.269
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 12.912,
+          "rmse": 16.16,
+          "smape_pct": 9.43,
+          "mase": 3.344
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.804,
+          "rmse": 19.462,
+          "smape_pct": 11.23,
+          "mase": 3.996
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.665,
+          "rmse": 24.62,
+          "smape_pct": 17.62,
+          "mase": 6.212
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 19.715,
+          "rmse": 21.094,
+          "smape_pct": 14.56,
+          "mase": 5.256
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 19.81,
+          "rmse": 20.64,
+          "smape_pct": 14.46,
+          "mase": 5.165
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 17.453,
+          "rmse": 19.895,
+          "smape_pct": 12.82,
+          "mase": 4.78
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 27.547,
+          "rmse": 28.565,
+          "smape_pct": 20.81,
+          "mase": 7.217
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "NL_Vegetables HICP ",
+    "country_code": "NL",
+    "country_label": "Netherlands — Eurostat HICP / CBS",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "holt_ets",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 10.441,
+        "rmse": 13.171,
+        "smape_pct": 8.18,
+        "mase": 3.141
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.259,
+        "rmse": 11.215,
+        "smape_pct": 7.17,
+        "mase": 2.735
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 9.27,
+        "rmse": 11.493,
+        "smape_pct": 7.2,
+        "mase": 2.735
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 9.583,
+        "rmse": 11.555,
+        "smape_pct": 7.44,
+        "mase": 2.864
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 11.242,
+        "rmse": 14.832,
+        "smape_pct": 8.92,
+        "mase": 3.469
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.712,
+          "rmse": 8.497,
+          "smape_pct": 5.27,
+          "mase": 1.786
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.953,
+          "rmse": 8.086,
+          "smape_pct": 5.46,
+          "mase": 1.852
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 6.342,
+          "rmse": 8.434,
+          "smape_pct": 4.99,
+          "mase": 1.663
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 6.53,
+          "rmse": 7.288,
+          "smape_pct": 5.15,
+          "mase": 1.783
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 5.502,
+          "rmse": 7.931,
+          "smape_pct": 4.38,
+          "mase": 1.556
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 10.402,
+          "rmse": 13.515,
+          "smape_pct": 8.21,
+          "mase": 3.202
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 10.146,
+          "rmse": 12.126,
+          "smape_pct": 7.9,
+          "mase": 2.987
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 9.806,
+          "rmse": 11.989,
+          "smape_pct": 7.64,
+          "mase": 2.913
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 11.376,
+          "rmse": 12.92,
+          "smape_pct": 8.83,
+          "mase": 3.315
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 11.37,
+          "rmse": 15.002,
+          "smape_pct": 9.05,
+          "mase": 3.561
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 16.082,
+          "rmse": 17.717,
+          "smape_pct": 12.5,
+          "mase": 5.097
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 11.608,
+          "rmse": 13.778,
+          "smape_pct": 8.83,
+          "mase": 3.746
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 12.992,
+          "rmse": 14.456,
+          "smape_pct": 9.95,
+          "mase": 4.119
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 11.923,
+          "rmse": 14.573,
+          "smape_pct": 9.15,
+          "mase": 3.924
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 19.692,
+          "rmse": 21.197,
+          "smape_pct": 15.58,
+          "mase": 6.226
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "FR_Healthy Whole-Fo",
+    "country_code": "FR",
+    "country_label": "France — Eurostat HICP / INSEE",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 9.204,
+        "rmse": 11.169,
+        "smape_pct": 7.06,
+        "mase": 2.68
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 6.838,
+        "rmse": 8.296,
+        "smape_pct": 5.11,
+        "mase": 1.946
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 7.822,
+        "rmse": 9.464,
+        "smape_pct": 5.93,
+        "mase": 2.244
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 6.72,
+        "rmse": 8.093,
+        "smape_pct": 5.0,
+        "mase": 1.899
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 11.345,
+        "rmse": 13.778,
+        "smape_pct": 8.83,
+        "mase": 3.323
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.36,
+          "rmse": 6.706,
+          "smape_pct": 4.14,
+          "mase": 1.453
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.317,
+          "rmse": 5.678,
+          "smape_pct": 3.25,
+          "mase": 1.141
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 4.907,
+          "rmse": 6.552,
+          "smape_pct": 3.76,
+          "mase": 1.304
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.338,
+          "rmse": 5.082,
+          "smape_pct": 3.27,
+          "mase": 1.142
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 5.36,
+          "rmse": 6.995,
+          "smape_pct": 4.21,
+          "mase": 1.509
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 8.826,
+          "rmse": 10.871,
+          "smape_pct": 6.79,
+          "mase": 2.597
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 7.096,
+          "rmse": 8.429,
+          "smape_pct": 5.28,
+          "mase": 1.989
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 7.79,
+          "rmse": 9.388,
+          "smape_pct": 5.9,
+          "mase": 2.239
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 7.072,
+          "rmse": 8.61,
+          "smape_pct": 5.2,
+          "mase": 1.944
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 11.612,
+          "rmse": 13.372,
+          "smape_pct": 9.03,
+          "mase": 3.375
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 15.442,
+          "rmse": 15.894,
+          "smape_pct": 11.76,
+          "mase": 4.623
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 10.298,
+          "rmse": 10.996,
+          "smape_pct": 7.7,
+          "mase": 3.102
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 12.235,
+          "rmse": 12.7,
+          "smape_pct": 9.2,
+          "mase": 3.661
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 9.852,
+          "rmse": 10.685,
+          "smape_pct": 7.36,
+          "mase": 2.978
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 19.987,
+          "rmse": 20.37,
+          "smape_pct": 15.49,
+          "mase": 5.978
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "FR_All Food & Non-A",
+    "country_code": "FR",
+    "country_label": "France — Eurostat HICP / INSEE",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 9.69,
+        "rmse": 12.277,
+        "smape_pct": 7.99,
+        "mase": 5.321
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 8.389,
+        "rmse": 10.772,
+        "smape_pct": 6.85,
+        "mase": 4.608
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 9.911,
+        "rmse": 11.975,
+        "smape_pct": 8.08,
+        "mase": 5.137
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 7.95,
+        "rmse": 10.362,
+        "smape_pct": 6.46,
+        "mase": 4.379
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 10.542,
+        "rmse": 13.399,
+        "smape_pct": 8.76,
+        "mase": 5.851
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.053,
+          "rmse": 7.231,
+          "smape_pct": 4.19,
+          "mase": 2.355
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.717,
+          "rmse": 6.618,
+          "smape_pct": 3.85,
+          "mase": 2.14
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 6.167,
+          "rmse": 8.112,
+          "smape_pct": 5.02,
+          "mase": 2.568
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.02,
+          "rmse": 5.708,
+          "smape_pct": 3.29,
+          "mase": 1.885
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 4.783,
+          "rmse": 6.863,
+          "smape_pct": 3.98,
+          "mase": 2.328
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 9.56,
+          "rmse": 12.013,
+          "smape_pct": 7.89,
+          "mase": 5.281
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.064,
+          "rmse": 10.666,
+          "smape_pct": 6.6,
+          "mase": 4.517
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 9.974,
+          "rmse": 11.941,
+          "smape_pct": 8.13,
+          "mase": 5.157
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.126,
+          "rmse": 10.502,
+          "smape_pct": 6.57,
+          "mase": 4.414
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 10.706,
+          "rmse": 13.1,
+          "smape_pct": 8.9,
+          "mase": 5.9
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 16.807,
+          "rmse": 17.505,
+          "smape_pct": 13.83,
+          "mase": 9.819
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 14.305,
+          "rmse": 15.076,
+          "smape_pct": 11.66,
+          "mase": 8.423
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 15.45,
+          "rmse": 16.149,
+          "smape_pct": 12.62,
+          "mase": 8.966
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 13.625,
+          "rmse": 14.694,
+          "smape_pct": 11.08,
+          "mase": 8.075
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 18.975,
+          "rmse": 19.701,
+          "smape_pct": 15.77,
+          "mase": 11.076
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "FR_Meat HICP (CP011",
+    "country_code": "FR",
+    "country_label": "France — Eurostat HICP / INSEE",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 9.087,
+        "rmse": 11.338,
+        "smape_pct": 7.6,
+        "mase": 5.204
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 8.136,
+        "rmse": 10.009,
+        "smape_pct": 6.72,
+        "mase": 4.591
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 9.344,
+        "rmse": 11.134,
+        "smape_pct": 7.75,
+        "mase": 5.093
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 7.619,
+        "rmse": 9.5,
+        "smape_pct": 6.25,
+        "mase": 4.25
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 9.76,
+        "rmse": 12.377,
+        "smape_pct": 8.21,
+        "mase": 5.639
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 5.015,
+          "rmse": 6.753,
+          "smape_pct": 4.21,
+          "mase": 2.459
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 4.615,
+          "rmse": 6.284,
+          "smape_pct": 3.82,
+          "mase": 2.216
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 5.772,
+          "rmse": 7.471,
+          "smape_pct": 4.8,
+          "mase": 2.616
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.187,
+          "rmse": 5.367,
+          "smape_pct": 3.43,
+          "mase": 1.954
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 4.437,
+          "rmse": 6.395,
+          "smape_pct": 3.75,
+          "mase": 2.296
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 8.776,
+          "rmse": 11.089,
+          "smape_pct": 7.36,
+          "mase": 5.078
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.338,
+          "rmse": 9.96,
+          "smape_pct": 6.88,
+          "mase": 4.609
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 9.37,
+          "rmse": 11.034,
+          "smape_pct": 7.77,
+          "mase": 5.069
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 7.952,
+          "rmse": 9.739,
+          "smape_pct": 6.48,
+          "mase": 4.276
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 9.848,
+          "rmse": 12.1,
+          "smape_pct": 8.29,
+          "mase": 5.634
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 15.585,
+          "rmse": 16.122,
+          "smape_pct": 12.98,
+          "mase": 9.478
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 13.165,
+          "rmse": 13.873,
+          "smape_pct": 10.89,
+          "mase": 8.131
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 14.67,
+          "rmse": 15.132,
+          "smape_pct": 12.15,
+          "mase": 8.839
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 12.353,
+          "rmse": 13.293,
+          "smape_pct": 10.18,
+          "mase": 7.663
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 17.635,
+          "rmse": 18.169,
+          "smape_pct": 14.8,
+          "mase": 10.661
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "FR_Milk, Cheese & E",
+    "country_code": "FR",
+    "country_label": "France — Eurostat HICP / INSEE",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 11.416,
+        "rmse": 14.969,
+        "smape_pct": 9.64,
+        "mase": 8.338
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 11.013,
+        "rmse": 14.284,
+        "smape_pct": 9.26,
+        "mase": 8.028
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 12.275,
+        "rmse": 15.289,
+        "smape_pct": 10.29,
+        "mase": 8.361
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.571,
+        "rmse": 13.817,
+        "smape_pct": 8.85,
+        "mase": 7.798
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 11.223,
+        "rmse": 15.39,
+        "smape_pct": 9.54,
+        "mase": 8.504
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.16,
+          "rmse": 9.104,
+          "smape_pct": 5.17,
+          "mase": 3.366
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.207,
+          "rmse": 8.864,
+          "smape_pct": 5.17,
+          "mase": 3.344
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.603,
+          "rmse": 10.473,
+          "smape_pct": 6.33,
+          "mase": 3.715
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 5.262,
+          "rmse": 7.674,
+          "smape_pct": 4.39,
+          "mase": 3.025
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 4.738,
+          "rmse": 8.249,
+          "smape_pct": 4.03,
+          "mase": 2.962
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 11.052,
+          "rmse": 14.852,
+          "smape_pct": 9.36,
+          "mase": 8.44
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 10.676,
+          "rmse": 14.215,
+          "smape_pct": 9.0,
+          "mase": 8.141
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 12.358,
+          "rmse": 15.362,
+          "smape_pct": 10.34,
+          "mase": 8.558
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 11.234,
+          "rmse": 14.087,
+          "smape_pct": 9.38,
+          "mase": 8.252
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 11.324,
+          "rmse": 15.323,
+          "smape_pct": 9.62,
+          "mase": 8.74
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 19.755,
+          "rmse": 20.981,
+          "smape_pct": 16.71,
+          "mase": 15.668
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 18.645,
+          "rmse": 19.865,
+          "smape_pct": 15.72,
+          "mase": 14.915
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 19.18,
+          "rmse": 20.423,
+          "smape_pct": 16.16,
+          "mase": 15.085
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 17.707,
+          "rmse": 19.48,
+          "smape_pct": 14.86,
+          "mase": 14.39
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 20.823,
+          "rmse": 22.195,
+          "smape_pct": 17.7,
+          "mase": 16.522
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "FR_Vegetables HICP ",
+    "country_code": "FR",
+    "country_label": "France — Eurostat HICP / INSEE",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 11.433,
+        "rmse": 13.84,
+        "smape_pct": 8.64,
+        "mase": 3.369
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.674,
+        "rmse": 11.51,
+        "smape_pct": 7.17,
+        "mase": 2.793
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 9.884,
+        "rmse": 12.171,
+        "smape_pct": 7.39,
+        "mase": 2.889
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 9.065,
+        "rmse": 11.277,
+        "smape_pct": 6.65,
+        "mase": 2.604
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 12.821,
+        "rmse": 16.254,
+        "smape_pct": 9.84,
+        "mase": 3.856
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.13,
+          "rmse": 8.85,
+          "smape_pct": 5.38,
+          "mase": 1.875
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.63,
+          "rmse": 8.226,
+          "smape_pct": 4.94,
+          "mase": 1.714
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 6.717,
+          "rmse": 8.73,
+          "smape_pct": 5.06,
+          "mase": 1.736
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 5.992,
+          "rmse": 7.279,
+          "smape_pct": 4.44,
+          "mase": 1.553
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.362,
+          "rmse": 8.603,
+          "smape_pct": 4.88,
+          "mase": 1.765
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 11.066,
+          "rmse": 13.694,
+          "smape_pct": 8.37,
+          "mase": 3.328
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 9.974,
+          "rmse": 11.752,
+          "smape_pct": 7.34,
+          "mase": 2.866
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 9.49,
+          "rmse": 12.21,
+          "smape_pct": 7.09,
+          "mase": 2.85
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 9.838,
+          "rmse": 12.28,
+          "smape_pct": 7.11,
+          "mase": 2.766
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 12.688,
+          "rmse": 16.103,
+          "smape_pct": 9.75,
+          "mase": 3.87
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 18.345,
+          "rmse": 19.141,
+          "smape_pct": 13.85,
+          "mase": 5.662
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 13.865,
+          "rmse": 14.922,
+          "smape_pct": 10.32,
+          "mase": 4.321
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 15.128,
+          "rmse": 15.963,
+          "smape_pct": 11.26,
+          "mase": 4.667
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 12.71,
+          "rmse": 14.453,
+          "smape_pct": 9.36,
+          "mase": 3.978
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 22.675,
+          "rmse": 23.57,
+          "smape_pct": 17.38,
+          "mase": 6.977
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "DE_Healthy Whole-Fo",
+    "country_code": "DE",
+    "country_label": "Germany — Eurostat HICP / Destatis",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 11.619,
+        "rmse": 14.584,
+        "smape_pct": 9.03,
+        "mase": 4.218
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.38,
+        "rmse": 12.117,
+        "smape_pct": 7.14,
+        "mase": 3.361
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 11.623,
+        "rmse": 13.935,
+        "smape_pct": 8.91,
+        "mase": 4.028
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 9.062,
+        "rmse": 11.558,
+        "smape_pct": 6.9,
+        "mase": 3.282
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 13.173,
+        "rmse": 16.225,
+        "smape_pct": 10.37,
+        "mase": 4.841
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.04,
+          "rmse": 8.387,
+          "smape_pct": 4.7,
+          "mase": 1.88
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.185,
+          "rmse": 7.425,
+          "smape_pct": 3.94,
+          "mase": 1.545
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.095,
+          "rmse": 9.271,
+          "smape_pct": 5.43,
+          "mase": 2.037
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.46,
+          "rmse": 6.153,
+          "smape_pct": 3.39,
+          "mase": 1.358
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.03,
+          "rmse": 7.986,
+          "smape_pct": 4.77,
+          "mase": 1.978
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 11.508,
+          "rmse": 14.253,
+          "smape_pct": 8.97,
+          "mase": 4.173
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 9.306,
+          "rmse": 12.105,
+          "smape_pct": 7.1,
+          "mase": 3.32
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.788,
+          "rmse": 13.879,
+          "smape_pct": 9.04,
+          "mase": 4.046
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 9.54,
+          "rmse": 11.664,
+          "smape_pct": 7.24,
+          "mase": 3.361
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 13.518,
+          "rmse": 15.766,
+          "smape_pct": 10.65,
+          "mase": 4.896
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 20.125,
+          "rmse": 20.932,
+          "smape_pct": 15.58,
+          "mase": 7.78
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 15.765,
+          "rmse": 16.875,
+          "smape_pct": 12.0,
+          "mase": 6.135
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 18.207,
+          "rmse": 18.933,
+          "smape_pct": 13.96,
+          "mase": 6.993
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.367,
+          "rmse": 16.557,
+          "smape_pct": 11.73,
+          "mase": 6.068
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 23.458,
+          "rmse": 24.101,
+          "smape_pct": 18.42,
+          "mase": 9.068
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "DE_All Food & Non-A",
+    "country_code": "DE",
+    "country_label": "Germany — Eurostat HICP / Destatis",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 14.346,
+        "rmse": 17.735,
+        "smape_pct": 11.11,
+        "mase": 5.835
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 12.356,
+        "rmse": 15.635,
+        "smape_pct": 9.47,
+        "mase": 5.071
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 15.083,
+        "rmse": 17.648,
+        "smape_pct": 11.49,
+        "mase": 5.701
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 11.181,
+        "rmse": 14.544,
+        "smape_pct": 8.55,
+        "mase": 4.7
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 15.667,
+        "rmse": 19.047,
+        "smape_pct": 12.22,
+        "mase": 6.389
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.197,
+          "rmse": 9.922,
+          "smape_pct": 5.62,
+          "mase": 2.417
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.528,
+          "rmse": 8.971,
+          "smape_pct": 5.01,
+          "mase": 2.124
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 9.262,
+          "rmse": 11.565,
+          "smape_pct": 7.03,
+          "mase": 2.703
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.945,
+          "rmse": 7.099,
+          "smape_pct": 3.81,
+          "mase": 1.696
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.233,
+          "rmse": 9.193,
+          "smape_pct": 5.65,
+          "mase": 2.48
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 14.426,
+          "rmse": 17.207,
+          "smape_pct": 11.2,
+          "mase": 5.767
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 12.058,
+          "rmse": 15.276,
+          "smape_pct": 9.31,
+          "mase": 4.947
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 15.324,
+          "rmse": 17.501,
+          "smape_pct": 11.69,
+          "mase": 5.673
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 11.418,
+          "rmse": 14.255,
+          "smape_pct": 8.75,
+          "mase": 4.675
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 16.12,
+          "rmse": 18.456,
+          "smape_pct": 12.58,
+          "mase": 6.402
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 24.97,
+          "rmse": 25.725,
+          "smape_pct": 19.24,
+          "mase": 11.045
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 21.47,
+          "rmse": 22.457,
+          "smape_pct": 16.38,
+          "mase": 9.647
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 23.512,
+          "rmse": 24.175,
+          "smape_pct": 17.94,
+          "mase": 10.23
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 20.24,
+          "rmse": 21.532,
+          "smape_pct": 15.43,
+          "mase": 9.238
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 27.75,
+          "rmse": 28.424,
+          "smape_pct": 21.61,
+          "mase": 12.237
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "DE_Meat HICP (CP011",
+    "country_code": "DE",
+    "country_label": "Germany — Eurostat HICP / Destatis",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.594,
+        "rmse": 16.583,
+        "smape_pct": 10.49,
+        "mase": 4.845
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 12.132,
+        "rmse": 14.568,
+        "smape_pct": 9.24,
+        "mase": 4.31
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 14.266,
+        "rmse": 16.426,
+        "smape_pct": 10.87,
+        "mase": 4.824
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.232,
+        "rmse": 13.183,
+        "smape_pct": 7.76,
+        "mase": 3.715
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 15.147,
+        "rmse": 18.239,
+        "smape_pct": 11.7,
+        "mase": 5.296
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.512,
+          "rmse": 9.495,
+          "smape_pct": 5.89,
+          "mase": 2.385
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.327,
+          "rmse": 8.724,
+          "smape_pct": 5.62,
+          "mase": 2.25
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.9,
+          "rmse": 10.61,
+          "smape_pct": 6.86,
+          "mase": 2.597
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 5.297,
+          "rmse": 6.918,
+          "smape_pct": 4.04,
+          "mase": 1.659
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.283,
+          "rmse": 9.077,
+          "smape_pct": 5.68,
+          "mase": 2.31
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.348,
+          "rmse": 15.943,
+          "smape_pct": 10.35,
+          "mase": 4.631
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 12.576,
+          "rmse": 14.207,
+          "smape_pct": 9.55,
+          "mase": 4.224
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 14.328,
+          "rmse": 16.032,
+          "smape_pct": 10.94,
+          "mase": 4.675
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 10.688,
+          "rmse": 12.88,
+          "smape_pct": 8.07,
+          "mase": 3.636
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 15.5,
+          "rmse": 17.546,
+          "smape_pct": 11.98,
+          "mase": 5.197
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.025,
+          "rmse": 24.047,
+          "smape_pct": 17.56,
+          "mase": 8.801
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 18.785,
+          "rmse": 20.721,
+          "smape_pct": 14.29,
+          "mase": 7.507
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 22.238,
+          "rmse": 22.84,
+          "smape_pct": 16.82,
+          "mase": 8.349
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 17.065,
+          "rmse": 19.303,
+          "smape_pct": 12.93,
+          "mase": 6.899
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 26.5,
+          "rmse": 27.185,
+          "smape_pct": 20.36,
+          "mase": 9.898
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "DE_Milk, Cheese & E",
+    "country_code": "DE",
+    "country_label": "Germany — Eurostat HICP / Destatis",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 18.525,
+        "rmse": 24.024,
+        "smape_pct": 13.53,
+        "mase": 4.473
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 17.791,
+        "rmse": 22.375,
+        "smape_pct": 12.8,
+        "mase": 4.228
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 18.303,
+        "rmse": 22.565,
+        "smape_pct": 13.08,
+        "mase": 4.188
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 16.049,
+        "rmse": 20.875,
+        "smape_pct": 11.47,
+        "mase": 3.873
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 19.927,
+        "rmse": 25.44,
+        "smape_pct": 14.7,
+        "mase": 4.825
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 9.302,
+          "rmse": 14.338,
+          "smape_pct": 6.81,
+          "mase": 1.945
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 9.937,
+          "rmse": 13.808,
+          "smape_pct": 7.08,
+          "mase": 1.974
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 11.133,
+          "rmse": 15.344,
+          "smape_pct": 7.97,
+          "mase": 2.104
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 8.73,
+          "rmse": 11.502,
+          "smape_pct": 6.2,
+          "mase": 1.752
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 9.6,
+          "rmse": 13.225,
+          "smape_pct": 7.02,
+          "mase": 2.011
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 18.51,
+          "rmse": 23.783,
+          "smape_pct": 13.58,
+          "mase": 4.556
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 18.37,
+          "rmse": 22.498,
+          "smape_pct": 13.19,
+          "mase": 4.386
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 18.34,
+          "rmse": 22.682,
+          "smape_pct": 13.11,
+          "mase": 4.273
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 16.778,
+          "rmse": 21.502,
+          "smape_pct": 11.88,
+          "mase": 4.028
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 19.66,
+          "rmse": 25.029,
+          "smape_pct": 14.61,
+          "mase": 4.884
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 32.377,
+          "rmse": 33.895,
+          "smape_pct": 23.57,
+          "mase": 8.163
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 28.85,
+          "rmse": 30.962,
+          "smape_pct": 20.89,
+          "mase": 7.411
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 29.01,
+          "rmse": 30.219,
+          "smape_pct": 20.69,
+          "mase": 7.21
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 26.115,
+          "rmse": 29.288,
+          "smape_pct": 18.86,
+          "mase": 6.86
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 35.75,
+          "rmse": 37.17,
+          "smape_pct": 26.34,
+          "mase": 8.972
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "DE_Vegetables HICP ",
+    "country_code": "DE",
+    "country_label": "Germany — Eurostat HICP / Destatis",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.121,
+        "rmse": 16.579,
+        "smape_pct": 9.98,
+        "mase": 4.353
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 11.543,
+        "rmse": 14.413,
+        "smape_pct": 8.61,
+        "mase": 3.737
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 12.51,
+        "rmse": 15.881,
+        "smape_pct": 9.48,
+        "mase": 4.101
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 11.45,
+        "rmse": 14.206,
+        "smape_pct": 8.55,
+        "mase": 3.737
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 13.993,
+        "rmse": 18.094,
+        "smape_pct": 10.83,
+        "mase": 4.779
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.32,
+          "rmse": 10.266,
+          "smape_pct": 5.53,
+          "mase": 2.019
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.26,
+          "rmse": 9.768,
+          "smape_pct": 5.4,
+          "mase": 1.92
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.57,
+          "rmse": 10.856,
+          "smape_pct": 5.72,
+          "mase": 2.012
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 7.242,
+          "rmse": 8.386,
+          "smape_pct": 5.39,
+          "mase": 1.929
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.417,
+          "rmse": 9.422,
+          "smape_pct": 4.96,
+          "mase": 1.919
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.464,
+          "rmse": 16.665,
+          "smape_pct": 10.24,
+          "mase": 4.462
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 12.632,
+          "rmse": 15.047,
+          "smape_pct": 9.38,
+          "mase": 4.0
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 12.472,
+          "rmse": 15.999,
+          "smape_pct": 9.48,
+          "mase": 4.168
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 12.982,
+          "rmse": 15.261,
+          "smape_pct": 9.62,
+          "mase": 4.101
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.44,
+          "rmse": 18.027,
+          "smape_pct": 11.18,
+          "mase": 4.925
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 21.392,
+          "rmse": 22.924,
+          "smape_pct": 16.34,
+          "mase": 7.716
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 16.605,
+          "rmse": 18.783,
+          "smape_pct": 12.47,
+          "mase": 6.135
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 19.967,
+          "rmse": 21.19,
+          "smape_pct": 15.13,
+          "mase": 7.15
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.847,
+          "rmse": 18.979,
+          "smape_pct": 11.94,
+          "mase": 5.994
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 24.8,
+          "rmse": 26.237,
+          "smape_pct": 19.2,
+          "mase": 8.888
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "GBR_Healthy Whole-Fo",
+    "country_code": "GBR",
+    "country_label": "United Kingdom — ONS CPIH (MM23)",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.884,
+        "rmse": 16.885,
+        "smape_pct": 10.88,
+        "mase": 5.055
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 12.027,
+        "rmse": 15.093,
+        "smape_pct": 9.41,
+        "mase": 4.486
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 14.04,
+        "rmse": 16.672,
+        "smape_pct": 10.82,
+        "mase": 4.842
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.565,
+        "rmse": 14.106,
+        "smape_pct": 8.25,
+        "mase": 4.086
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.849,
+        "rmse": 18.176,
+        "smape_pct": 11.72,
+        "mase": 5.45
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.318,
+          "rmse": 9.419,
+          "smape_pct": 5.74,
+          "mase": 2.26
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.008,
+          "rmse": 8.39,
+          "smape_pct": 4.76,
+          "mase": 1.935
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 9.07,
+          "rmse": 11.221,
+          "smape_pct": 6.96,
+          "mase": 2.533
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.465,
+          "rmse": 6.782,
+          "smape_pct": 3.56,
+          "mase": 1.56
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.03,
+          "rmse": 8.876,
+          "smape_pct": 5.51,
+          "mase": 2.219
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.986,
+          "rmse": 16.347,
+          "smape_pct": 10.95,
+          "mase": 5.05
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 11.926,
+          "rmse": 14.53,
+          "smape_pct": 9.33,
+          "mase": 4.449
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 14.12,
+          "rmse": 16.626,
+          "smape_pct": 10.86,
+          "mase": 4.826
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 10.564,
+          "rmse": 13.65,
+          "smape_pct": 8.29,
+          "mase": 4.101
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 15.284,
+          "rmse": 17.632,
+          "smape_pct": 12.04,
+          "mase": 5.521
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.605,
+          "rmse": 24.535,
+          "smape_pct": 18.51,
+          "mase": 9.252
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 21.18,
+          "rmse": 22.018,
+          "smape_pct": 16.48,
+          "mase": 8.358
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 21.395,
+          "rmse": 22.537,
+          "smape_pct": 16.56,
+          "mase": 8.325
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 19.715,
+          "rmse": 21.077,
+          "smape_pct": 15.24,
+          "mase": 7.858
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 26.032,
+          "rmse": 27.056,
+          "smape_pct": 20.62,
+          "mase": 10.208
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "GBR_All Food & Non-A",
+    "country_code": "GBR",
+    "country_label": "United Kingdom — ONS CPIH (MM23)",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 14.205,
+        "rmse": 17.588,
+        "smape_pct": 11.68,
+        "mase": 6.785
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 13.285,
+        "rmse": 16.746,
+        "smape_pct": 10.97,
+        "mase": 6.521
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 15.355,
+        "rmse": 18.315,
+        "smape_pct": 12.47,
+        "mase": 6.831
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 11.474,
+        "rmse": 15.614,
+        "smape_pct": 9.45,
+        "mase": 5.908
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.313,
+        "rmse": 17.989,
+        "smape_pct": 11.79,
+        "mase": 6.913
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.313,
+          "rmse": 9.882,
+          "smape_pct": 6.02,
+          "mase": 2.84
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.588,
+          "rmse": 9.33,
+          "smape_pct": 5.49,
+          "mase": 2.693
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 9.76,
+          "rmse": 12.278,
+          "smape_pct": 7.86,
+          "mase": 3.3
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.582,
+          "rmse": 7.456,
+          "smape_pct": 3.84,
+          "mase": 2.086
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.567,
+          "rmse": 8.852,
+          "smape_pct": 5.38,
+          "mase": 2.627
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 14.306,
+          "rmse": 17.108,
+          "smape_pct": 11.75,
+          "mase": 6.812
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 13.174,
+          "rmse": 16.159,
+          "smape_pct": 10.88,
+          "mase": 6.512
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 15.506,
+          "rmse": 18.279,
+          "smape_pct": 12.57,
+          "mase": 6.859
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 11.38,
+          "rmse": 15.133,
+          "smape_pct": 9.4,
+          "mase": 5.919
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.68,
+          "rmse": 17.559,
+          "smape_pct": 12.07,
+          "mase": 7.005
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 24.415,
+          "rmse": 25.451,
+          "smape_pct": 20.1,
+          "mase": 12.668
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 23.468,
+          "rmse": 24.386,
+          "smape_pct": 19.3,
+          "mase": 12.275
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 23.56,
+          "rmse": 24.781,
+          "smape_pct": 19.26,
+          "mase": 12.094
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 21.93,
+          "rmse": 23.336,
+          "smape_pct": 17.92,
+          "mase": 11.626
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 25.475,
+          "rmse": 26.656,
+          "smape_pct": 21.06,
+          "mase": 13.227
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "GBR_Meat HICP (CP011",
+    "country_code": "GBR",
+    "country_label": "United Kingdom — ONS CPIH (MM23)",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 14.744,
+        "rmse": 17.902,
+        "smape_pct": 12.37,
+        "mase": 7.26
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 14.205,
+        "rmse": 17.47,
+        "smape_pct": 12.03,
+        "mase": 7.219
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 16.443,
+        "rmse": 19.236,
+        "smape_pct": 13.65,
+        "mase": 7.52
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 12.167,
+        "rmse": 16.137,
+        "smape_pct": 10.22,
+        "mase": 6.42
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.487,
+        "rmse": 17.984,
+        "smape_pct": 12.13,
+        "mase": 7.179
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.698,
+          "rmse": 9.986,
+          "smape_pct": 6.47,
+          "mase": 3.11
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.127,
+          "rmse": 9.601,
+          "smape_pct": 6.11,
+          "mase": 3.071
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 10.415,
+          "rmse": 12.793,
+          "smape_pct": 8.56,
+          "mase": 3.637
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.982,
+          "rmse": 7.607,
+          "smape_pct": 4.24,
+          "mase": 2.309
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.75,
+          "rmse": 8.88,
+          "smape_pct": 5.61,
+          "mase": 2.768
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 14.814,
+          "rmse": 17.307,
+          "smape_pct": 12.42,
+          "mase": 7.252
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 14.094,
+          "rmse": 16.706,
+          "smape_pct": 11.94,
+          "mase": 7.179
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 16.656,
+          "rmse": 19.098,
+          "smape_pct": 13.82,
+          "mase": 7.55
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 11.948,
+          "rmse": 15.461,
+          "smape_pct": 10.06,
+          "mase": 6.343
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.82,
+          "rmse": 17.492,
+          "smape_pct": 12.38,
+          "mase": 7.234
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 25.225,
+          "rmse": 26.035,
+          "smape_pct": 21.18,
+          "mase": 13.496
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 24.96,
+          "rmse": 25.639,
+          "smape_pct": 21.02,
+          "mase": 13.49
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 25.217,
+          "rmse": 26.195,
+          "smape_pct": 21.09,
+          "mase": 13.307
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 23.217,
+          "rmse": 24.31,
+          "smape_pct": 19.4,
+          "mase": 12.681
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 25.675,
+          "rmse": 26.685,
+          "smape_pct": 21.57,
+          "mase": 13.726
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "GBR_Milk, Cheese & E",
+    "country_code": "GBR",
+    "country_label": "United Kingdom — ONS CPIH (MM23)",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 17.995,
+        "rmse": 22.962,
+        "smape_pct": 14.22,
+        "mase": 6.659
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 17.284,
+        "rmse": 22.208,
+        "smape_pct": 13.71,
+        "mase": 6.522
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 19.717,
+        "rmse": 23.649,
+        "smape_pct": 15.3,
+        "mase": 6.731
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 15.469,
+        "rmse": 20.712,
+        "smape_pct": 12.16,
+        "mase": 6.004
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 18.12,
+        "rmse": 23.309,
+        "smape_pct": 14.33,
+        "mase": 6.769
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 8.903,
+          "rmse": 13.225,
+          "smape_pct": 7.07,
+          "mase": 2.738
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 9.028,
+          "rmse": 12.809,
+          "smape_pct": 7.16,
+          "mase": 2.787
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 12.165,
+          "rmse": 15.84,
+          "smape_pct": 9.34,
+          "mase": 3.186
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 6.72,
+          "rmse": 10.452,
+          "smape_pct": 5.32,
+          "mase": 2.236
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 8.067,
+          "rmse": 11.827,
+          "smape_pct": 6.36,
+          "mase": 2.563
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 17.918,
+          "rmse": 22.446,
+          "smape_pct": 14.16,
+          "mase": 6.747
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 16.49,
+          "rmse": 21.649,
+          "smape_pct": 13.19,
+          "mase": 6.507
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 19.98,
+          "rmse": 23.612,
+          "smape_pct": 15.51,
+          "mase": 6.881
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 15.626,
+          "rmse": 20.468,
+          "smape_pct": 12.3,
+          "mase": 6.159
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 18.34,
+          "rmse": 22.855,
+          "smape_pct": 14.5,
+          "mase": 6.907
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 31.728,
+          "rmse": 32.939,
+          "smape_pct": 25.03,
+          "mase": 12.431
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 30.66,
+          "rmse": 31.899,
+          "smape_pct": 24.2,
+          "mase": 12.144
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 30.718,
+          "rmse": 32.001,
+          "smape_pct": 24.0,
+          "mase": 11.859
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 28.398,
+          "rmse": 30.35,
+          "smape_pct": 22.26,
+          "mase": 11.463
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 32.925,
+          "rmse": 34.274,
+          "smape_pct": 26.09,
+          "mase": 12.904
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "GBR_Vegetables HICP ",
+    "country_code": "GBR",
+    "country_label": "United Kingdom — ONS CPIH (MM23)",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 16.631,
+        "rmse": 20.38,
+        "smape_pct": 13.05,
+        "mase": 5.258
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 15.421,
+        "rmse": 19.143,
+        "smape_pct": 12.16,
+        "mase": 4.984
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 17.513,
+        "rmse": 20.892,
+        "smape_pct": 13.52,
+        "mase": 5.255
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 13.521,
+        "rmse": 17.974,
+        "smape_pct": 10.61,
+        "mase": 4.542
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 16.967,
+        "rmse": 21.315,
+        "smape_pct": 13.34,
+        "mase": 5.426
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 8.758,
+          "rmse": 11.438,
+          "smape_pct": 6.87,
+          "mase": 2.345
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.782,
+          "rmse": 10.61,
+          "smape_pct": 6.21,
+          "mase": 2.181
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 11.318,
+          "rmse": 14.096,
+          "smape_pct": 8.68,
+          "mase": 2.743
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 5.8,
+          "rmse": 8.634,
+          "smape_pct": 4.65,
+          "mase": 1.76
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.9,
+          "rmse": 10.542,
+          "smape_pct": 6.14,
+          "mase": 2.167
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 16.748,
+          "rmse": 19.761,
+          "smape_pct": 13.11,
+          "mase": 5.298
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 15.328,
+          "rmse": 18.376,
+          "smape_pct": 12.08,
+          "mase": 4.996
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 17.636,
+          "rmse": 20.845,
+          "smape_pct": 13.58,
+          "mase": 5.287
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 13.676,
+          "rmse": 17.387,
+          "smape_pct": 10.8,
+          "mase": 4.631
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 17.42,
+          "rmse": 20.762,
+          "smape_pct": 13.67,
+          "mase": 5.53
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 28.292,
+          "rmse": 29.549,
+          "smape_pct": 22.22,
+          "mase": 9.578
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 26.995,
+          "rmse": 27.987,
+          "smape_pct": 21.17,
+          "mase": 9.174
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 26.65,
+          "rmse": 28.206,
+          "smape_pct": 20.71,
+          "mase": 8.983
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 24.91,
+          "rmse": 26.865,
+          "smape_pct": 19.31,
+          "mase": 8.604
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 30.0,
+          "rmse": 31.595,
+          "smape_pct": 23.71,
+          "mase": 10.183
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "EU27_2020_Healthy Whole-Fo",
+    "country_code": "EU27_2020",
+    "country_label": "European Union — Eurostat HICP (EU-27)",
+    "indicator_name": "Healthy Whole-Food CPI Basket (2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 11.851,
+        "rmse": 14.533,
+        "smape_pct": 9.03,
+        "mase": 3.776
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 9.197,
+        "rmse": 11.718,
+        "smape_pct": 6.9,
+        "mase": 2.949
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 11.532,
+        "rmse": 13.541,
+        "smape_pct": 8.65,
+        "mase": 3.519
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 8.654,
+        "rmse": 11.156,
+        "smape_pct": 6.49,
+        "mase": 2.805
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 13.836,
+        "rmse": 16.687,
+        "smape_pct": 10.66,
+        "mase": 4.421
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.133,
+          "rmse": 8.28,
+          "smape_pct": 4.73,
+          "mase": 1.765
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.16,
+          "rmse": 7.038,
+          "smape_pct": 3.91,
+          "mase": 1.465
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.228,
+          "rmse": 9.039,
+          "smape_pct": 5.43,
+          "mase": 1.908
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.462,
+          "rmse": 5.972,
+          "smape_pct": 3.42,
+          "mase": 1.321
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.573,
+          "rmse": 8.245,
+          "smape_pct": 5.08,
+          "mase": 1.919
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 11.802,
+          "rmse": 14.055,
+          "smape_pct": 8.99,
+          "mase": 3.733
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 8.704,
+          "rmse": 11.527,
+          "smape_pct": 6.55,
+          "mase": 2.817
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 11.566,
+          "rmse": 13.408,
+          "smape_pct": 8.66,
+          "mase": 3.498
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.522,
+          "rmse": 11.153,
+          "smape_pct": 6.35,
+          "mase": 2.723
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 14.142,
+          "rmse": 16.112,
+          "smape_pct": 10.89,
+          "mase": 4.452
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 20.49,
+          "rmse": 21.03,
+          "smape_pct": 15.53,
+          "mase": 6.848
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 15.87,
+          "rmse": 16.57,
+          "smape_pct": 11.83,
+          "mase": 5.342
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 17.945,
+          "rmse": 18.447,
+          "smape_pct": 13.44,
+          "mase": 5.961
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 15.107,
+          "rmse": 16.053,
+          "smape_pct": 11.26,
+          "mase": 5.135
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 24.347,
+          "rmse": 24.854,
+          "smape_pct": 18.75,
+          "mase": 8.136
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "EU27_2020_All Food & Non-A",
+    "country_code": "EU27_2020",
+    "country_label": "European Union — Eurostat HICP (EU-27)",
+    "indicator_name": "All Food & Non-Alcoholic Beverages HICP (CP01, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.603,
+        "rmse": 16.667,
+        "smape_pct": 10.72,
+        "mase": 6.143
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 11.577,
+        "rmse": 14.753,
+        "smape_pct": 9.07,
+        "mase": 5.35
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 14.411,
+        "rmse": 16.781,
+        "smape_pct": 11.19,
+        "mase": 6.061
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 10.378,
+        "rmse": 13.802,
+        "smape_pct": 8.1,
+        "mase": 4.91
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 14.695,
+        "rmse": 17.901,
+        "smape_pct": 11.64,
+        "mase": 6.656
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.968,
+          "rmse": 9.366,
+          "smape_pct": 5.53,
+          "mase": 2.623
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.013,
+          "rmse": 8.441,
+          "smape_pct": 4.74,
+          "mase": 2.27
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.992,
+          "rmse": 11.069,
+          "smape_pct": 6.96,
+          "mase": 2.953
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.458,
+          "rmse": 6.87,
+          "smape_pct": 3.53,
+          "mase": 1.792
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.875,
+          "rmse": 8.795,
+          "smape_pct": 5.44,
+          "mase": 2.63
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 13.602,
+          "rmse": 16.122,
+          "smape_pct": 10.72,
+          "mase": 6.042
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 11.094,
+          "rmse": 14.325,
+          "smape_pct": 8.75,
+          "mase": 5.168
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 14.556,
+          "rmse": 16.613,
+          "smape_pct": 11.31,
+          "mase": 6.001
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 10.31,
+          "rmse": 13.491,
+          "smape_pct": 8.06,
+          "mase": 4.803
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 15.024,
+          "rmse": 17.324,
+          "smape_pct": 11.9,
+          "mase": 6.633
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.555,
+          "rmse": 24.191,
+          "smape_pct": 18.49,
+          "mase": 11.548
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 20.525,
+          "rmse": 21.279,
+          "smape_pct": 15.96,
+          "mase": 10.199
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 22.358,
+          "rmse": 22.96,
+          "smape_pct": 17.4,
+          "mase": 10.799
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 19.343,
+          "rmse": 20.398,
+          "smape_pct": 15.01,
+          "mase": 9.722
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 26.013,
+          "rmse": 26.654,
+          "smape_pct": 20.61,
+          "mase": 12.721
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "EU27_2020_Meat HICP (CP011",
+    "country_code": "EU27_2020",
+    "country_label": "European Union — Eurostat HICP (EU-27)",
+    "indicator_name": "Meat HICP (CP0112, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 12.451,
+        "rmse": 14.756,
+        "smape_pct": 9.96,
+        "mase": 5.38
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 10.521,
+        "rmse": 12.95,
+        "smape_pct": 8.41,
+        "mase": 4.704
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 13.285,
+        "rmse": 14.932,
+        "smape_pct": 10.5,
+        "mase": 5.4
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 9.299,
+        "rmse": 11.885,
+        "smape_pct": 7.37,
+        "mase": 4.171
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 13.62,
+        "rmse": 16.144,
+        "smape_pct": 10.91,
+        "mase": 5.81
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 6.652,
+          "rmse": 8.292,
+          "smape_pct": 5.39,
+          "mase": 2.561
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 5.628,
+          "rmse": 7.407,
+          "smape_pct": 4.58,
+          "mase": 2.247
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 8.46,
+          "rmse": 9.749,
+          "smape_pct": 6.7,
+          "mase": 2.907
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 4.487,
+          "rmse": 6.049,
+          "smape_pct": 3.61,
+          "mase": 1.794
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.627,
+          "rmse": 8.042,
+          "smape_pct": 5.32,
+          "mase": 2.512
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 12.356,
+          "rmse": 14.076,
+          "smape_pct": 9.89,
+          "mase": 5.194
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 10.134,
+          "rmse": 12.363,
+          "smape_pct": 8.15,
+          "mase": 4.471
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 13.34,
+          "rmse": 14.592,
+          "smape_pct": 10.54,
+          "mase": 5.254
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 8.954,
+          "rmse": 11.423,
+          "smape_pct": 7.12,
+          "mase": 3.925
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 13.892,
+          "rmse": 15.487,
+          "smape_pct": 11.12,
+          "mase": 5.712
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 21.267,
+          "rmse": 21.58,
+          "smape_pct": 16.89,
+          "mase": 9.84
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 18.345,
+          "rmse": 18.856,
+          "smape_pct": 14.5,
+          "mase": 8.683
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 20.452,
+          "rmse": 20.673,
+          "smape_pct": 16.13,
+          "mase": 9.319
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 16.95,
+          "rmse": 17.656,
+          "smape_pct": 13.32,
+          "mase": 8.042
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 23.77,
+          "rmse": 24.094,
+          "smape_pct": 19.02,
+          "mase": 10.882
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "EU27_2020_Milk, Cheese & E",
+    "country_code": "EU27_2020",
+    "country_label": "European Union — Eurostat HICP (EU-27)",
+    "indicator_name": "Milk, Cheese & Eggs HICP (CP0114, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 15.301,
+        "rmse": 19.646,
+        "smape_pct": 12.13,
+        "mase": 6.296
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 14.386,
+        "rmse": 18.491,
+        "smape_pct": 11.36,
+        "mase": 5.977
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 16.451,
+        "rmse": 19.78,
+        "smape_pct": 12.79,
+        "mase": 6.219
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 13.146,
+        "rmse": 17.31,
+        "smape_pct": 10.26,
+        "mase": 5.502
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 16.096,
+        "rmse": 20.41,
+        "smape_pct": 12.78,
+        "mase": 6.611
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.543,
+          "rmse": 11.477,
+          "smape_pct": 6.02,
+          "mase": 2.607
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 7.275,
+          "rmse": 10.973,
+          "smape_pct": 5.77,
+          "mase": 2.523
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 9.975,
+          "rmse": 13.232,
+          "smape_pct": 7.69,
+          "mase": 2.907
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 6.32,
+          "rmse": 9.222,
+          "smape_pct": 4.89,
+          "mase": 2.128
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 7.493,
+          "rmse": 10.611,
+          "smape_pct": 5.92,
+          "mase": 2.594
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 15.096,
+          "rmse": 19.2,
+          "smape_pct": 12.0,
+          "mase": 6.33
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 14.32,
+          "rmse": 18.175,
+          "smape_pct": 11.32,
+          "mase": 6.041
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 16.546,
+          "rmse": 19.68,
+          "smape_pct": 12.87,
+          "mase": 6.305
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 13.258,
+          "rmse": 17.306,
+          "smape_pct": 10.33,
+          "mase": 5.599
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 16.074,
+          "rmse": 19.928,
+          "smape_pct": 12.8,
+          "mase": 6.68
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 27.192,
+          "rmse": 28.09,
+          "smape_pct": 21.46,
+          "mase": 11.787
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 25.135,
+          "rmse": 26.243,
+          "smape_pct": 19.77,
+          "mase": 11.077
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 26.045,
+          "rmse": 26.842,
+          "smape_pct": 20.34,
+          "mase": 11.079
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 23.245,
+          "rmse": 24.935,
+          "smape_pct": 18.22,
+          "mase": 10.44
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 29.027,
+          "rmse": 29.947,
+          "smape_pct": 23.06,
+          "mase": 12.551
+        }
+      }
+    },
+    "fold_count": 15
+  },
+  {
+    "series_id": "EU27_2020_Vegetables HICP ",
+    "country_code": "EU27_2020",
+    "country_label": "European Union — Eurostat HICP (EU-27)",
+    "indicator_name": "Vegetables HICP (CP0117, 2015=100)",
+    "best_cv_model": "naive_drift",
+    "overall": {
+      "damped_ets": {
+        "count": 15,
+        "mae": 13.49,
+        "rmse": 17.274,
+        "smape_pct": 9.92,
+        "mase": 3.919
+      },
+      "holt_ets": {
+        "count": 15,
+        "mae": 11.54,
+        "rmse": 14.535,
+        "smape_pct": 8.33,
+        "mase": 3.321
+      },
+      "ridge_trend": {
+        "count": 15,
+        "mae": 12.862,
+        "rmse": 15.923,
+        "smape_pct": 9.32,
+        "mase": 3.613
+      },
+      "naive_drift": {
+        "count": 15,
+        "mae": 11.41,
+        "rmse": 14.275,
+        "smape_pct": 8.26,
+        "mase": 3.32
+      },
+      "naive_rw": {
+        "count": 15,
+        "mae": 15.105,
+        "rmse": 19.593,
+        "smape_pct": 11.28,
+        "mase": 4.454
+      }
+    },
+    "by_horizon": {
+      "1": {
+        "damped_ets": {
+          "count": 6,
+          "mae": 7.362,
+          "rmse": 10.282,
+          "smape_pct": 5.4,
+          "mase": 1.83
+        },
+        "holt_ets": {
+          "count": 6,
+          "mae": 6.908,
+          "rmse": 9.329,
+          "smape_pct": 4.99,
+          "mase": 1.701
+        },
+        "ridge_trend": {
+          "count": 6,
+          "mae": 7.985,
+          "rmse": 10.879,
+          "smape_pct": 5.82,
+          "mase": 1.897
+        },
+        "naive_drift": {
+          "count": 6,
+          "mae": 6.507,
+          "rmse": 8.11,
+          "smape_pct": 4.76,
+          "mase": 1.66
+        },
+        "naive_rw": {
+          "count": 6,
+          "mae": 6.548,
+          "rmse": 9.839,
+          "smape_pct": 4.9,
+          "mase": 1.758
+        }
+      },
+      "2": {
+        "damped_ets": {
+          "count": 5,
+          "mae": 12.98,
+          "rmse": 17.064,
+          "smape_pct": 9.58,
+          "mase": 3.893
+        },
+        "holt_ets": {
+          "count": 5,
+          "mae": 11.658,
+          "rmse": 14.741,
+          "smape_pct": 8.41,
+          "mase": 3.399
+        },
+        "ridge_trend": {
+          "count": 5,
+          "mae": 12.786,
+          "rmse": 16.008,
+          "smape_pct": 9.24,
+          "mase": 3.648
+        },
+        "naive_drift": {
+          "count": 5,
+          "mae": 12.826,
+          "rmse": 15.035,
+          "smape_pct": 9.29,
+          "mase": 3.682
+        },
+        "naive_rw": {
+          "count": 5,
+          "mae": 15.4,
+          "rmse": 19.297,
+          "smape_pct": 11.5,
+          "mase": 4.569
+        }
+      },
+      "3": {
+        "damped_ets": {
+          "count": 4,
+          "mae": 23.32,
+          "rmse": 24.421,
+          "smape_pct": 17.12,
+          "mase": 7.084
+        },
+        "holt_ets": {
+          "count": 4,
+          "mae": 18.34,
+          "rmse": 19.751,
+          "smape_pct": 13.23,
+          "mase": 5.655
+        },
+        "ridge_trend": {
+          "count": 4,
+          "mae": 20.273,
+          "rmse": 21.283,
+          "smape_pct": 14.68,
+          "mase": 6.142
+        },
+        "naive_drift": {
+          "count": 4,
+          "mae": 16.995,
+          "rmse": 19.569,
+          "smape_pct": 12.21,
+          "mase": 5.356
+        },
+        "naive_rw": {
+          "count": 4,
+          "mae": 27.57,
+          "rmse": 28.791,
+          "smape_pct": 20.58,
+          "mase": 8.356
+        }
+      }
+    },
+    "fold_count": 15
+  }
+]

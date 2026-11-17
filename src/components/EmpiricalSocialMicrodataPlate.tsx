@@ -1,7 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import ReactECharts from './ThemedEChart';
-import { assetUrl } from '../utils/assetPath';
+import { fetchCachedJson } from '../services/dataProvider';
+import { classifyResourceError, type ResourceDisclosure } from '../utils/resourceAvailability';
 import { Activity, Clock, ExternalLink, HeartPulse, ShieldCheck, Users2 } from 'lucide-react';
+import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
+import {
+  type BiomarkerMetricMode,
+  type CulturalMetricMode,
+  type TimeUseMetricMode,
+  buildBiomarkerChartSeries,
+  buildCulturalInertiaChartSeries,
+  buildTimeUseChartSeries,
+} from '../analytics/microdataViewHelper';
+import { DataNatureBadge } from './DataNatureBadge';
 
 interface TimeUseRecord {
   record_id: string;
@@ -86,32 +97,86 @@ interface EmpiricalBundle {
 
 export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCountry: string }) {
   const [data, setData] = useState<EmpiricalBundle | null>(null);
+  const [loadDisclosure, setLoadDisclosure] = useState<ResourceDisclosure | null>(null);
+  const [retryTick, setRetryTick] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'time_use' | 'biomarkers' | 'school_meals' | 'cultural_inertia'>('time_use');
+  const [timeUseMode, setTimeUseMode] = useState<TimeUseMetricMode>('cooking_min_day');
+  const [biomarkerMode, setBiomarkerMode] = useState<BiomarkerMetricMode>('lipids_mg_dl');
+  const [culturalMode, setCulturalMode] = useState<CulturalMetricMode>('prevalence_pct');
 
   useEffect(() => {
-    fetch(assetUrl('data/empirical_microdata_bundle.json'))
-      .then((res) => res.json())
-      .then((d: EmpiricalBundle) => setData(d))
-      .catch((err) => console.error('Failed to load empirical microdata bundle:', err));
-  }, []);
+    let cancelled = false;
+    const forceRetry = retryTick > 0;
+    fetchCachedJson<EmpiricalBundle>('data/empirical_microdata_bundle.json', {
+      forceRetry,
+    })
+      .then((d) => {
+        if (!cancelled) {
+          setData(d);
+          setLoadDisclosure(null);
+        }
+      })
+      .catch(async (err: unknown) => {
+        if (cancelled) return;
+        const primaryDisclosure = classifyResourceError(err, {
+          resourcePath: 'data/empirical_microdata_bundle.json',
+          availableSummary:
+            'Open CDC NHANES Clinical Biomarker Grounding and GCNF Public School Canteens datasets remain live in Tabs 2 and 3.',
+        });
+
+        if (primaryDisclosure.isExcludedTrackB) {
+          const [nhanesRes, gcnfRes] = await Promise.allSettled([
+            fetchCachedJson<ClinicalBiomarkerRecord[]>('data/clinical_biomarker_grounding.json', { forceRetry }),
+            fetchCachedJson<SchoolMealRecord[]>('data/school_meals_procurement.json', { forceRetry }),
+          ]);
+          const biomarkers = nhanesRes.status === 'fulfilled' ? nhanesRes.value : [];
+          const schoolMeals = gcnfRes.status === 'fulfilled' ? gcnfRes.value : [];
+          if (!cancelled && (biomarkers.length > 0 || schoolMeals.length > 0)) {
+            setData({
+              metadata: {
+                title: 'Track A Open Microdata Slice (NHANES & GCNF)',
+                source_curation: 'CDC/NCHS NHANES 2021–2023 + GCNF',
+                harmonized_sources: ['NHANES', 'GCNF'],
+                total_records: biomarkers.length + schoolMeals.length,
+              },
+              time_use: [],
+              clinical_biomarkers: biomarkers,
+              school_meals: schoolMeals,
+              cultural_climate: [],
+            });
+            setActiveTab((prev) => (prev === 'time_use' ? 'biomarkers' : prev));
+            setLoadDisclosure(primaryDisclosure);
+            return;
+          }
+        }
+
+        if (!cancelled) {
+          setLoadDisclosure(primaryDisclosure);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [retryTick]);
 
   // Filtered country records
+  const isCountryFallback = useMemo(() => {
+    if (!data) return false;
+    const refPool = data.cultural_climate.length > 0 ? data.cultural_climate : data.school_meals;
+    return !refPool.some((r) => r.country_code === selectedCountry);
+  }, [data, selectedCountry]);
+
   const activeCountryCode = useMemo(() => {
     if (!data) return 'IT';
-    const exists = data.cultural_climate.some((r) => r.country_code === selectedCountry);
+    const refPool = data.cultural_climate.length > 0 ? data.cultural_climate : data.school_meals;
+    const exists = refPool.some((r) => r.country_code === selectedCountry);
     return exists ? selectedCountry : 'IT';
   }, [data, selectedCountry]);
 
-  // Tab 1: Time Use Chart Option
+  // Tab 1: Time Use Chart Option (strict single unit per axis)
   const timeUseChartOption = useMemo(() => {
     if (!data) return {};
-    // Aggregate by country for median quintile Q3
-    const q3Records = data.time_use.filter((r) => r.income_quintile.includes('Q3') && r.country_code !== 'EU27');
-    const sorted = [...q3Records].sort((a, b) => b.daily_cooking_food_prep_min - a.daily_cooking_food_prep_min);
-
-    const categories = sorted.map((r) => `[${r.country_code}] ${r.country_name}`);
-    const cookMin = sorted.map((r) => r.daily_cooking_food_prep_min);
-    const convenienceShare = sorted.map((r) => r.convenience_food_expenditure_share_pct);
+    const spec = buildTimeUseChartSeries(data.time_use, timeUseMode);
 
     return {
       backgroundColor: 'transparent',
@@ -126,44 +191,36 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
         top: 0,
         textStyle: { color: '#2d3643', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
       },
-      grid: { top: 40, right: 48, bottom: 40, left: 140 },
+      grid: { top: 40, right: 48, bottom: 48, left: 140 },
       xAxis: {
         type: 'value',
+        name: spec.xAxisName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: { color: '#3d4654', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
         splitLine: { lineStyle: { color: '#aeb6c4', type: 'dashed' } },
         axisLabel: { color: '#3d4654', fontFamily: 'IBM Plex Mono, monospace', fontSize: 10 },
       },
       yAxis: {
         type: 'category',
-        data: categories,
+        data: spec.categories,
         inverse: true,
         axisLabel: { color: '#111827', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
       },
-      series: [
-        {
-          name: 'Daily Food Prep & Cooking (min/d)',
-          type: 'bar',
-          data: cookMin,
-          itemStyle: { color: '#163d4a', borderRadius: [0, 3, 3, 0] },
-          barMaxWidth: 16,
-        },
-        {
-          name: 'Convenience / UPF Spend Share (%)',
-          type: 'bar',
-          data: convenienceShare,
-          itemStyle: { color: '#8a1253', borderRadius: [0, 3, 3, 0] },
-          barMaxWidth: 16,
-        },
-      ],
+      series: spec.series.map((s) => ({
+        name: s.name,
+        type: 'bar',
+        data: s.data,
+        itemStyle: { color: s.color, borderRadius: [0, 3, 3, 0] },
+        barMaxWidth: 16,
+      })),
     };
-  }, [data]);
+  }, [data, timeUseMode]);
 
-  // Tab 2: Clinical Biomarkers Chart Option
+  // Tab 2: Clinical Biomarkers Chart Option (strict single homogeneous clinical unit per view)
   const biomarkerChartOption = useMemo(() => {
     if (!data) return {};
-    const archetypes = data.clinical_biomarkers;
-    const labels = archetypes.map((a) => a.dietary_pattern.split('(')[0].trim());
-    const ldl = archetypes.map((a) => a.ldl_cholesterol_mg_dl);
-    const cvdDelta = archetypes.map((a) => a.cardiovascular_risk_delta_pct);
+    const spec = buildBiomarkerChartSeries(data.clinical_biomarkers, biomarkerMode);
 
     return {
       backgroundColor: 'transparent',
@@ -180,39 +237,34 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
       grid: { top: 44, right: 36, bottom: 48, left: 180 },
       xAxis: {
         type: 'value',
-        name: 'LDL-C (mg/dL) & CVD Risk Delta (%)',
+        name: spec.xAxisName,
         nameLocation: 'middle',
         nameGap: 30,
+        nameTextStyle: { color: '#3d4654', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
         splitLine: { lineStyle: { color: '#aeb6c4', type: 'dashed' } },
         axisLabel: { color: '#3d4654', fontFamily: 'IBM Plex Mono, monospace', fontSize: 10 },
       },
       yAxis: {
         type: 'category',
-        data: labels,
+        data: spec.categories,
         inverse: true,
         axisLabel: { color: '#111827', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
       },
-      series: [
-        {
-          name: 'LDL Cholesterol (mg/dL)',
-          type: 'bar',
-          data: ldl,
-          itemStyle: { color: '#163d4a', borderRadius: [0, 3, 3, 0] },
-          barMaxWidth: 14,
-        },
-        {
-          name: '10-Year CVD Risk Delta vs. Baseline (%)',
-          type: 'bar',
-          data: cvdDelta,
-          itemStyle: {
-            color: (params: { value: number }) => (params.value < 0 ? '#059669' : '#8a1253'),
-            borderRadius: [0, 3, 3, 0],
-          },
-          barMaxWidth: 14,
-        },
-      ],
+      series: spec.series.map((s) => ({
+        name: s.name,
+        type: 'bar',
+        data: s.data,
+        itemStyle:
+          biomarkerMode === 'cvd_risk_delta_pct'
+            ? {
+                color: (params: { value: number }) => (params.value < 0 ? '#059669' : '#8a1253'),
+                borderRadius: [0, 3, 3, 0],
+              }
+            : { color: s.color, borderRadius: [0, 3, 3, 0] },
+        barMaxWidth: 14,
+      })),
     };
-  }, [data]);
+  }, [data, biomarkerMode]);
 
   // Tab 3: School Meals Chart Option
   const schoolMealsChartOption = useMemo(() => {
@@ -269,16 +321,10 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
     };
   }, [data]);
 
-  // Tab 4: Cultural Climate Inertia Chart Option
+  // Tab 4: Cultural Climate Inertia Chart Option (strict separation between % shares & 0-100 index)
   const culturalInertiaChartOption = useMemo(() => {
     if (!data) return {};
-    const records = data.cultural_climate.filter((r) => r.country_code !== 'EU27');
-    const sorted = [...records].sort((a, b) => b.cultural_culinary_inertia_index - a.cultural_culinary_inertia_index);
-
-    const categories = sorted.map((r) => `[${r.country_code}] ${r.country_name}`);
-    const worry = sorted.map((r) => r.climate_worry_score_pct);
-    const inertia = sorted.map((r) => r.cultural_culinary_inertia_index);
-    const actualPlant = sorted.map((r) => r.actual_plant_basket_penetration_pct);
+    const spec = buildCulturalInertiaChartSeries(data.cultural_climate, culturalMode);
 
     return {
       backgroundColor: 'transparent',
@@ -293,44 +339,53 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
         top: 0,
         textStyle: { color: '#2d3643', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
       },
-      grid: { top: 40, right: 30, bottom: 40, left: 130 },
+      grid: { top: 40, right: 30, bottom: 48, left: 130 },
       xAxis: {
         type: 'value',
         max: 100,
+        name: spec.xAxisName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: { color: '#3d4654', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
         splitLine: { lineStyle: { color: '#aeb6c4', type: 'dashed' } },
-        axisLabel: { color: '#3d4654', fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, formatter: '{value}%' },
+        axisLabel: {
+          color: '#3d4654',
+          fontFamily: 'IBM Plex Mono, monospace',
+          fontSize: 10,
+          formatter: culturalMode === 'prevalence_pct' ? '{value}%' : '{value}',
+        },
       },
       yAxis: {
         type: 'category',
-        data: categories,
+        data: spec.categories,
         inverse: true,
         axisLabel: { color: '#111827', fontFamily: 'Newsreader, Georgia, serif', fontSize: 11 },
       },
-      series: [
-        {
-          name: 'Climate Concern Index (%)',
-          type: 'bar',
-          data: worry,
-          itemStyle: { color: '#3f6f7d', borderRadius: [0, 2, 2, 0] },
-          barMaxWidth: 12,
-        },
-        {
-          name: 'Culinary Cultural Inertia Index (0-100)',
-          type: 'bar',
-          data: inertia,
-          itemStyle: { color: '#8a1253', borderRadius: [0, 2, 2, 0] },
-          barMaxWidth: 12,
-        },
-        {
-          name: 'Actual Plant Basket Penetration (%)',
-          type: 'bar',
-          data: actualPlant,
-          itemStyle: { color: '#059669', borderRadius: [0, 2, 2, 0] },
-          barMaxWidth: 12,
-        },
-      ],
+      series: spec.series.map((s) => ({
+        name: s.name,
+        type: 'bar',
+        data: s.data,
+        itemStyle: { color: s.color, borderRadius: [0, 2, 2, 0] },
+        barMaxWidth: 14,
+      })),
     };
-  }, [data]);
+  }, [data, culturalMode]);
+
+  if (loadDisclosure && !data) {
+    return (
+      <ResourceDisclosureBanner
+        disclosure={loadDisclosure}
+        onRetry={
+          loadDisclosure.isRetryable
+            ? () => {
+                setLoadDisclosure(null);
+                setRetryTick((t) => t + 1);
+              }
+            : undefined
+        }
+      />
+    );
+  }
 
   if (!data) {
     return (
@@ -346,6 +401,27 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
 
   return (
     <div className="almanac-sheet p-5 space-y-5">
+      {loadDisclosure && (
+        <ResourceDisclosureBanner
+          disclosure={loadDisclosure}
+          onRetry={
+            loadDisclosure.isRetryable
+              ? () => {
+                  setLoadDisclosure(null);
+                  setRetryTick((t) => t + 1);
+                }
+              : undefined
+          }
+          compact
+        />
+      )}
+      {isCountryFallback && (
+        <div className="p-2.5 border-l-4 border-[#6b4c1b] bg-[#6b4c1b]/10 text-xs text-[var(--color-ink)]">
+          <b>Jurisdiction Fallback Disclosure:</b> Selected jurisdiction <code>{selectedCountry}</code> is not covered
+          in Plate III-F country tables; country highlight falls back to <code>[IT] Italy</code> while cross-country
+          comparators show all available records.
+        </div>
+      )}
       {/* Masthead */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-3 rule-firm">
         <div>
@@ -419,7 +495,35 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
 
       {/* Tab 1: Time Use & Cooking Friction */}
       {activeTab === 'time_use' && (
+        data.time_use.length === 0 ? (
+          <ResourceDisclosureBanner
+            disclosure={classifyResourceError(
+              { status: 404, message: 'HTTP 404 for data/time_use_cooking_friction.json' },
+              {
+                resourcePath: 'data/time_use_cooking_friction.json',
+                availableSummary: 'CDC NHANES Clinical Biomarkers (Tab 2) and GCNF Public School Canteens (Tab 3) remain fully available.',
+              }
+            )}
+          />
+        ) : (
         <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <DataNatureBadge nature="Estimated" label="MTUS/ATUS Scaled Quintiles" />
+            <div className="flex items-center gap-1.5" role="group" aria-label="Time use single unit">
+              <button
+                onClick={() => setTimeUseMode('cooking_min_day')}
+                className={`almanac-btn text-xs ${timeUseMode === 'cooking_min_day' ? 'almanac-btn--primary' : ''}`}
+              >
+                Cooking Time (min/d)
+              </button>
+              <button
+                onClick={() => setTimeUseMode('convenience_spend_pct')}
+                className={`almanac-btn text-xs ${timeUseMode === 'convenience_spend_pct' ? 'almanac-btn--primary' : ''}`}
+              >
+                Convenience Spend (%)
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
             <div className="xl:col-span-7">
               <div className="h-80 w-full">
@@ -469,6 +573,7 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
             </div>
           </div>
         </div>
+        )
       )}
 
       {/* Tab 2: Clinical Biomarkers Grounding */}
@@ -476,9 +581,33 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
         <div className="space-y-4">
           <div className="almanac-well p-3 border-l-4 border-[var(--color-accent)] text-xs text-[var(--color-ink)]">
             <span className="font-mono-num font-semibold text-[var(--color-accent)] uppercase mr-2">
-              Methodological Caveat (Domain Transfer):
+              Methodological Caveat (Domain Transfer &amp; Proxy Columns):
             </span>
-            Clinical biomarker baselines (LDL-C, hs-CRP, HbA1c, ASCVD 10-yr delta) are anchored in the US CDC NHANES cohort. Direct extrapolation to European populations requires covariate adjustment (age, baseline BMI, statin prevalence) and calibration against EU prospective cohorts (e.g., EPIC, NutriNet-Santé) to avoid ecological fallacy.
+            Total Cholesterol, HDL-C, Non-HDL-C, hs-CRP, and Systolic BP are WTDRD1-weighted empirical quintile means from US CDC NHANES 2021–2023 (domain transfer caveat for Europe). Note that auxiliary schema columns (`ldl_cholesterol_mg_dl`, `triglycerides_mg_dl`, `fasting_glucose_mg_dl=96.0`, `hba1c_pct=5.5%`, `bmi_mean=28.4`) are proxy/reference constants, and `CVD Risk Δ` is a derived weighted composite index vs Q3.
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <DataNatureBadge
+              nature={biomarkerMode === 'cvd_risk_delta_pct' ? 'Estimated' : 'Observed'}
+              label={biomarkerMode === 'cvd_risk_delta_pct' ? 'Derived Composite Index' : 'NHANES Lab Biomarker'}
+            />
+            <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Biomarker single unit">
+              {(
+                [
+                  { id: 'lipids_mg_dl', label: 'Lipids (mg/dL)' },
+                  { id: 'hs_crp_mg_l', label: 'hs-CRP (mg/L)' },
+                  { id: 'systolic_bp_mmhg', label: 'Systolic BP (mmHg)' },
+                  { id: 'cvd_risk_delta_pct', label: 'Composite CVD Index Δ (%)' },
+                ] as const
+              ).map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setBiomarkerMode(opt.id)}
+                  className={`almanac-btn text-xs ${biomarkerMode === opt.id ? 'almanac-btn--primary' : ''}`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
             <div className="xl:col-span-7">
@@ -613,7 +742,35 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
 
       {/* Tab 4: Cultural Culinary Inertia */}
       {activeTab === 'cultural_inertia' && (
+        data.cultural_climate.length === 0 ? (
+          <ResourceDisclosureBanner
+            disclosure={classifyResourceError(
+              { status: 404, message: 'HTTP 404 for data/cultural_climate_inertia.json' },
+              {
+                resourcePath: 'data/cultural_climate_inertia.json',
+                availableSummary: 'CDC NHANES Clinical Biomarkers (Tab 2) and GCNF Public School Canteens (Tab 3) remain fully available.',
+              }
+            )}
+          />
+        ) : (
         <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <DataNatureBadge nature="Estimated" label="ESS / TISP Synthesis" />
+            <div className="flex items-center gap-1.5" role="group" aria-label="Cultural indicator unit">
+              <button
+                onClick={() => setCulturalMode('prevalence_pct')}
+                className={`almanac-btn text-xs ${culturalMode === 'prevalence_pct' ? 'almanac-btn--primary' : ''}`}
+              >
+                Prevalence Shares (%)
+              </button>
+              <button
+                onClick={() => setCulturalMode('inertia_index_100')}
+                className={`almanac-btn text-xs ${culturalMode === 'inertia_index_100' ? 'almanac-btn--primary' : ''}`}
+              >
+                Inertia Index (0–100)
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
             <div className="xl:col-span-7">
               <div className="h-80 w-full">
@@ -653,6 +810,7 @@ export function EmpiricalSocialMicrodataPlate({ selectedCountry }: { selectedCou
             </div>
           </div>
         </div>
+        )
       )}
     </div>
   );

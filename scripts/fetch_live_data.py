@@ -1,6 +1,29 @@
+"""
+[DEPRECATED LEGACY SCRIPT — DO NOT USE FOR PRODUCTION DATASETS]
+Retained strictly for historical provenance auditability.
+Known defects:
+  1. Silently imputes missing Open Food Facts nutrients, Eco-Score ('C'/55), and NOVA (3).
+  2. Truncates Agribalyse to 500 items and overwrites public/data/live_research_bundle.json.
+Use scripts/refresh_off_clean.py instead.
+Pass --allow-legacy-imputation explicitly if reproducing historical behavior in isolation.
+"""
+import argparse
+import sys
 import urllib.request
 import json
 import os
+
+_parser = argparse.ArgumentParser(description="Deprecated legacy Open Food Facts / bundle fetcher")
+_parser.add_argument("--allow-legacy-imputation", action="store_true", help="Explicit opt-in required to run deprecated script")
+_args, _ = _parser.parse_known_args()
+if not _args.allow_legacy_imputation:
+    print(
+        "[BLOCKED - DEPRECATED] scripts/fetch_live_data.py uses silent fallback imputations and overwrites "
+        "public/data/live_research_bundle.json. Use scripts/refresh_off_clean.py instead, or pass "
+        "--allow-legacy-imputation to run intentionally.",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
 
 os.makedirs("public/data", exist_ok=True)
 

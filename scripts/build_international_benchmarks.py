@@ -17,7 +17,7 @@ Outputs:
 - public/data/parquet/global_poore_nemecek_lca.parquet
 - public/data/parquet/global_healthy_diet_affordability.parquet
 - public/data/global_benchmarks.json
-- Updates public/data/provenance_manifest.json with all 18 Parquet tables + raw source SHA-256 hashes.
+- Updates public/data/provenance_manifest.json with all 19 Parquet tables + raw source SHA-256 hashes.
 """
 
 from __future__ import annotations
@@ -326,7 +326,7 @@ def main() -> None:
         f"  -> Wrote {len(cohd_df)} CoHD panel rows ({len(country_summary)} countries latest={country_summary['year'].max()})"
     )
 
-    print("[4/4] Refreshing provenance_manifest.json across all 18 Parquet tables...")
+    print("[4/4] Refreshing provenance_manifest.json across all 19 Parquet tables...")
     manifest = update_provenance_manifest(raw_hashes)
     print(f"[OK] Manifest updated: {manifest['total_parquet_tables']} Parquet tables, {manifest['total_rows']:,} total rows.")
 

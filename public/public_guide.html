@@ -258,10 +258,10 @@
     <ul>
       <li><b>EFSA FoodEx2:</b> The official European dietary surveys tracking what families across Europe actually eat.</li>
       <li><b>ADEME Agribalyse 3.1:</b> Detailed environmental audits measuring greenhouse gases, water usage, and land footprint for 2,451 foods.</li>
-      <li><b>Open Food Facts:</b> Real barcode nutritional labels from grocery stores across the globe.</li>
-      <li><b>EUIPO & Qualigeo:</b> The complete register of 6,029 European protected agricultural traditions (DOP, IGP, DOC).</li>
+      <li><b>Open Food Facts &amp; Open Prices:</b> Barcode-level EU product nutrition labels (3,197 cleaned products preserving NULLs) and 1,355 shelf receipt price records.</li>
+      <li><b>EUIPO &amp; Qualigeo:</b> Geographical indications registry totaling 6,845 GI items (3,037 food-sector items selected by default).</li>
       <li><b>National Statistical Institutes:</b> Official household food spending from ISTAT (Italy), INE (Spain), INSEE (France), CBS (Netherlands), Destatis (Germany), and ONS (UK).</li>
-      <li><b>GS1 Italy Immagino & NielsenIQ:</b> Scanner data on 151,203 products and 84,817 digitized nutritional panels across €57.3 Billion in supermarket sales.</li>
+      <li><b>GS1 Italy Immagino Benchmark:</b> Transcribed summary report indicators referencing 151,203 Italian SKUs and 84,817 nutritional panels across €57.3 Billion in sell-out (proprietary microdata not bundled).</li>
     </ul>
   </section>
 
@@ -299,14 +299,14 @@
     </p>
     <ol>
       <li><b>Tier 1 — Data Ingestion & Live Scrapling:</b> Collects raw food facts, EAN barcodes, and protected origins using Python and <i>D4Vinci Scrapling</i> to keep data fresh without getting blocked.</li>
-      <li><b>Tier 2 — In-Browser Columnar Storage (DuckDB-Wasm):</b> Downloaded directly into your web browser. <b>No cloud server tracking your clicks.</b> You can query 11 Parquet tables in milliseconds right on your laptop!</li>
-      <li><b>Tier 3 — AI & Econometric Forecasting:</b> Uses <i>Google TimesFM 2.0</i> (a cutting-edge foundation model) to forecast price and consumption trends up to 2028, and calculates Push vs. Pull market elasticity.</li>
+      <li><b>Tier 2 — In-Browser Columnar Storage (DuckDB-Wasm):</b> Downloaded directly into your web browser. <b>No cloud server tracking your clicks.</b> You can query 19 Parquet tables in milliseconds right on your laptop!</li>
+      <li><b>Tier 3 — Causal Statistical &amp; Econometric Forecasting:</b> Uses expanding-origin statistical baselines (Damped ETS, Holt ETS, Ridge trend, and Random Walk w/ Drift) calibrated on Eurostat/ONS HICP series to forecast price trends through 2030 with empirical residual intervals, plus Push vs. Pull market elasticity.</li>
       <li><b>Tier 4 — Reactive Almanac UI:</b> Clean, publication-grade screens styled in our restrained Hallmark design system.</li>
     </ol>
   </section>
 
   <section>
-    <h2>4. Quick Guide to the 12 Observatories</h2>
+    <h2>4. Quick Guide to the 13 Observatories</h2>
     <div class="observatory-grid">
       <div class="observatory-card">
         <div class="card-num">Section I</div>
@@ -316,8 +316,8 @@
 
       <div class="observatory-card">
         <div class="card-num">Section II</div>
-        <div class="card-title">NSI & TimesFM 2.0 Lab</div>
-        <div class="card-desc">Explore how household income quintiles affect food choices in IT, ES, FR, NL, DE, UK, with AI chronological forecasts.</div>
+        <div class="card-title">NSI &amp; Statistical Forecasting Lab</div>
+        <div class="card-desc">Explore how household income quintiles affect food choices in IT, ES, FR, NL, DE, UK, alongside causal expanding-origin HICP forecasts.</div>
       </div>
 
       <div class="observatory-card">
@@ -335,7 +335,7 @@
       <div class="observatory-card">
         <div class="card-num">Section V</div>
         <div class="card-title">DuckDB Parquet SQL Console</div>
-        <div class="card-desc">Run real SQL queries directly against our 11 Parquet tables inside your browser with sub-50ms execution.</div>
+        <div class="card-desc">Run real SQL queries directly against our 19 Parquet tables inside your browser with sub-50ms execution.</div>
       </div>
 
       <div class="observatory-card">
@@ -347,37 +347,43 @@
       <div class="observatory-card">
         <div class="card-num">Section VII</div>
         <div class="card-title">Retail Product Trilemma</div>
-        <div class="card-desc">Explore the 3-way tension between Nutritional Quality, Climate Footprint, and Economic Affordability per 1,000 kcal.</div>
+        <div class="card-desc">Compare 3,197 Open Food Facts products on 100g vs. 100kcal nutrient density and missingness audits without inventing per-serving defaults.</div>
       </div>
 
       <div class="observatory-card">
         <div class="card-num">Section VIII</div>
         <div class="card-title">Agribalyse 3.1 LCA Database</div>
-        <div class="card-desc">Search 2,451 food products categorized by French agency ADEME for greenhouse gases, water usage, and land use.</div>
+        <div class="card-desc">Inspect 2,451 ADEME Agribalyse items (CO2eq, AWARE water eq m³, PEF land Pt) cleanly segregated from Poore &amp; Nemecek and GI class proxies.</div>
       </div>
 
       <div class="observatory-card">
         <div class="card-num">Section IX</div>
-        <div class="card-title">Price & Literature Engine</div>
-        <div class="card-desc">Historical food inflation series paired with academic literature on nutritional shifts during economic crises.</div>
+        <div class="card-title">Affordability &amp; Integrated Comparator</div>
+        <div class="card-desc">Segregates EUR/kg vs. EUR/L retail SKUs, Eurostat HICP/PPP, World Bank CoHD, taxonomy bridges, and 12 Phase 4D robustness checks.</div>
       </div>
 
       <div class="observatory-card">
         <div class="card-num">Section X</div>
         <div class="card-title">Policy Intervention Model</div>
-        <div class="card-desc">Interactive policy levers: simulate carbon taxes, ultra-processed food reductions, plant shifts, and food waste cuts.</div>
+        <div class="card-desc">Heuristic linear sensitivity sliders illustrating relative carbon, land, water, and HBS quintile budget trade-offs over static baselines.</div>
       </div>
 
       <div class="observatory-card">
         <div class="card-num">Section XI</div>
-        <div class="card-title">Code Floorplan & Blueprints</div>
-        <div class="card-desc">Full transparency: toggle between the 33-file code graph (Floorplan) and the vector architectural schematic (Diagram-Design).</div>
+        <div class="card-title">Code Floorplan &amp; Blueprints</div>
+        <div class="card-desc">Full transparency: toggle between the 33-file interactive code graph and the vector architectural schematic.</div>
       </div>
 
       <div class="observatory-card">
         <div class="card-num">Section XII</div>
-        <div class="card-title">Pan-EU Retail Scanner</div>
-        <div class="card-desc">151.2k SKUs, €57.3B sell-out, Metaproduct reformulations, Push vs. Pull, 10 EU countries, and an Autonomous AI Grocery Planner.</div>
+        <div class="card-title">Pan-EU Retail Scanner &amp; Claims</div>
+        <div class="card-desc">GS1 Italy report summaries (151.2k SKUs, €57.3B reference study), Push vs. Pull benchmarks, stylized 10-country profiles, and SQL basket planner.</div>
+      </div>
+
+      <div class="observatory-card">
+        <div class="card-num">Section XIII</div>
+        <div class="card-title">Empirical Sensitivity Analysis</div>
+        <div class="card-desc">19 valid one-at-a-time sensitivity scenarios across 6 dimensions plus 1 isolated GI alcohol stress test and full CSV/JSON dossiers.</div>
       </div>
     </div>
   </section>

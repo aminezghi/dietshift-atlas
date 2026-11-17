@@ -11,6 +11,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-release
 *.local
 .tools
 .venv
@@ -20,6 +21,18 @@ scripts/.raw_cache
 .pytest_cache
 __pycache__/
 *.pyc
+
+# Test Outputs & Coverage
+coverage/
+playwright-report/
+test-results/
+.coverage
+htmlcov/
+
+# Scratch & Temporary Files
+scratch/
+*.tmp
+.tmp*
 
 # Editor directories and files
 .vscode/*

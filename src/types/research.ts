@@ -26,18 +26,23 @@ export interface OFFProduct {
   brand: string;
   category: string;
   nutriscore_grade: string;
-  nutriscore_score: number;
-  ecoscore_grade: string;
-  ecoscore_score: number;
-  nova_group: number;
-  primary_country?: string;
+  nutriscore_score: number | null;
+  ecoscore_grade: string | null;
+  ecoscore_score: number | null;
+  nova_group: number | null;
+  primary_country: string | null;
   countries?: string[];
-  proteins_100g: number;
-  energy_kcal_100g: number;
-  fiber_100g: number;
-  salt_100g: number;
-  sugars_100g?: number;
-  saturated_fat_100g?: number;
+  serving_size?: string | null;
+  serving_quantity_g?: number | null;
+  proteins_100g: number | null;
+  energy_kcal_100g: number | null;
+  carbohydrates_100g?: number | null;
+  fat_100g?: number | null;
+  fiber_100g: number | null;
+  salt_100g: number | null;
+  sugars_100g?: number | null;
+  saturated_fat_100g?: number | null;
+  nutrition_data_status?: string;
 }
 
 export interface EFSAFoodEx2Record {
@@ -102,6 +107,11 @@ export interface CountryDietaryProfile {
   plantProteinSharePct: number;
 }
 
+/**
+ * Manually compiled country dietary baselines (25 jurisdictions).
+ * Evidence classification: Manually Compiled analyst reference estimates
+ * lacking raw Harmonized Individual Consumption uncertainty distributions.
+ */
 export const COUNTRY_PROFILES: Record<string, CountryDietaryProfile> = {
   EU27_2020: {
     code: 'EU27_2020',
@@ -630,16 +640,23 @@ export const COUNTRY_PROFILES: Record<string, CountryDietaryProfile> = {
   },
 };
 
+export type BasketItemOrigin =
+  | 'preset_reference'
+  | 'agribalyse_lca_import'
+  | 'user_csv_import';
+
 export interface CustomBasketItem {
   id: string;
   foodName: string;
   foodEx2Category: string;
   gramsPerDay: number;
-  novaGroup: number;
-  carbonPerKg: number;      // kg CO2eq / kg
-  waterM3PerKg: number;     // m3 / kg
-  landPtPerKg: number;      // Pt / kg
-  kcalPer100g: number;
-  proteinPer100g: number;
-  costEurPerKg: number;
+  novaGroup: number | null;
+  carbonPerKg: number | null;      // kg CO2eq / kg
+  waterM3PerKg: number | null;     // AWARE deprivation-weighted m3 world-eq / kg (NOT physical liters)
+  landPtPerKg: number | null;      // PEF 3.1 Land Use Pt / kg (NOT physical m2)
+  kcalPer100g: number | null;
+  proteinPer100g: number | null;
+  costEurPerKg: number | null;
+  sourceNatureTag?: 'Model Output' | 'Estimated' | 'User Supplied';
+  itemOrigin?: BasketItemOrigin;
 }

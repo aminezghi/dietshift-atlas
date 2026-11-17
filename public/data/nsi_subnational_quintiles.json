@@ -6,6 +6,10 @@
     "5": 0.282,
     "6": 0.297
   },
+  "pca_explained_variance_pct": [
+    65.5,
+    16.9
+  ],
   "optimal_k": 4,
   "rows": [
     {
@@ -29,8 +33,8 @@
       "out_of_home_kcal_pct": 27.1,
       "daily_carbon_kg": 4.53,
       "double_burden_index": 75.8,
-      "pca1": 0.127,
-      "pca2": -1.033,
+      "pca1": -0.415,
+      "pca2": -0.977,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -54,8 +58,8 @@
       "out_of_home_kcal_pct": 28.9,
       "daily_carbon_kg": 4.84,
       "double_burden_index": 69.0,
-      "pca1": 0.034,
-      "pca2": -0.386,
+      "pca1": -0.204,
+      "pca2": -0.788,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -79,8 +83,8 @@
       "out_of_home_kcal_pct": 30.8,
       "daily_carbon_kg": 4.74,
       "double_burden_index": 63.4,
-      "pca1": -0.517,
-      "pca2": -0.078,
+      "pca1": -0.651,
+      "pca2": -0.231,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -104,8 +108,8 @@
       "out_of_home_kcal_pct": 34.5,
       "daily_carbon_kg": 4.74,
       "double_burden_index": 59.1,
-      "pca1": -0.784,
-      "pca2": 0.134,
+      "pca1": -0.736,
+      "pca2": 0.118,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -129,8 +133,8 @@
       "out_of_home_kcal_pct": 38.8,
       "daily_carbon_kg": 4.88,
       "double_burden_index": 49.1,
-      "pca1": -1.918,
-      "pca2": 1.304,
+      "pca1": -1.321,
+      "pca2": 1.434,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -154,8 +158,8 @@
       "out_of_home_kcal_pct": 26.6,
       "daily_carbon_kg": 4.47,
       "double_burden_index": 79.1,
-      "pca1": 0.171,
-      "pca2": -1.442,
+      "pca1": -0.794,
+      "pca2": -1.501,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -179,8 +183,8 @@
       "out_of_home_kcal_pct": 28.4,
       "daily_carbon_kg": 4.79,
       "double_burden_index": 72.6,
-      "pca1": 0.1,
-      "pca2": -0.801,
+      "pca1": -0.561,
+      "pca2": -1.342,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -204,8 +208,8 @@
       "out_of_home_kcal_pct": 30.2,
       "daily_carbon_kg": 4.68,
       "double_burden_index": 66.6,
-      "pca1": -0.482,
-      "pca2": -0.469,
+      "pca1": -1.025,
+      "pca2": -0.73,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -229,8 +233,8 @@
       "out_of_home_kcal_pct": 33.8,
       "daily_carbon_kg": 4.68,
       "double_burden_index": 61.9,
-      "pca1": -0.765,
-      "pca2": -0.204,
+      "pca1": -1.081,
+      "pca2": -0.307,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -254,8 +258,8 @@
       "out_of_home_kcal_pct": 38.1,
       "daily_carbon_kg": 4.81,
       "double_burden_index": 51.2,
-      "pca1": -1.949,
-      "pca2": 1.029,
+      "pca1": -1.672,
+      "pca2": 1.11,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -279,8 +283,8 @@
       "out_of_home_kcal_pct": 23.1,
       "daily_carbon_kg": 4.24,
       "double_burden_index": 77.8,
-      "pca1": -0.302,
-      "pca2": -1.908,
+      "pca1": -2.043,
+      "pca2": -1.976,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -304,8 +308,8 @@
       "out_of_home_kcal_pct": 24.6,
       "daily_carbon_kg": 4.53,
       "double_burden_index": 71.4,
-      "pca1": -0.391,
-      "pca2": -1.313,
+      "pca1": -1.866,
+      "pca2": -1.822,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -329,8 +333,8 @@
       "out_of_home_kcal_pct": 26.2,
       "daily_carbon_kg": 4.41,
       "double_burden_index": 65.0,
-      "pca1": -1.01,
-      "pca2": -0.906,
+      "pca1": -2.326,
+      "pca2": -1.109,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -354,8 +358,8 @@
       "out_of_home_kcal_pct": 29.4,
       "daily_carbon_kg": 4.41,
       "double_burden_index": 60.1,
-      "pca1": -1.299,
-      "pca2": -0.624,
+      "pca1": -2.373,
+      "pca2": -0.661,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -379,8 +383,8 @@
       "out_of_home_kcal_pct": 33.0,
       "daily_carbon_kg": 4.5,
       "double_burden_index": 49.0,
-      "pca1": -2.524,
-      "pca2": 0.656,
+      "pca1": -2.986,
+      "pca2": 0.863,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -404,8 +408,8 @@
       "out_of_home_kcal_pct": 28.1,
       "daily_carbon_kg": 4.62,
       "double_burden_index": 79.9,
-      "pca1": 0.571,
-      "pca2": -1.313,
+      "pca1": -0.057,
+      "pca2": -1.464,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -429,8 +433,8 @@
       "out_of_home_kcal_pct": 30.0,
       "daily_carbon_kg": 4.95,
       "double_burden_index": 73.0,
-      "pca1": 0.487,
-      "pca2": -0.639,
+      "pca1": 0.19,
+      "pca2": -1.273,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -454,8 +458,8 @@
       "out_of_home_kcal_pct": 31.9,
       "daily_carbon_kg": 4.84,
       "double_burden_index": 67.1,
-      "pca1": -0.079,
-      "pca2": -0.333,
+      "pca1": -0.27,
+      "pca2": -0.693,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -479,8 +483,8 @@
       "out_of_home_kcal_pct": 35.8,
       "daily_carbon_kg": 4.84,
       "double_burden_index": 62.4,
-      "pca1": -0.361,
-      "pca2": -0.086,
+      "pca1": -0.34,
+      "pca2": -0.296,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -504,8 +508,8 @@
       "out_of_home_kcal_pct": 40.2,
       "daily_carbon_kg": 5.01,
       "double_burden_index": 51.7,
-      "pca1": -1.53,
-      "pca2": 1.173,
+      "pca1": -0.874,
+      "pca2": 1.113,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -529,8 +533,8 @@
       "out_of_home_kcal_pct": 24.1,
       "daily_carbon_kg": 4.34,
       "double_burden_index": 75.9,
-      "pca1": -0.164,
-      "pca2": -1.612,
+      "pca1": -1.5,
+      "pca2": -1.642,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -554,8 +558,8 @@
       "out_of_home_kcal_pct": 25.7,
       "daily_carbon_kg": 4.64,
       "double_burden_index": 69.4,
-      "pca1": -0.252,
-      "pca2": -1.001,
+      "pca1": -1.31,
+      "pca2": -1.481,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -579,8 +583,8 @@
       "out_of_home_kcal_pct": 27.4,
       "daily_carbon_kg": 4.51,
       "double_burden_index": 63.5,
-      "pca1": -0.843,
-      "pca2": -0.667,
+      "pca1": -1.798,
+      "pca2": -0.851,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -604,8 +608,8 @@
       "out_of_home_kcal_pct": 30.6,
       "daily_carbon_kg": 4.51,
       "double_burden_index": 58.8,
-      "pca1": -1.123,
-      "pca2": -0.402,
+      "pca1": -1.852,
+      "pca2": -0.429,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -629,8 +633,8 @@
       "out_of_home_kcal_pct": 34.5,
       "daily_carbon_kg": 4.63,
       "double_burden_index": 47.8,
-      "pca1": -2.33,
-      "pca2": 0.879,
+      "pca1": -2.435,
+      "pca2": 1.058,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -654,8 +658,8 @@
       "out_of_home_kcal_pct": 23.2,
       "daily_carbon_kg": 4.59,
       "double_burden_index": 78.8,
-      "pca1": -0.04,
-      "pca2": -1.423,
+      "pca1": -0.822,
+      "pca2": -1.468,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -679,8 +683,8 @@
       "out_of_home_kcal_pct": 24.8,
       "daily_carbon_kg": 4.78,
       "double_burden_index": 68.0,
-      "pca1": -0.73,
-      "pca2": -0.383,
+      "pca1": -1.086,
+      "pca2": -0.586,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -704,8 +708,8 @@
       "out_of_home_kcal_pct": 26.4,
       "daily_carbon_kg": 4.69,
       "double_burden_index": 63.9,
-      "pca1": -1.115,
-      "pca2": -0.184,
+      "pca1": -1.419,
+      "pca2": -0.208,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -729,8 +733,8 @@
       "out_of_home_kcal_pct": 29.6,
       "daily_carbon_kg": 4.52,
       "double_burden_index": 58.7,
-      "pca1": -1.775,
-      "pca2": 0.123,
+      "pca1": -2.077,
+      "pca2": 0.398,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -754,8 +758,8 @@
       "out_of_home_kcal_pct": 33.3,
       "daily_carbon_kg": 4.77,
       "double_burden_index": 51.3,
-      "pca1": -2.397,
-      "pca2": 1.228,
+      "pca1": -2.045,
+      "pca2": 1.416,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -779,8 +783,8 @@
       "out_of_home_kcal_pct": 22.4,
       "daily_carbon_kg": 4.54,
       "double_burden_index": 79.4,
-      "pca1": -0.126,
-      "pca2": -1.531,
+      "pca1": -1.083,
+      "pca2": -1.585,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -804,8 +808,8 @@
       "out_of_home_kcal_pct": 23.9,
       "daily_carbon_kg": 4.72,
       "double_burden_index": 68.7,
-      "pca1": -0.817,
-      "pca2": -0.507,
+      "pca1": -1.358,
+      "pca2": -0.709,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -829,8 +833,8 @@
       "out_of_home_kcal_pct": 25.4,
       "daily_carbon_kg": 4.64,
       "double_burden_index": 64.5,
-      "pca1": -1.207,
-      "pca2": -0.272,
+      "pca1": -1.671,
+      "pca2": -0.3,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -854,8 +858,8 @@
       "out_of_home_kcal_pct": 28.5,
       "daily_carbon_kg": 4.46,
       "double_burden_index": 59.1,
-      "pca1": -1.883,
-      "pca2": 0.018,
+      "pca1": -2.356,
+      "pca2": 0.304,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -879,8 +883,8 @@
       "out_of_home_kcal_pct": 32.1,
       "daily_carbon_kg": 4.7,
       "double_burden_index": 51.7,
-      "pca1": -2.512,
-      "pca2": 1.131,
+      "pca1": -2.331,
+      "pca2": 1.344,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -904,8 +908,8 @@
       "out_of_home_kcal_pct": 21.1,
       "daily_carbon_kg": 4.38,
       "double_burden_index": 77.5,
-      "pca1": -0.457,
-      "pca2": -1.821,
+      "pca1": -1.921,
+      "pca2": -1.871,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -929,8 +933,8 @@
       "out_of_home_kcal_pct": 22.6,
       "daily_carbon_kg": 4.53,
       "double_burden_index": 66.4,
-      "pca1": -1.2,
-      "pca2": -0.777,
+      "pca1": -2.244,
+      "pca2": -0.925,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -954,8 +958,8 @@
       "out_of_home_kcal_pct": 24.0,
       "daily_carbon_kg": 4.44,
       "double_burden_index": 62.1,
-      "pca1": -1.614,
-      "pca2": -0.525,
+      "pca1": -2.584,
+      "pca2": -0.483,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -979,8 +983,8 @@
       "out_of_home_kcal_pct": 26.9,
       "daily_carbon_kg": 4.25,
       "double_burden_index": 56.8,
-      "pca1": -2.304,
-      "pca2": -0.213,
+      "pca1": -3.287,
+      "pca2": 0.145,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1004,8 +1008,8 @@
       "out_of_home_kcal_pct": 30.2,
       "daily_carbon_kg": 4.46,
       "double_burden_index": 49.0,
-      "pca1": -2.967,
-      "pca2": 0.91,
+      "pca1": -3.289,
+      "pca2": 1.249,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1029,8 +1033,8 @@
       "out_of_home_kcal_pct": 18.2,
       "daily_carbon_kg": 4.19,
       "double_burden_index": 83.0,
-      "pca1": -0.622,
-      "pca2": -2.531,
+      "pca1": -2.982,
+      "pca2": -2.742,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1054,8 +1058,8 @@
       "out_of_home_kcal_pct": 19.4,
       "daily_carbon_kg": 4.31,
       "double_burden_index": 71.2,
-      "pca1": -1.43,
-      "pca2": -1.441,
+      "pca1": -3.356,
+      "pca2": -1.692,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1079,8 +1083,8 @@
       "out_of_home_kcal_pct": 20.6,
       "daily_carbon_kg": 4.21,
       "double_burden_index": 66.7,
-      "pca1": -1.87,
-      "pca2": -1.162,
+      "pca1": -3.706,
+      "pca2": -1.2,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1104,8 +1108,8 @@
       "out_of_home_kcal_pct": 23.1,
       "daily_carbon_kg": 4.01,
       "double_burden_index": 60.6,
-      "pca1": -2.634,
-      "pca2": -0.752,
+      "pca1": -4.43,
+      "pca2": -0.43,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1129,8 +1133,8 @@
       "out_of_home_kcal_pct": 26.0,
       "daily_carbon_kg": 4.19,
       "double_burden_index": 52.0,
-      "pca1": -3.216,
-      "pca2": 0.367,
+      "pca1": -4.32,
+      "pca2": 0.785,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1154,8 +1158,8 @@
       "out_of_home_kcal_pct": 17.7,
       "daily_carbon_kg": 4.24,
       "double_burden_index": 84.4,
-      "pca1": -0.439,
-      "pca2": -2.628,
+      "pca1": -2.806,
+      "pca2": -2.925,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1179,8 +1183,8 @@
       "out_of_home_kcal_pct": 19.0,
       "daily_carbon_kg": 4.36,
       "double_burden_index": 72.7,
-      "pca1": -1.239,
-      "pca2": -1.54,
+      "pca1": -3.172,
+      "pca2": -1.876,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1204,8 +1208,8 @@
       "out_of_home_kcal_pct": 20.2,
       "daily_carbon_kg": 4.27,
       "double_burden_index": 68.0,
-      "pca1": -1.686,
-      "pca2": -1.231,
+      "pca1": -3.5,
+      "pca2": -1.358,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1229,8 +1233,8 @@
       "out_of_home_kcal_pct": 22.6,
       "daily_carbon_kg": 4.07,
       "double_burden_index": 61.8,
-      "pca1": -2.441,
-      "pca2": -0.831,
+      "pca1": -4.211,
+      "pca2": -0.595,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1254,8 +1258,8 @@
       "out_of_home_kcal_pct": 25.4,
       "daily_carbon_kg": 4.26,
       "double_burden_index": 53.1,
-      "pca1": -3.103,
-      "pca2": 0.351,
+      "pca1": -4.152,
+      "pca2": 0.652,
       "cluster_label": "Archetype A: Mediterranean Whole-Food & High Guideline Adherence"
     },
     {
@@ -1279,8 +1283,8 @@
       "out_of_home_kcal_pct": 26.6,
       "daily_carbon_kg": 4.06,
       "double_burden_index": 65.9,
-      "pca1": -0.429,
-      "pca2": -0.252,
+      "pca1": -0.96,
+      "pca2": 0.701,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1304,8 +1308,8 @@
       "out_of_home_kcal_pct": 28.4,
       "daily_carbon_kg": 4.51,
       "double_burden_index": 56.9,
-      "pca1": -0.434,
-      "pca2": 0.459,
+      "pca1": -0.351,
+      "pca2": 0.973,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1329,8 +1333,8 @@
       "out_of_home_kcal_pct": 30.2,
       "daily_carbon_kg": 4.51,
       "double_burden_index": 52.5,
-      "pca1": -0.862,
-      "pca2": 0.423,
+      "pca1": -0.8,
+      "pca2": 1.083,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1354,8 +1358,8 @@
       "out_of_home_kcal_pct": 33.8,
       "daily_carbon_kg": 4.5,
       "double_burden_index": 49.6,
-      "pca1": -1.047,
-      "pca2": 0.432,
+      "pca1": -0.98,
+      "pca2": 1.139,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1379,8 +1383,8 @@
       "out_of_home_kcal_pct": 38.1,
       "daily_carbon_kg": 4.63,
       "double_burden_index": 44.5,
-      "pca1": -1.844,
-      "pca2": 1.025,
+      "pca1": -1.701,
+      "pca2": 1.621,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1404,8 +1408,8 @@
       "out_of_home_kcal_pct": 24.5,
       "daily_carbon_kg": 4.3,
       "double_burden_index": 67.4,
-      "pca1": 0.362,
-      "pca2": -0.308,
+      "pca1": 0.161,
+      "pca2": 0.377,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1429,8 +1433,8 @@
       "out_of_home_kcal_pct": 26.2,
       "daily_carbon_kg": 4.76,
       "double_burden_index": 58.1,
-      "pca1": 0.32,
-      "pca2": 0.43,
+      "pca1": 0.743,
+      "pca2": 0.666,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1454,8 +1458,8 @@
       "out_of_home_kcal_pct": 27.8,
       "daily_carbon_kg": 4.76,
       "double_burden_index": 53.3,
-      "pca1": -0.142,
-      "pca2": 0.395,
+      "pca1": 0.26,
+      "pca2": 0.789,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1479,8 +1483,8 @@
       "out_of_home_kcal_pct": 31.2,
       "daily_carbon_kg": 4.76,
       "double_burden_index": 50.0,
-      "pca1": -0.349,
-      "pca2": 0.421,
+      "pca1": 0.069,
+      "pca2": 0.855,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1504,8 +1508,8 @@
       "out_of_home_kcal_pct": 35.1,
       "daily_carbon_kg": 4.92,
       "double_burden_index": 44.5,
-      "pca1": -1.146,
-      "pca2": 1.038,
+      "pca1": -0.608,
+      "pca2": 1.348,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1529,8 +1533,8 @@
       "out_of_home_kcal_pct": 23.8,
       "daily_carbon_kg": 4.16,
       "double_burden_index": 65.6,
-      "pca1": -0.063,
-      "pca2": -0.375,
+      "pca1": -0.546,
+      "pca2": 0.421,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1554,8 +1558,8 @@
       "out_of_home_kcal_pct": 25.4,
       "daily_carbon_kg": 4.61,
       "double_burden_index": 56.5,
-      "pca1": -0.086,
-      "pca2": 0.344,
+      "pca1": 0.043,
+      "pca2": 0.7,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1579,8 +1583,8 @@
       "out_of_home_kcal_pct": 27.0,
       "daily_carbon_kg": 4.61,
       "double_burden_index": 52.0,
-      "pca1": -0.525,
-      "pca2": 0.309,
+      "pca1": -0.417,
+      "pca2": 0.814,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1604,8 +1608,8 @@
       "out_of_home_kcal_pct": 30.3,
       "daily_carbon_kg": 4.6,
       "double_burden_index": 48.9,
-      "pca1": -0.721,
-      "pca2": 0.318,
+      "pca1": -0.609,
+      "pca2": 0.874,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1629,8 +1633,8 @@
       "out_of_home_kcal_pct": 34.1,
       "daily_carbon_kg": 4.75,
       "double_burden_index": 43.6,
-      "pca1": -1.51,
-      "pca2": 0.927,
+      "pca1": -1.292,
+      "pca2": 1.359,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1654,8 +1658,8 @@
       "out_of_home_kcal_pct": 22.4,
       "daily_carbon_kg": 4.5,
       "double_burden_index": 71.8,
-      "pca1": 1.048,
-      "pca2": -0.343,
+      "pca1": 1.12,
+      "pca2": 0.106,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1679,8 +1683,8 @@
       "out_of_home_kcal_pct": 23.9,
       "daily_carbon_kg": 4.97,
       "double_burden_index": 62.2,
-      "pca1": 0.978,
-      "pca2": 0.423,
+      "pca1": 1.683,
+      "pca2": 0.409,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1704,8 +1708,8 @@
       "out_of_home_kcal_pct": 25.4,
       "daily_carbon_kg": 4.97,
       "double_burden_index": 57.0,
-      "pca1": 0.474,
-      "pca2": 0.388,
+      "pca1": 1.159,
+      "pca2": 0.548,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1729,8 +1733,8 @@
       "out_of_home_kcal_pct": 28.5,
       "daily_carbon_kg": 4.96,
       "double_burden_index": 53.4,
-      "pca1": 0.248,
-      "pca2": 0.396,
+      "pca1": 0.938,
+      "pca2": 0.613,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1754,8 +1758,8 @@
       "out_of_home_kcal_pct": 32.1,
       "daily_carbon_kg": 5.16,
       "double_burden_index": 47.5,
-      "pca1": -0.555,
-      "pca2": 1.057,
+      "pca1": 0.312,
+      "pca2": 1.123,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1779,8 +1783,8 @@
       "out_of_home_kcal_pct": 21.0,
       "daily_carbon_kg": 4.59,
       "double_burden_index": 74.6,
-      "pca1": 1.423,
-      "pca2": -0.431,
+      "pca1": 1.576,
+      "pca2": -0.113,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1804,8 +1808,8 @@
       "out_of_home_kcal_pct": 22.4,
       "daily_carbon_kg": 5.07,
       "double_burden_index": 65.0,
-      "pca1": 1.344,
-      "pca2": 0.36,
+      "pca1": 2.138,
+      "pca2": 0.204,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1829,8 +1833,8 @@
       "out_of_home_kcal_pct": 23.9,
       "daily_carbon_kg": 5.07,
       "double_burden_index": 59.5,
-      "pca1": 0.814,
-      "pca2": 0.325,
+      "pca1": 1.588,
+      "pca2": 0.35,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1854,8 +1858,8 @@
       "out_of_home_kcal_pct": 26.7,
       "daily_carbon_kg": 5.07,
       "double_burden_index": 55.8,
-      "pca1": 0.589,
-      "pca2": 0.344,
+      "pca1": 1.384,
+      "pca2": 0.415,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1879,8 +1883,8 @@
       "out_of_home_kcal_pct": 30.1,
       "daily_carbon_kg": 5.29,
       "double_burden_index": 49.6,
-      "pca1": -0.223,
-      "pca2": 1.031,
+      "pca1": 0.775,
+      "pca2": 0.935,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1904,8 +1908,8 @@
       "out_of_home_kcal_pct": 25.3,
       "daily_carbon_kg": 4.68,
       "double_burden_index": 83.0,
-      "pca1": 0.283,
-      "pca2": -0.376,
+      "pca1": 0.501,
+      "pca2": -0.174,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1929,8 +1933,8 @@
       "out_of_home_kcal_pct": 27.0,
       "daily_carbon_kg": 5.0,
       "double_burden_index": 75.7,
-      "pca1": 0.021,
-      "pca2": 0.278,
+      "pca1": 0.523,
+      "pca2": 0.042,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -1954,8 +1958,8 @@
       "out_of_home_kcal_pct": 28.7,
       "daily_carbon_kg": 4.9,
       "double_burden_index": 73.0,
-      "pca1": -0.396,
-      "pca2": 0.205,
+      "pca1": -0.098,
+      "pca2": 0.077,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -1979,8 +1983,8 @@
       "out_of_home_kcal_pct": 32.2,
       "daily_carbon_kg": 4.76,
       "double_burden_index": 69.2,
-      "pca1": -0.981,
-      "pca2": 0.239,
+      "pca1": -0.866,
+      "pca2": 0.301,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2004,8 +2008,8 @@
       "out_of_home_kcal_pct": 36.2,
       "daily_carbon_kg": 4.96,
       "double_burden_index": 61.1,
-      "pca1": -1.866,
-      "pca2": 1.228,
+      "pca1": -1.287,
+      "pca2": 1.254,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2029,8 +2033,8 @@
       "out_of_home_kcal_pct": 22.4,
       "daily_carbon_kg": 4.76,
       "double_burden_index": 82.9,
-      "pca1": 0.651,
-      "pca2": -0.549,
+      "pca1": 0.855,
+      "pca2": -0.498,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2054,8 +2058,8 @@
       "out_of_home_kcal_pct": 24.0,
       "daily_carbon_kg": 5.09,
       "double_burden_index": 75.5,
-      "pca1": 0.387,
-      "pca2": 0.121,
+      "pca1": 0.885,
+      "pca2": -0.275,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2079,8 +2083,8 @@
       "out_of_home_kcal_pct": 25.5,
       "daily_carbon_kg": 5.0,
       "double_burden_index": 72.9,
-      "pca1": -0.01,
-      "pca2": 0.032,
+      "pca1": 0.287,
+      "pca2": -0.273,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2104,8 +2108,8 @@
       "out_of_home_kcal_pct": 28.6,
       "daily_carbon_kg": 4.86,
       "double_burden_index": 68.7,
-      "pca1": -0.618,
-      "pca2": 0.081,
+      "pca1": -0.489,
+      "pca2": -0.015,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2129,8 +2133,8 @@
       "out_of_home_kcal_pct": 32.1,
       "daily_carbon_kg": 5.07,
       "double_burden_index": 60.4,
-      "pca1": -1.507,
-      "pca2": 1.096,
+      "pca1": -0.883,
+      "pca2": 0.963,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2154,8 +2158,8 @@
       "out_of_home_kcal_pct": 21.8,
       "daily_carbon_kg": 4.64,
       "double_burden_index": 81.9,
-      "pca1": 0.295,
-      "pca2": -0.66,
+      "pca1": 0.209,
+      "pca2": -0.549,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2179,8 +2183,8 @@
       "out_of_home_kcal_pct": 23.3,
       "daily_carbon_kg": 4.96,
       "double_burden_index": 74.7,
-      "pca1": 0.029,
-      "pca2": -0.005,
+      "pca1": 0.226,
+      "pca2": -0.333,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2204,8 +2208,8 @@
       "out_of_home_kcal_pct": 24.8,
       "daily_carbon_kg": 4.86,
       "double_burden_index": 72.3,
-      "pca1": -0.367,
-      "pca2": -0.096,
+      "pca1": -0.389,
+      "pca2": -0.328,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2229,8 +2233,8 @@
       "out_of_home_kcal_pct": 27.7,
       "daily_carbon_kg": 4.71,
       "double_burden_index": 68.3,
-      "pca1": -0.979,
-      "pca2": -0.053,
+      "pca1": -1.183,
+      "pca2": -0.074,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2254,8 +2258,8 @@
       "out_of_home_kcal_pct": 31.2,
       "daily_carbon_kg": 4.9,
       "double_burden_index": 60.2,
-      "pca1": -1.859,
-      "pca2": 0.938,
+      "pca1": -1.595,
+      "pca2": 0.891,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2279,8 +2283,8 @@
       "out_of_home_kcal_pct": 21.1,
       "daily_carbon_kg": 4.7,
       "double_burden_index": 83.1,
-      "pca1": 0.506,
-      "pca2": -0.678,
+      "pca1": 0.507,
+      "pca2": -0.627,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2304,8 +2308,8 @@
       "out_of_home_kcal_pct": 22.6,
       "daily_carbon_kg": 5.03,
       "double_burden_index": 76.0,
-      "pca1": 0.25,
-      "pca2": -0.025,
+      "pca1": 0.531,
+      "pca2": -0.43,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2329,8 +2333,8 @@
       "out_of_home_kcal_pct": 24.0,
       "daily_carbon_kg": 4.93,
       "double_burden_index": 73.5,
-      "pca1": -0.145,
-      "pca2": -0.117,
+      "pca1": -0.084,
+      "pca2": -0.425,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2354,8 +2358,8 @@
       "out_of_home_kcal_pct": 26.9,
       "daily_carbon_kg": 4.78,
       "double_burden_index": 69.4,
-      "pca1": -0.751,
-      "pca2": -0.083,
+      "pca1": -0.868,
+      "pca2": -0.177,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2379,8 +2383,8 @@
       "out_of_home_kcal_pct": 30.2,
       "daily_carbon_kg": 4.99,
       "double_burden_index": 61.0,
-      "pca1": -1.65,
-      "pca2": 0.952,
+      "pca1": -1.258,
+      "pca2": 0.827,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2404,8 +2408,8 @@
       "out_of_home_kcal_pct": 19.4,
       "daily_carbon_kg": 5.04,
       "double_burden_index": 92.0,
-      "pca1": 1.854,
-      "pca2": -0.869,
+      "pca1": 2.241,
+      "pca2": -1.244,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2429,8 +2433,8 @@
       "out_of_home_kcal_pct": 20.7,
       "daily_carbon_kg": 5.41,
       "double_burden_index": 84.5,
-      "pca1": 1.608,
-      "pca2": -0.167,
+      "pca1": 2.329,
+      "pca2": -1.034,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2454,8 +2458,8 @@
       "out_of_home_kcal_pct": 22.0,
       "daily_carbon_kg": 5.32,
       "double_burden_index": 81.4,
-      "pca1": 1.2,
-      "pca2": -0.27,
+      "pca1": 1.723,
+      "pca2": -1.029,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2479,8 +2483,8 @@
       "out_of_home_kcal_pct": 24.6,
       "daily_carbon_kg": 5.2,
       "double_burden_index": 76.7,
-      "pca1": 0.588,
-      "pca2": -0.215,
+      "pca1": 0.976,
+      "pca2": -0.767,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2504,8 +2508,8 @@
       "out_of_home_kcal_pct": 27.7,
       "daily_carbon_kg": 5.47,
       "double_burden_index": 67.1,
-      "pca1": -0.343,
-      "pca2": 0.922,
+      "pca1": 0.668,
+      "pca2": 0.32,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2529,8 +2533,8 @@
       "out_of_home_kcal_pct": 21.9,
       "daily_carbon_kg": 4.32,
       "double_burden_index": 77.4,
-      "pca1": 0.917,
-      "pca2": -0.593,
+      "pca1": 0.503,
+      "pca2": -0.181,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2554,8 +2558,8 @@
       "out_of_home_kcal_pct": 23.4,
       "daily_carbon_kg": 4.74,
       "double_burden_index": 65.3,
-      "pca1": 0.646,
-      "pca2": 0.333,
+      "pca1": 0.952,
+      "pca2": 0.434,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2579,8 +2583,8 @@
       "out_of_home_kcal_pct": 24.9,
       "daily_carbon_kg": 4.83,
       "double_burden_index": 59.7,
-      "pca1": 0.425,
-      "pca2": 0.494,
+      "pca1": 1.008,
+      "pca2": 0.685,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2604,8 +2608,8 @@
       "out_of_home_kcal_pct": 27.9,
       "daily_carbon_kg": 4.82,
       "double_burden_index": 55.1,
-      "pca1": 0.071,
-      "pca2": 0.565,
+      "pca1": 0.703,
+      "pca2": 0.879,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2629,8 +2633,8 @@
       "out_of_home_kcal_pct": 31.4,
       "daily_carbon_kg": 4.85,
       "double_burden_index": 47.7,
-      "pca1": -1.025,
-      "pca2": 1.361,
+      "pca1": -0.313,
+      "pca2": 1.709,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2654,8 +2658,8 @@
       "out_of_home_kcal_pct": 23.2,
       "daily_carbon_kg": 4.0,
       "double_burden_index": 72.9,
-      "pca1": -0.046,
-      "pca2": -0.718,
+      "pca1": -1.055,
+      "pca2": -0.014,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2679,8 +2683,8 @@
       "out_of_home_kcal_pct": 24.7,
       "daily_carbon_kg": 4.4,
       "double_burden_index": 61.1,
-      "pca1": -0.29,
-      "pca2": 0.181,
+      "pca1": -0.585,
+      "pca2": 0.603,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2704,8 +2708,8 @@
       "out_of_home_kcal_pct": 26.3,
       "daily_carbon_kg": 4.51,
       "double_burden_index": 55.9,
-      "pca1": -0.455,
-      "pca2": 0.36,
+      "pca1": -0.443,
+      "pca2": 0.841,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2729,8 +2733,8 @@
       "out_of_home_kcal_pct": 29.5,
       "daily_carbon_kg": 4.49,
       "double_burden_index": 52.0,
-      "pca1": -0.765,
-      "pca2": 0.397,
+      "pca1": -0.733,
+      "pca2": 0.994,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2754,8 +2758,8 @@
       "out_of_home_kcal_pct": 33.2,
       "daily_carbon_kg": 4.45,
       "double_burden_index": 44.9,
-      "pca1": -1.905,
-      "pca2": 1.149,
+      "pca1": -1.881,
+      "pca2": 1.84,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2779,8 +2783,8 @@
       "out_of_home_kcal_pct": 20.3,
       "daily_carbon_kg": 4.44,
       "double_burden_index": 77.9,
-      "pca1": 1.409,
-      "pca2": -0.736,
+      "pca1": 1.064,
+      "pca2": -0.522,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2804,8 +2808,8 @@
       "out_of_home_kcal_pct": 21.6,
       "daily_carbon_kg": 4.87,
       "double_burden_index": 65.6,
-      "pca1": 1.118,
-      "pca2": 0.227,
+      "pca1": 1.518,
+      "pca2": 0.125,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2829,8 +2833,8 @@
       "out_of_home_kcal_pct": 23.0,
       "daily_carbon_kg": 4.96,
       "double_burden_index": 59.8,
-      "pca1": 0.872,
-      "pca2": 0.396,
+      "pca1": 1.547,
+      "pca2": 0.387,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2854,8 +2858,8 @@
       "out_of_home_kcal_pct": 25.8,
       "daily_carbon_kg": 4.94,
       "double_burden_index": 55.0,
-      "pca1": 0.496,
-      "pca2": 0.451,
+      "pca1": 1.208,
+      "pca2": 0.583,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2879,8 +2883,8 @@
       "out_of_home_kcal_pct": 29.0,
       "daily_carbon_kg": 5.0,
       "double_burden_index": 47.1,
-      "pca1": -0.596,
-      "pca2": 1.289,
+      "pca1": 0.256,
+      "pca2": 1.442,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -2904,8 +2908,8 @@
       "out_of_home_kcal_pct": 20.5,
       "daily_carbon_kg": 4.42,
       "double_burden_index": 77.2,
-      "pca1": 1.312,
-      "pca2": -0.716,
+      "pca1": 0.946,
+      "pca2": -0.47,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2929,8 +2933,8 @@
       "out_of_home_kcal_pct": 21.9,
       "daily_carbon_kg": 4.84,
       "double_burden_index": 64.9,
-      "pca1": 1.025,
-      "pca2": 0.227,
+      "pca1": 1.394,
+      "pca2": 0.171,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2954,8 +2958,8 @@
       "out_of_home_kcal_pct": 23.3,
       "daily_carbon_kg": 4.93,
       "double_burden_index": 59.2,
-      "pca1": 0.786,
-      "pca2": 0.399,
+      "pca1": 1.43,
+      "pca2": 0.429,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -2979,8 +2983,8 @@
       "out_of_home_kcal_pct": 26.1,
       "daily_carbon_kg": 4.92,
       "double_burden_index": 54.4,
-      "pca1": 0.415,
-      "pca2": 0.469,
+      "pca1": 1.106,
+      "pca2": 0.631,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3004,8 +3008,8 @@
       "out_of_home_kcal_pct": 29.3,
       "daily_carbon_kg": 4.97,
       "double_burden_index": 46.6,
-      "pca1": -0.675,
-      "pca2": 1.298,
+      "pca1": 0.142,
+      "pca2": 1.486,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -3029,8 +3033,8 @@
       "out_of_home_kcal_pct": 18.4,
       "daily_carbon_kg": 4.59,
       "double_burden_index": 83.2,
-      "pca1": 2.041,
-      "pca2": -0.924,
+      "pca1": 1.768,
+      "pca2": -0.971,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3054,8 +3058,8 @@
       "out_of_home_kcal_pct": 19.7,
       "daily_carbon_kg": 5.03,
       "double_burden_index": 70.3,
-      "pca1": 1.703,
-      "pca2": 0.101,
+      "pca1": 2.214,
+      "pca2": -0.255,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3079,8 +3083,8 @@
       "out_of_home_kcal_pct": 20.9,
       "daily_carbon_kg": 5.11,
       "double_burden_index": 64.2,
-      "pca1": 1.429,
-      "pca2": 0.261,
+      "pca1": 2.201,
+      "pca2": 0.012,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3104,8 +3108,8 @@
       "out_of_home_kcal_pct": 23.4,
       "daily_carbon_kg": 5.09,
       "double_burden_index": 59.0,
-      "pca1": 1.029,
-      "pca2": 0.333,
+      "pca1": 1.852,
+      "pca2": 0.238,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3129,8 +3133,8 @@
       "out_of_home_kcal_pct": 26.4,
       "daily_carbon_kg": 5.18,
       "double_burden_index": 50.5,
-      "pca1": -0.065,
-      "pca2": 1.213,
+      "pca1": 0.958,
+      "pca2": 1.13,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3154,8 +3158,8 @@
       "out_of_home_kcal_pct": 29.6,
       "daily_carbon_kg": 4.54,
       "double_burden_index": 95.8,
-      "pca1": 2.336,
-      "pca2": -0.748,
+      "pca1": 2.199,
+      "pca2": -0.635,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3179,8 +3183,8 @@
       "out_of_home_kcal_pct": 31.6,
       "daily_carbon_kg": 4.79,
       "double_burden_index": 82.4,
-      "pca1": 1.641,
-      "pca2": 0.186,
+      "pca1": 1.962,
+      "pca2": 0.151,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3204,8 +3208,8 @@
       "out_of_home_kcal_pct": 33.6,
       "daily_carbon_kg": 4.63,
       "double_burden_index": 74.9,
-      "pca1": 0.872,
-      "pca2": 0.431,
+      "pca1": 1.167,
+      "pca2": 0.725,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3229,8 +3233,8 @@
       "out_of_home_kcal_pct": 37.7,
       "daily_carbon_kg": 4.44,
       "double_burden_index": 67.8,
-      "pca1": 0.098,
-      "pca2": 0.604,
+      "pca1": 0.296,
+      "pca2": 1.253,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -3254,8 +3258,8 @@
       "out_of_home_kcal_pct": 42.4,
       "daily_carbon_kg": 4.58,
       "double_burden_index": 58.4,
-      "pca1": -0.894,
-      "pca2": 1.489,
+      "pca1": -0.349,
+      "pca2": 2.177,
       "cluster_label": "Archetype B: Inflation-Squeezed Low-Income (High Food Budget Share)"
     },
     {
@@ -3279,8 +3283,8 @@
       "out_of_home_kcal_pct": 26.0,
       "daily_carbon_kg": 4.78,
       "double_burden_index": 98.0,
-      "pca1": 3.358,
-      "pca2": -0.908,
+      "pca1": 3.44,
+      "pca2": -1.195,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3304,8 +3308,8 @@
       "out_of_home_kcal_pct": 27.8,
       "daily_carbon_kg": 5.07,
       "double_burden_index": 87.0,
-      "pca1": 2.644,
-      "pca2": 0.089,
+      "pca1": 3.257,
+      "pca2": -0.369,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3329,8 +3333,8 @@
       "out_of_home_kcal_pct": 29.6,
       "daily_carbon_kg": 4.91,
       "double_burden_index": 78.5,
-      "pca1": 1.847,
-      "pca2": 0.349,
+      "pca1": 2.471,
+      "pca2": 0.252,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3354,8 +3358,8 @@
       "out_of_home_kcal_pct": 33.1,
       "daily_carbon_kg": 4.76,
       "double_burden_index": 70.8,
-      "pca1": 1.06,
-      "pca2": 0.576,
+      "pca1": 1.662,
+      "pca2": 0.817,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3379,8 +3383,8 @@
       "out_of_home_kcal_pct": 37.3,
       "daily_carbon_kg": 4.94,
       "double_burden_index": 60.4,
-      "pca1": 0.04,
-      "pca2": 1.521,
+      "pca1": 1.06,
+      "pca2": 1.788,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3404,8 +3408,8 @@
       "out_of_home_kcal_pct": 24.0,
       "daily_carbon_kg": 4.94,
       "double_burden_index": 98.0,
-      "pca1": 4.136,
-      "pca2": -1.072,
+      "pca1": 4.321,
+      "pca2": -1.667,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3429,8 +3433,8 @@
       "out_of_home_kcal_pct": 25.6,
       "daily_carbon_kg": 5.25,
       "double_burden_index": 93.4,
-      "pca1": 3.396,
-      "pca2": -0.015,
+      "pca1": 4.168,
+      "pca2": -0.779,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3454,8 +3458,8 @@
       "out_of_home_kcal_pct": 27.3,
       "daily_carbon_kg": 5.11,
       "double_burden_index": 84.4,
-      "pca1": 2.589,
-      "pca2": 0.262,
+      "pca1": 3.401,
+      "pca2": -0.151,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3479,8 +3483,8 @@
       "out_of_home_kcal_pct": 30.5,
       "daily_carbon_kg": 4.96,
       "double_burden_index": 75.9,
-      "pca1": 1.768,
-      "pca2": 0.507,
+      "pca1": 2.596,
+      "pca2": 0.461,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3504,8 +3508,8 @@
       "out_of_home_kcal_pct": 34.3,
       "daily_carbon_kg": 5.17,
       "double_burden_index": 64.6,
-      "pca1": 0.712,
-      "pca2": 1.521,
+      "pca1": 2.03,
+      "pca2": 1.501,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3529,8 +3533,8 @@
       "out_of_home_kcal_pct": 23.2,
       "daily_carbon_kg": 5.0,
       "double_burden_index": 98.0,
-      "pca1": 4.431,
-      "pca2": -1.163,
+      "pca1": 4.626,
+      "pca2": -1.894,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3554,8 +3558,8 @@
       "out_of_home_kcal_pct": 24.8,
       "daily_carbon_kg": 5.32,
       "double_burden_index": 96.5,
-      "pca1": 3.718,
-      "pca2": -0.097,
+      "pca1": 4.514,
+      "pca2": -1.004,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3579,8 +3583,8 @@
       "out_of_home_kcal_pct": 26.4,
       "daily_carbon_kg": 5.18,
       "double_burden_index": 87.0,
-      "pca1": 2.882,
-      "pca2": 0.208,
+      "pca1": 3.752,
+      "pca2": -0.326,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3604,8 +3608,8 @@
       "out_of_home_kcal_pct": 29.6,
       "daily_carbon_kg": 5.04,
       "double_burden_index": 78.2,
-      "pca1": 2.051,
-      "pca2": 0.469,
+      "pca1": 2.948,
+      "pca2": 0.295,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3629,8 +3633,8 @@
       "out_of_home_kcal_pct": 33.3,
       "daily_carbon_kg": 5.26,
       "double_burden_index": 66.6,
-      "pca1": 0.98,
-      "pca2": 1.51,
+      "pca1": 2.397,
+      "pca2": 1.365,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     },
     {
@@ -3654,8 +3658,8 @@
       "out_of_home_kcal_pct": 23.7,
       "daily_carbon_kg": 4.98,
       "double_burden_index": 98.0,
-      "pca1": 4.34,
-      "pca2": -1.118,
+      "pca1": 4.547,
+      "pca2": -1.794,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3679,8 +3683,8 @@
       "out_of_home_kcal_pct": 25.4,
       "daily_carbon_kg": 5.29,
       "double_burden_index": 95.2,
-      "pca1": 3.6,
-      "pca2": -0.061,
+      "pca1": 4.394,
+      "pca2": -0.907,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3704,8 +3708,8 @@
       "out_of_home_kcal_pct": 27.0,
       "daily_carbon_kg": 5.16,
       "double_burden_index": 86.0,
-      "pca1": 2.777,
-      "pca2": 0.244,
+      "pca1": 3.642,
+      "pca2": -0.249,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3729,8 +3733,8 @@
       "out_of_home_kcal_pct": 30.2,
       "daily_carbon_kg": 5.01,
       "double_burden_index": 77.3,
-      "pca1": 1.95,
-      "pca2": 0.488,
+      "pca1": 2.829,
+      "pca2": 0.367,
       "cluster_label": "Archetype D: High-NOVA 4 Ultra-Processed & Cardiometabolic Risk"
     },
     {
@@ -3754,8 +3758,8 @@
       "out_of_home_kcal_pct": 34.0,
       "daily_carbon_kg": 5.23,
       "double_burden_index": 65.9,
-      "pca1": 0.887,
-      "pca2": 1.511,
+      "pca1": 2.272,
+      "pca2": 1.411,
       "cluster_label": "Archetype C: Affluent Plant-Shifting & Low Engel Burden"
     }
   ]

@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import ReactECharts from './ThemedEChart';
 import { assetUrl } from '../utils/assetPath';
+import { fetchCachedJson, fetchConsumerBehaviorPulse } from '../services/dataProvider';
+import { classifyResourceError, type ResourceDisclosure } from '../utils/resourceAvailability';
 import { EmpiricalSocialMicrodataPlate } from './EmpiricalSocialMicrodataPlate';
+import { DataNatureBadge } from './DataNatureBadge';
+import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
 import {
   Activity,
   Award,
@@ -133,9 +137,16 @@ export function ConsumerBehaviorPulse({
   onSelectCountry?: (code: string) => void;
 }) {
   const [pulseData, setPulseData] = useState<ConsumerPulseBundle | null>(null);
-  const [activeCountry, setActiveCountry] = useState<string>(
-    ['ES', 'IT', 'FR', 'DE', 'NL', 'GBR', 'SE', 'PL'].includes(selectedCountry) ? selectedCountry : 'IT'
-  );
+  const [pulseDisclosure, setPulseDisclosure] = useState<ResourceDisclosure | null>(null);
+  const [retryTick, setRetryTick] = useState<number>(0);
+  const [activeCountryOverride, setActiveCountryOverride] = useState<{ forProp: string; value: string } | null>(null);
+  const supportedPulseCountries = ['ES', 'IT', 'FR', 'DE', 'NL', 'GBR', 'SE', 'PL'];
+  const effectiveOverride =
+    activeCountryOverride?.forProp === selectedCountry ? activeCountryOverride.value : null;
+  const isCountryFallback = !effectiveOverride && !supportedPulseCountries.includes(selectedCountry);
+  const activeCountry =
+    effectiveOverride ??
+    (supportedPulseCountries.includes(selectedCountry) ? selectedCountry : 'IT');
   const [selectedFrame, setSelectedFrame] = useState<string>('ALL');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('ALL');
   const [giSectorFilter, setGiSectorFilter] = useState<string>('FOOD');
@@ -146,19 +157,58 @@ export function ConsumerBehaviorPulse({
   const [showScraplingModal, setShowScraplingModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (['ES', 'IT', 'FR', 'DE', 'NL', 'GBR', 'SE', 'PL'].includes(selectedCountry)) {
-      setActiveCountry(selectedCountry);
-    }
-  }, [selectedCountry]);
+    let cancelled = false;
+    const forceRetry = retryTick > 0;
+    fetchConsumerBehaviorPulse<ConsumerPulseBundle>({ forceRetry })
+      .then((d) => {
+        if (!cancelled) {
+          setPulseData(d);
+          setPulseDisclosure(null);
+        }
+      })
+      .catch(async (err: unknown) => {
+        if (cancelled) return;
+        const primaryDisclosure = classifyResourceError(err, {
+          resourcePath: 'data/consumer_behavior_pulse.json',
+          availableSummary:
+            'Open 8-country behavioral intention-to-plate scorecard (consumer_pulse_rows.json), NHANES clinical biomarkers, and GCNF school meals procurement remain active.',
+        });
 
-  useEffect(() => {
-    fetch(assetUrl('data/consumer_behavior_pulse.json'))
-      .then((r) => r.json())
-      .then((d: ConsumerPulseBundle) => setPulseData(d));
-  }, []);
+        if (primaryDisclosure.isExcludedTrackB) {
+          try {
+            const openProfiles = await fetchCachedJson<CountryBehaviorProfile[]>('data/consumer_pulse_rows.json', {
+              forceRetry,
+            });
+            if (!cancelled) {
+              setPulseData({
+                generated_at: 'track-a-open-slice',
+                scrapling_ready: false,
+                off_product_count: 3197,
+                wikimedia_annual_views: {},
+                wikimedia_language_totals: {},
+                country_behavior_profiles: openProfiles,
+                longitudinal_pulse: [],
+                social_discourse_posts: [],
+              });
+              setPulseDisclosure(primaryDisclosure);
+            }
+            return;
+          } catch {
+            // Fall through to showing disclosure if open fallback is also absent
+          }
+        }
+
+        if (!cancelled) {
+          setPulseDisclosure(primaryDisclosure);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [retryTick]);
 
   const handleCountryChange = (code: string) => {
-    setActiveCountry(code);
+    setActiveCountryOverride({ forProp: selectedCountry, value: code });
     if (onSelectCountry) {
       onSelectCountry(code);
     }
@@ -507,6 +557,25 @@ export function ConsumerBehaviorPulse({
     };
   }, [pulseData]);
 
+  if (pulseDisclosure && !pulseData) {
+    return (
+      <div className="space-y-5">
+        <ResourceDisclosureBanner
+          disclosure={pulseDisclosure}
+          onRetry={
+            pulseDisclosure.isRetryable
+              ? () => {
+                  setPulseDisclosure(null);
+                  setRetryTick((t) => t + 1);
+                }
+              : undefined
+          }
+        />
+        <EmpiricalSocialMicrodataPlate selectedCountry={selectedCountry} />
+      </div>
+    );
+  }
+
   if (!pulseData || !activeProfile) {
     return (
       <div className="almanac-sheet p-6 text-sm text-[var(--color-muted)]">
@@ -521,13 +590,36 @@ export function ConsumerBehaviorPulse({
 
   return (
     <div className="space-y-5">
+      {pulseDisclosure && (
+        <ResourceDisclosureBanner
+          disclosure={pulseDisclosure}
+          onRetry={
+            pulseDisclosure.isRetryable
+              ? () => {
+                  setPulseDisclosure(null);
+                  setRetryTick((t) => t + 1);
+                }
+              : undefined
+          }
+          compact
+        />
+      )}
+      {isCountryFallback && (
+        <div className="almanac-sheet px-4 py-2.5 border-l-4 border-[#6b4c1b] bg-[#6b4c1b]/10 text-xs text-[var(--color-ink)]">
+          <b>Jurisdiction Fallback Disclosure:</b> Selected country <code>{selectedCountry}</code> is outside the 8
+          European behavioral infodemiology panels; displaying <code>[IT] Italy</code> reference cascade and longitudinal
+          metrics.
+        </div>
+      )}
       {/* Section Header */}
       <div className="almanac-sheet p-5">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-3 rule-firm">
           <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2">
+            <h2 className="text-lg font-semibold flex flex-wrap items-center gap-2">
               <Users className="w-4 h-4" />
-              Section III. Consumer Behavior, Intention–Action Cascade & Digital Infodemiology
+              Section III. Consumer Behavior, Intention–Action Cascade &amp; Digital Infodemiology
+              <DataNatureBadge nature="Estimated" label="Cascade" />
+              <DataNatureBadge nature="Observed" label="Wikimedia &amp; Discourse" />
             </h2>
             <p className="almanac-label mt-0.5">
               Triangulating digital search velocity (Wikimedia REST API across 6 European languages + Google Trends),
@@ -696,7 +788,13 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
             </p>
           </div>
           <div className="h-80 w-full">
-            <ReactECharts option={infodemiologyChartOption} style={{ height: '100%', width: '100%' }} notMerge={true} />
+            {activeLongitudinal.length > 0 ? (
+              <ReactECharts option={infodemiologyChartOption} style={{ height: '100%', width: '100%' }} notMerge={true} />
+            ) : (
+              <div className="h-full flex items-center justify-center p-4 almanac-well text-xs text-center text-[var(--color-muted)]">
+                Annual longitudinal attention trajectories are bundled inside the Track B composite pulse archive and omitted in this Track A release; 8-country behavioral cascade metrics above remain active.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -715,7 +813,13 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
             </p>
           </div>
           <div className="h-76 w-full">
-            <ReactECharts option={wikiLanguageChartOption} style={{ height: '100%', width: '100%' }} notMerge={true} />
+            {Object.keys(pulseData.wikimedia_language_totals).length > 0 ? (
+              <ReactECharts option={wikiLanguageChartOption} style={{ height: '100%', width: '100%' }} notMerge={true} />
+            ) : (
+              <div className="h-full flex items-center justify-center p-4 almanac-well text-xs text-center text-[var(--color-muted)]">
+                Multilingual Wikimedia language-totals series are bundled in Track B; national behavioral search-to-plate correlations remain available in the country matrix.
+              </div>
+            )}
           </div>
         </div>
 
@@ -825,46 +929,52 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
           </div>
         </div>
 
-        <div className="overflow-x-auto max-h-80">
-          <table className="almanac-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Platform</th>
-                <th>Behavioral frame</th>
-                <th>Post / thread headline & direct link</th>
-                <th className="text-right">Engagement</th>
-                <th className="text-right">Comments</th>
-                <th className="text-right">Velocity score</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPosts.map((post) => (
-                <tr key={post.post_id}>
-                  <td className="num text-xs whitespace-nowrap">{post.created_date}</td>
-                  <td className="text-xs font-semibold">{post.platform || 'Hacker News (Algolia API)'}</td>
-                  <td className="text-xs font-semibold text-[var(--color-accent)]">{post.behavioral_frame}</td>
-                  <td>
-                    <a
-                      href={post.source_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)] hover:underline inline-flex items-center gap-1"
-                    >
-                      {post.title}
-                      <ExternalLink className="w-3 h-3 shrink-0" />
-                    </a>
-                  </td>
-                  <td className="num text-right">{post.upvotes_points.toLocaleString()}</td>
-                  <td className="num text-right">{post.comments_count.toLocaleString()}</td>
-                  <td className="num text-right font-semibold text-[var(--color-ink)]">
-                    {post.engagement_velocity.toLocaleString()}
-                  </td>
+        {pulseData.social_discourse_posts.length > 0 ? (
+          <div className="overflow-x-auto max-h-80">
+            <table className="almanac-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Platform</th>
+                  <th>Behavioral frame</th>
+                  <th>Post / thread headline & direct link</th>
+                  <th className="text-right">Engagement</th>
+                  <th className="text-right">Comments</th>
+                  <th className="text-right">Velocity score</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filteredPosts.map((post) => (
+                  <tr key={post.post_id}>
+                    <td className="num text-xs whitespace-nowrap">{post.created_date}</td>
+                    <td className="text-xs font-semibold">{post.platform || 'Hacker News (Algolia API)'}</td>
+                    <td className="text-xs font-semibold text-[var(--color-accent)]">{post.behavioral_frame}</td>
+                    <td>
+                      <a
+                        href={post.source_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)] hover:underline inline-flex items-center gap-1"
+                      >
+                        {post.title}
+                        <ExternalLink className="w-3 h-3 shrink-0" />
+                      </a>
+                    </td>
+                    <td className="num text-right">{post.upvotes_points.toLocaleString()}</td>
+                    <td className="num text-right">{post.comments_count.toLocaleString()}</td>
+                    <td className="num text-right font-semibold text-[var(--color-ink)]">
+                      {post.engagement_velocity.toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="p-3 almanac-well text-xs text-[var(--color-muted)]">
+            Social and news-feed headlines (Hacker News / RSS) are excluded from the Track A distribution under third-party publisher and API terms.
+          </div>
+        )}
       </div>
 
       {/* Row 4: Qualigeo (qualigeo.eu) & EUIPO GIview (tmdn.org/giview) Geographical Indications & Heritage Terroir Lab */}
@@ -1070,8 +1180,8 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
                     <th>Scheme</th>
                     <th>EU GI class & dietary role</th>
                     <th className="text-right">NOVA</th>
-                    <th className="text-right">Carbon (kg CO₂/kg)</th>
-                    <th className="text-right">Water (L/kg)</th>
+                    <th className="text-right">Carbon (est. proxy kg/kg)</th>
+                    <th className="text-right">Water (est. proxy L/kg)</th>
                     <th>Source & disciplinare</th>
                   </tr>
                 </thead>
@@ -1122,11 +1232,11 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
               </table>
             </div>
           </div>
-
-          {/* Section V: Empirical Microdata & Cohort Grounding (MTUS, NHANES, GCNF, ESS) */}
-          <EmpiricalSocialMicrodataPlate selectedCountry={activeCountry} />
         </div>
       )}
+
+      {/* Plate III-F: Independent Track A/B Empirical Microdata & Cohort Grounding (MTUS, NHANES, GCNF, ESS) */}
+      <EmpiricalSocialMicrodataPlate selectedCountry={activeCountry} />
     </div>
   );
 }

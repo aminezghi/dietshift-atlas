@@ -1,0 +1,49 @@
+# DietShift Atlas — Phase 6A Research Release Readiness Assessment (WP7)
+
+**Assessment Date:** 2026-11-17  
+**Audited Code & Data Baseline:** `v5.2.0-phase5c` (Phase 6A documentation layer: `v6.0.0-phase6a`)  
+**Target Milestone:** `v1.0 Research Release Candidate`  
+**Overall Release Verdict:** **`PARTIAL — DO NOT RELEASE UNQUALIFIED v1.0 UNTIL CRITICAL BLOCKERS ARE RESOLVED`**
+
+---
+
+## 1. Ten-Dimension Release Readiness Scorecard
+
+Ratings strictly separate **Software/Implementation**, **Documentation**, **Scientific Defensibility**, and **External Confirmation**:
+
+| # | Dimension | Status | Software / Data State vs. Documentation / External Verification | Primary Evidence |
+| :---: | :--- | :---: | :--- | :--- |
+| **1** | **Code & Architecture Stability** | **`PASS`** | Modularized React 19 + Vite 8 + TypeScript architecture with session-deduplicated `dataProvider.ts`, shared `exportDownload.ts`, and isolated 19-view `duckdbEngine.ts`. `Oxlint` reports `0` warnings/`0` errors (`58` files); `tsc -b && vite build` succeeds cleanly. | [`vite.config.ts`](../../vite.config.ts), [`src/App.tsx`](../../src/App.tsx) |
+| **2** | **Analytical Correctness** | **`PASS`** | Pure engines (`nutritionEngine`, `environmentEngine`, `affordabilityEngine`, `classificationEngine`, `integratedComparator`, `forecastingEngine`, `sensitivityEngine`, `integratedRobustness`, `policyScenarioModel`, `sandboxLedger`) enforce strict unit guards (`AWARE m³ world-eq`, `PEF Pt`, `EUR/kg` vs `EUR/L`), zero vs `NULL` preservation, causal CV splits, denominator-grain reconciliation (`2,451/2,161/3,114/60/55/83/11`), and single-dimension ranking isolation. | [`docs/SCIENTIFIC_METHODOLOGY.md`](../SCIENTIFIC_METHODOLOGY.md), `src/analytics/*.test.ts` |
+| **3** | **Data Provenance & Lineage** | **`PARTIAL`** | All `19` Parquet tables (`17,627` rows) carry SHA-256 manifests and registry tags in `datasets_registry.json`, with `17` JSON–Parquet parity assertions. **Gaps:** `25` hardcoded `COUNTRY_PROFILES` (`src/types/research.ts`) lack row-level source citations/years in the registry; `public/data/world.geojson` lacks upstream commit/hash tracking; `4` analytical tables remain stylized (`v1.0/v2.0/v3.5`). | [`datasets_registry.json`](../../public/data/datasets_registry.json), [`PHASE6A_REPOSITORY_AUDIT.md`](PHASE6A_REPOSITORY_AUDIT.md) |
+| **4** | **Dataset Licensing Clarity** | **`FAIL`** | Software code (`MIT`, `LICENSE`) and major institutional feeds (`Etalab 2.0`, `ODbL 1.0`, `CC-BY 4.0`, `OGL v3`, US Public Domain) are verified. **Blocker:** `Qualigeo` (`gi_terroir_registry`), `GS1 Immagino` / `Pan-EU`, `MTUS/IPUMS`, `ESS` (`CC BY-NC-SA` commercial-use ambiguity in `cultural_climate_inertia`), `HN/RSS` publisher links, and `world.geojson` remain **`Unverified — requires confirmation`**. | [`docs/DATA_PROVENANCE_AND_LICENSING.md`](../DATA_PROVENANCE_AND_LICENSING.md) |
+| **5** | **Reproducibility** | **`PARTIAL`** | Offline build, unit tests, Parquet schema/SHA checks, and 13-section Playwright E2E checks (`npm run qa`) run deterministically. **Gaps:** [`requirements.txt`](../../requirements.txt) omits `pytest`, `pyarrow`, and `numpy`; legacy fallback-imputing scripts (`fetch_live_data.py`, `build_consumer_pulse_and_scale_off.py`) coexist in `scripts/`; live external API re-harvests drift over time without pinned snapshots. | [`docs/REPRODUCIBILITY.md`](../REPRODUCIBILITY.md), [`requirements.txt`](../../requirements.txt) |
+| **6** | **Test Coverage & QA Gate** | **`PASS`** | Unified 5-stage fail-fast QA gate (`scripts/run_qa_gate.py`) passes Oxlint (`58` files), Vitest (`16` files, `73` tests), `tsc -b && vite build`, Pytest Parquet parity (`14/14`), and Playwright Chromium E2E across all 13 sections and live CSV/JSON downloads. *(Disclosed uncovered scope: in-browser DuckDB-Wasm SQL execution is deferred to native Python DuckDB checks rather than CI Chromium.)* | [`PHASE5C_QA_IMPLEMENTATION_REPORT.md`](../../PHASE5C_QA_IMPLEMENTATION_REPORT.md), `.github/workflows/qa-gate.yml` |
+| **7** | **UI Transparency & Usability** | **`PASS`** | Phase 5A/5B/5C guarantees explicit `DataNatureBadge` classification, visible NOVA `NULL` toggle + excluded count, single-unit ECharts plots, `[EU27_2020 FALLBACK]` / `[IT]` banners inside chart titles/exports, accessible `DataCatalogModal` focus trapping, chart HTML table toggles, and blank-preserving survey templates. | [`docs/USER_GUIDE.md`](../USER_GUIDE.md), `src/components/*` |
+| **8** | **Documentation Completeness** | **`PARTIAL`** | New Phase 6A suite (`WP1`–`WP7`) covers every method, dataset, build step, user control, and limitation accurately. **Blocker:** Frozen legacy documents—specifically `paper/*` (retracted `TimesFM` / `89.4%` MAE / `12` tables), [`docs/PUBLIC_GUIDE.md`](../PUBLIC_GUIDE.md), [`CITATION.cff`](../../CITATION.cff), [`src/App.tsx:1099`](../../src/App.tsx#L1099) (`4.0.0`), [`DATA_SOURCES.md`](../development/DATA_SOURCES.md) (`18` tables & `Observed` error), and [`DATA_DICTIONARY.md`](../development/DATA_DICTIONARY.md) / [`DATA_PIPELINE.md`](../development/DATA_PIPELINE.md) (`18` tables)—remain contradictory. | [`PHASE6A_REPOSITORY_AUDIT.md`](PHASE6A_REPOSITORY_AUDIT.md) |
+| **9** | **Limitations & Responsible Use** | **`PASS`** | Dedicated, prominent non-footnoted limitations guide documents all 16 analytical, unit, coverage, forecasting, proxy, simulation, and licensing constraints with explicit allowed vs. prohibited conclusions. | [`docs/LIMITATIONS_AND_RESPONSIBLE_USE.md`](../LIMITATIONS_AND_RESPONSIBLE_USE.md) |
+| **10** | **Overall Release Readiness** | **`PARTIAL`** | **Software core and Phase 6A technical docs are release-grade, but critical scientific-record (`paper/*`), citation (`CITATION.cff`, `App.tsx:1099`), and external licensing blockers prevent granting an unqualified public `v1.0` PASS.** | Blockers B-01 through B-06 below |
+
+---
+
+## 2. Mandatory v1.0 Release Blockers (Must Resolve Before Tagging `v1.0.0`)
+
+Because this Phase 6A exercise froze code, manuscripts, and source datasets, **no code or manuscript edits were forced**. An external maintainer/PI must execute the following bounded corrective tasks (suggested **Phase 6B**) before tagging `v1.0.0`:
+
+| Blocker ID | Priority | Exact Affected File(s) | Required Remediation Action |
+| :---: | :---: | :--- | :--- |
+| **B-01** | **Critical** | `paper/DIETSHIFT_ATLAS_ACADEMIC_PAPER.{md,html,docx}`, `paper/main.tex`, `paper/references.bib` | Rewrite or archive/retract stale `Google TimesFM 200M`, `89.4% MAE reduction`, `ml_timesfm_forecasts.parquet`, `12` Parquet files, `DuckDB-Wasm 1.28`, and `151,203` SKUs claims so the manuscript reflects actual `19`-table architecture (`17,627` rows), classical ETS/Ridge/Drift CV (`Random Walk w/ Drift` `34/35`), and GS1 report summary boundaries. |
+| **B-02** | **Critical** | [`docs/DATA_PROVENANCE_AND_LICENSING.md`](../DATA_PROVENANCE_AND_LICENSING.md), `scripts/build_data_infrastructure.py`, `datasets_registry.json` | Confirm redistribution rights (or isolate/strip restricted fields) for: (a) **Qualigeo** scraped fields in `gi_terroir_registry`, (b) **ESS `CC BY-NC-SA 4.0`** non-commercial compatibility in `cultural_climate_inertia`, (c) **GS1 Immagino / Pan-EU / MTUS** report/benchmark redistribution permissions, (d) **HN/RSS** metadata terms, and (e) `public/data/world.geojson` source commit/license. |
+| **B-03** | **High** | [`CITATION.cff`](../../CITATION.cff), [`src/App.tsx:1099`](../../src/App.tsx#L1099), [`docs/PUBLIC_GUIDE.md`](../PUBLIC_GUIDE.md) | Sync `CITATION.cff` (`version: "1.0.0"`, current date, remove `timesfm` keyword), update `src/App.tsx:1099` BibTeX `version` from `{4.0.0}` (match release tag / `package.json`), and rewrite or deprecate `docs/PUBLIC_GUIDE.md` (`13` observatories, `19` tables, zero TimesFM). |
+| **B-04** | **High** | [`docs/development/DATA_SOURCES.md`](../development/DATA_SOURCES.md), `DATA_DICTIONARY.md`, `DATA_PIPELINE.md`, `build_data_infrastructure.py:12`, `build_international_benchmarks.py:20,329` | Update stale `18 Parquet tables` references to `19` (`classification_mappings` included), fix `DATA_SOURCES.md` so `global_poore_nemecek_lca` and `clinical_biomarker_grounding` state **`Estimated`**, and remove the stale Section II width-formula sentence in `DATA_PIPELINE.md`. |
+| **B-05** | **High** | [`src/types/research.ts`](../../src/types/research.ts) (`COUNTRY_PROFILES`), `datasets_registry.json` | Document row-level bibliographic citations, reference years, and methodology notes for all `25` manual baselines in `COUNTRY_PROFILES`. |
+| **B-06** | **Medium** | [`requirements.txt`](../../requirements.txt), [`scripts/fetch_live_data.py`](../../scripts/fetch_live_data.py), [`scripts/build_consumer_pulse_and_scale_off.py`](../../scripts/build_consumer_pulse_and_scale_off.py), [`scripts/build_nsi_and_ml_parquet.py:12`](../../scripts/build_nsi_and_ml_parquet.py#L12) | Add `pytest`, `pyarrow`, `numpy` to `requirements.txt`; archive or clearly quarantine legacy fallback-imputing OFF scripts; change `build_nsi_and_ml_parquet.py:12` stdout string from `TIMESFM 2.0 BACKTESTING` to `STATISTICAL HICP BACKTESTING`. |
+
+---
+
+## 3. Recommended Pre-Release Execution Gate (Phase 6B Sign-Off)
+
+Before publishing an external `v1.0.0` research release or journal supplement:
+1. Close Blockers **B-01** through **B-06**.
+2. Decide explicitly whether any dataset flagged **`Unverified — requires confirmation`** cannot be legally mirrored on GitHub/Zenodo; if non-commercial (`ESS`) or proprietary summaries (`GS1` / `Qualigeo`) block MIT/open data bundling, separate open analytical bundles from credentialed/citation-only tables.
+3. Re-run `npm run qa` cleanly after syncing `CITATION.cff`, `App.tsx`, `requirements.txt`, and legacy docstrings, then mint the tagged GitHub release + Zenodo archive DOI.
