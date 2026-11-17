@@ -5,8 +5,113 @@ import { Award, ExternalLink, Filter, Globe2, Layers, MapPin, ZoomIn } from 'luc
 import { fetchCachedJson, fetchGiTerroirBundle } from '../services/dataProvider';
 import { COUNTRY_PROFILES, type CountryDietaryProfile } from '../types/research';
 import { classifyResourceError, type ResourceDisclosure } from '../utils/resourceAvailability';
+import { useDarkMode } from '../utils/chartTheme';
 import { DataNatureBadge } from './DataNatureBadge';
 import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
+
+export type GiVisualMode = 'constellation' | 'hubs' | 'carbon';
+
+interface HubStatSummary {
+  countryCode: string;
+  count: number;
+  plantCount: number;
+  plantSharePct: number;
+  sampleProduct: string;
+}
+
+const GOLDEN_ANGLE_RAD = 2.399963229728653;
+
+/**
+ * Geographic centroids [lon, lat, maxSpreadDeg] for jurisdictions whose raw GI records
+ * cluster on artificial rings/petals or fall back to an administrative proxy point.
+ * Used purely for cartographic dispersion (never mutates underlying dataset coordinates).
+ */
+const COUNTRY_CENTROIDS: Record<string, [number, number, number]> = {
+  CN: [106.5, 33.5, 4.2],
+  BR: [-48.5, -15.5, 3.2],
+  TH: [101.0, 15.5, 1.4],
+  IN: [78.5, 22.0, 2.2],
+  JP: [138.0, 36.5, 1.5],
+  KR: [127.8, 36.2, 1.0],
+  VN: [106.5, 16.0, 1.4],
+  KH: [105.0, 12.6, 0.8],
+  ID: [114.0, -2.0, 2.5],
+  LK: [80.7, 7.9, 0.6],
+  PK: [69.3, 30.4, 1.5],
+  MN: [103.8, 46.8, 2.0],
+  UZ: [64.6, 41.4, 1.5],
+  AU: [134.0, -25.0, 4.5],
+  NZ: [172.5, -41.5, 1.5],
+  AR: [-64.0, -34.0, 3.0],
+  UY: [-56.0, -32.8, 1.0],
+  CO: [-74.0, 4.6, 1.4],
+  EC: [-78.5, -1.8, 0.8],
+  BO: [-64.7, -16.3, 1.5],
+  GY: [-58.9, 4.9, 0.8],
+  VE: [-66.6, 8.0, 1.5],
+  MX: [-102.0, 23.0, 2.0],
+  GT: [-90.2, 15.5, 0.6],
+  DO: [-70.2, 18.9, 0.5],
+  CU: [-79.5, 21.8, 1.0],
+  CA: [-96.0, 56.0, 4.5],
+  ZA: [24.0, -29.0, 1.5],
+  TN: [9.5, 34.0, 1.0],
+  CM: [12.3, 5.9, 1.2],
+  NE: [8.1, 17.6, 1.5],
+  ST: [6.6, 0.2, 0.1],
+  TR: [35.0, 39.0, 2.2],
+  GE: [43.5, 42.1, 0.9],
+  AM: [45.0, 40.1, 0.4],
+  RS: [20.9, 44.0, 0.9],
+  AL: [20.0, 41.1, 0.6],
+  BA: [17.7, 44.0, 0.7],
+  ME: [19.3, 42.7, 0.4],
+  MD: [28.5, 47.0, 0.5],
+  UA: [31.2, 49.0, 2.0],
+  RU: [40.0, 56.0, 2.5],
+  NO: [10.0, 61.5, 1.8],
+  IS: [-18.5, 65.0, 1.0],
+  LI: [9.55, 47.16, 0.25],
+  MT: [14.4, 35.9, 0.2],
+  AD: [1.55, 42.54, 0.1],
+};
+
+function getOrganicGiCoords(gi: GICartographyItem, countryIdx: number, countryTotal: number): [number, number] {
+  const centroid = COUNTRY_CENTROIDS[gi.country_code];
+  if (!centroid) return [gi.lon, gi.lat];
+  const [lon0, lat0, maxSpread] = centroid;
+  if (countryTotal <= 1) return [lon0, lat0];
+  const angle = countryIdx * GOLDEN_ANGLE_RAD;
+  const radius = maxSpread * Math.sqrt((countryIdx + 0.5) / countryTotal);
+  return [
+    +(lon0 + radius * Math.cos(angle)).toFixed(4),
+    +(lat0 + radius * Math.sin(angle) * 0.82).toFixed(4),
+  ];
+}
+
+function classifyGiPinCategory(gi: GICartographyItem): 'plant' | 'cheese_meat' | 'wine_spirit' {
+  if (
+    gi.eu_class.includes('Pulses') ||
+    gi.eu_class.includes('Fruits') ||
+    gi.eu_class.includes('Grains') ||
+    gi.eu_class.includes('Olive Oils')
+  ) {
+    return 'plant';
+  }
+  if (gi.product_sector === 'WINE' || gi.product_sector === 'SPIRIT') {
+    return 'wine_spirit';
+  }
+  return 'cheese_meat';
+}
+
+function sampleProportionally<T>(items: T[], limit: number): T[] {
+  if (items.length <= limit) return items;
+  const sampled: T[] = [];
+  for (let i = 0; i < limit; i++) {
+    sampled.push(items[Math.floor((i * items.length) / limit)]);
+  }
+  return sampled;
+}
 
 export type MapMetric =
   | 'dailyCarbonKg'
@@ -70,12 +175,14 @@ export function InteractiveChoroplethMap({
   onSelectCountry,
   compact = false,
 }: InteractiveChoroplethMapProps) {
+  const isDark = useDarkMode();
   const [geoLoaded, setGeoLoaded] = useState(() => Boolean(echarts.getMap('world_dietshift')));
   const [metric, setMetric] = useState<MapMetric>('dailyCarbonKg');
   const [focusView, setFocusView] = useState<'europe' | 'world'>('europe');
   const [giRecords, setGiRecords] = useState<GICartographyItem[]>([]);
   const [cohdRecords, setCohdRecords] = useState<CohdCountryRecord[]>([]);
   const [showGiPins, setShowGiPins] = useState<boolean>(!compact);
+  const [giVisualMode, setGiVisualMode] = useState<GiVisualMode>('constellation');
   const [giSectorFilter, setGiSectorFilter] = useState<string>('FOOD');
   const [giRoleFilter, setGiRoleFilter] = useState<string>('ALL');
   const [selectedGiItem, setSelectedGiItem] = useState<GICartographyItem | null>(null);
@@ -480,25 +587,223 @@ export function InteractiveChoroplethMap({
                 : undefined,
           }));
 
-    const scatterPoints = filteredGiPins.slice(0, compact ? 450 : 2500).map((gi) => {
-      const isPlant =
-        gi.eu_class.includes('Pulses') ||
-        gi.eu_class.includes('Fruits') ||
-        gi.eu_class.includes('Grains') ||
-        gi.eu_class.includes('Olive Oils');
-      const isWineSpirit = gi.product_sector === 'WINE' || gi.product_sector === 'SPIRIT';
-      return {
+    const hubAccumulator: Record<
+      string,
+      {
+        count: number;
+        plantCount: number;
+        sumLon: number;
+        sumLat: number;
+        sampleProduct: string;
+        sampleGi: GICartographyItem;
+      }
+    > = {};
+
+    for (const gi of filteredGiPins) {
+      const cc = gi.country_code;
+      const cat = classifyGiPinCategory(gi);
+      if (!hubAccumulator[cc]) {
+        hubAccumulator[cc] = {
+          count: 0,
+          plantCount: 0,
+          sumLon: 0,
+          sumLat: 0,
+          sampleProduct: gi.product_name,
+          sampleGi: gi,
+        };
+      }
+      hubAccumulator[cc].count += 1;
+      if (cat === 'plant') hubAccumulator[cc].plantCount += 1;
+      hubAccumulator[cc].sumLon += gi.lon;
+      hubAccumulator[cc].sumLat += gi.lat;
+    }
+
+    const hubPoints = Object.entries(hubAccumulator)
+      .sort((a, b) => b[1].count - a[1].count)
+      .map(([cc, hub]) => {
+        const override = COUNTRY_CENTROIDS[cc];
+        const lon = override ? override[0] : +(hub.sumLon / hub.count).toFixed(4);
+        const lat = override ? override[1] : +(hub.sumLat / hub.count).toFixed(4);
+        const plantSharePct = hub.count > 0 ? +((hub.plantCount / hub.count) * 100).toFixed(1) : 0;
+        const hubColor = plantSharePct >= 50 ? '#0d9488' : plantSharePct >= 30 ? '#163d4a' : '#8a1253';
+        const hubStat: HubStatSummary = {
+          countryCode: cc,
+          count: hub.count,
+          plantCount: hub.plantCount,
+          plantSharePct,
+          sampleProduct: hub.sampleProduct,
+        };
+        return {
+          name: `${cc} (${hub.count})`,
+          value: [lon, lat, hub.count],
+          hubStat,
+          giItem: hub.sampleGi,
+          itemStyle: {
+            color: hubColor,
+            borderColor: '#ffffff',
+            borderWidth: 1.5,
+            opacity: 0.9,
+          },
+        };
+      });
+
+    const sampledPins = sampleProportionally(filteredGiPins, compact ? 600 : 1800);
+    const sampledTotals: Record<string, number> = {};
+    for (const gi of sampledPins) {
+      sampledTotals[gi.country_code] = (sampledTotals[gi.country_code] || 0) + 1;
+    }
+    const sampledSeen: Record<string, number> = {};
+
+    type GiPinPoint = {
+      name: string;
+      value: [number, number, number];
+      giItem: GICartographyItem;
+    };
+    const plantPoints: GiPinPoint[] = [];
+    const cheeseMeatPoints: GiPinPoint[] = [];
+    const wineSpiritPoints: GiPinPoint[] = [];
+
+    for (const gi of sampledPins) {
+      const cc = gi.country_code;
+      const idx = sampledSeen[cc] || 0;
+      sampledSeen[cc] = idx + 1;
+      const [lon, lat] = getOrganicGiCoords(gi, idx, sampledTotals[cc] || 1);
+      const pt: GiPinPoint = {
         name: gi.product_name,
-        value: [gi.lon, gi.lat, gi.co2_kg_per_kg],
+        value: [lon, lat, gi.co2_kg_per_kg],
         giItem: gi,
-        itemStyle: {
-          color: isPlant ? '#163d4a' : isWineSpirit ? '#6b4c1b' : '#8a1253',
-          borderColor: '#eaedf2',
-          borderWidth: 0.8,
-          opacity: 0.88,
-        },
       };
-    });
+      const cat = classifyGiPinCategory(gi);
+      if (cat === 'plant') {
+        plantPoints.push(pt);
+      } else if (cat === 'wine_spirit') {
+        wineSpiritPoints.push(pt);
+      } else {
+        cheeseMeatPoints.push(pt);
+      }
+    }
+
+    const pinSizeConstellation =
+      focusView === 'world' ? (compact ? 3.8 : 4.4) : compact ? 5 : 6.2;
+    const carbonPinSize = (val: number[]) =>
+      Math.max(3.5, Math.min(13, 3 + Math.sqrt(Math.max(0.2, val[2] || 1)) * 1.8));
+
+    const pinScatterSeries =
+      !showGiPins
+        ? []
+        : giVisualMode === 'hubs'
+        ? [
+            {
+              name: 'National Terroir Hubs (GIview + EUIPO)',
+              type: 'effectScatter',
+              coordinateSystem: 'geo',
+              showEffectOn: 'render',
+              rippleEffect: { brushType: 'stroke', scale: 2.5, period: 5 },
+              symbolSize: (val: number[]) => Math.max(10, Math.min(38, Math.sqrt(val[2] || 1) * 1.45)),
+              labelLayout: { hideOverlap: true },
+              label: {
+                show: !compact,
+                position: 'top',
+                distance: 4,
+                formatter: (p: { data?: { hubStat?: HubStatSummary } }) => {
+                  const hs = p.data?.hubStat;
+                  return hs && hs.count >= 25 ? `${hs.countryCode} · ${hs.count}` : '';
+                },
+                fontSize: 10,
+                fontFamily: 'IBM Plex Mono, monospace',
+                color: '#111827',
+                backgroundColor: 'rgba(234, 237, 242, 0.88)',
+                borderColor: '#aeb6c4',
+                borderWidth: 0.6,
+                padding: [1, 4],
+                borderRadius: 3,
+              },
+              data: hubPoints,
+            },
+          ]
+        : [
+            {
+              name: 'Artisanal Cheese & Meat GI',
+              type: 'scatter',
+              coordinateSystem: 'geo',
+              large: false,
+              zlevel: 1,
+              symbolSize: giVisualMode === 'carbon' ? carbonPinSize : pinSizeConstellation,
+              itemStyle: {
+                color: '#d97706',
+                borderColor: '#ffffff',
+                borderWidth: 1.0,
+                opacity: giVisualMode === 'carbon' ? 0.76 : 0.86,
+                shadowBlur: 3,
+                shadowColor: 'rgba(217, 119, 6, 0.3)',
+              },
+              data: cheeseMeatPoints,
+            },
+            {
+              name: 'Viticulture & Spirits GI',
+              type: 'scatter',
+              coordinateSystem: 'geo',
+              large: false,
+              zlevel: 1,
+              symbolSize: giVisualMode === 'carbon' ? carbonPinSize : pinSizeConstellation,
+              itemStyle: {
+                color: '#7c3aed',
+                borderColor: '#ffffff',
+                borderWidth: 1.0,
+                opacity: 0.86,
+              },
+              data: wineSpiritPoints,
+            },
+            {
+              name: 'Plant & Olive Oil GI (NOVA 1–2)',
+              type: 'scatter',
+              coordinateSystem: 'geo',
+              large: false,
+              zlevel: 2,
+              symbolSize: giVisualMode === 'carbon' ? carbonPinSize : pinSizeConstellation,
+              itemStyle: {
+                color: '#0d9488',
+                borderColor: '#ffffff',
+                borderWidth: 1.1,
+                opacity: 0.94,
+                shadowBlur: 3,
+                shadowColor: 'rgba(13, 148, 136, 0.35)',
+              },
+              data: plantPoints,
+            },
+            ...(giVisualMode === 'constellation' && !compact
+              ? [
+                  {
+                    name: 'Top 10 National Terroir Hubs',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    showEffectOn: 'render',
+                    rippleEffect: { brushType: 'stroke', scale: 2.6, period: 5.5 },
+                    symbolSize: focusView === 'world' ? 11 : 14,
+                    labelLayout: { hideOverlap: true },
+                    label: {
+                      show: true,
+                      position: 'right',
+                      distance: 5,
+                      formatter: (p: { data?: { hubStat?: HubStatSummary } }) => {
+                        const hs = p.data?.hubStat;
+                        return hs ? `${hs.countryCode} · ${hs.count}` : '';
+                      },
+                      fontSize: 10,
+                      fontFamily: 'IBM Plex Mono, monospace',
+                      color: '#111827',
+                      backgroundColor: 'rgba(234, 237, 242, 0.88)',
+                      borderColor: '#aeb6c4',
+                      borderWidth: 0.6,
+                      padding: [1, 4],
+                      borderRadius: 3,
+                    },
+                    data: hubPoints.slice(0, 10),
+                  },
+                ]
+              : []),
+          ];
 
     return {
       backgroundColor: 'transparent',
@@ -516,10 +821,29 @@ export function InteractiveChoroplethMap({
             value?: number | number[];
             giStat?: { total: number; food: number; wine: number; spirit: number; plantSharePct: number };
             giItem?: GICartographyItem;
+            hubStat?: HubStatSummary;
           };
           name: string;
         }) => {
-          if (params.seriesType === 'scatter' && params.data?.giItem) {
+          if (params.data?.hubStat) {
+            const hs = params.data.hubStat;
+            return `
+              <div style="min-width:225px;max-width:290px;">
+                <div style="font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:13px;color:#111827;border-bottom:2px solid #2d3643;padding-bottom:3px;margin-bottom:5px;">
+                  [${hs.countryCode}] National Terroir Hub
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px;color:#2d3643;font-family:'IBM Plex Mono',monospace;margin-bottom:5px;">
+                  <span>Active GIs: <b>${hs.count.toLocaleString()}</b></span>
+                  <span>Plant Share: <b>${hs.plantSharePct}%</b></span>
+                </div>
+                <div style="font-size:10px;color:#3d4654;font-family:'IBM Plex Mono',monospace;">
+                  Flagship sample: ${hs.sampleProduct} (Click hub to filter)
+                </div>
+              </div>
+            `;
+          }
+
+          if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter') && params.data?.giItem) {
             const gi = params.data.giItem;
             return `
               <div style="min-width:240px;max-width:310px;">
@@ -612,9 +936,9 @@ export function InteractiveChoroplethMap({
         zoom: focusView === 'europe' ? 4.3 : 1.25,
         label: { show: false },
         itemStyle: {
-          areaColor: '#cfd5df',
-          borderColor: '#8c96a6',
-          borderWidth: 0.7,
+          areaColor: isDark ? '#27303f' : '#dde3ec',
+          borderColor: isDark ? '#475569' : '#7c8ba1',
+          borderWidth: 0.75,
         },
         emphasis: {
           label: { show: true, color: '#111827', fontSize: 11, fontFamily: 'Hanken Grotesk, sans-serif' },
@@ -628,37 +952,29 @@ export function InteractiveChoroplethMap({
           geoIndex: 0,
           data,
         },
-        ...(showGiPins
-          ? [
-              {
-                name: 'Protected GI Terroir Products (GIview + Qualigeo)',
-                type: 'scatter',
-                coordinateSystem: 'geo',
-                symbolSize: compact ? 5 : 7,
-                large: true,
-                largeThreshold: 600,
-                data: scatterPoints,
-              },
-            ]
-          : []),
+        ...pinScatterSeries,
       ],
     };
-  }, [geoLoaded, metric, focusView, selectedCountry, METRIC_META, giCountryStats, showGiPins, filteredGiPins, compact, cohdRecords, cohdByGeoName]);
+  }, [geoLoaded, metric, focusView, selectedCountry, METRIC_META, giCountryStats, showGiPins, giVisualMode, filteredGiPins, compact, cohdRecords, cohdByGeoName, isDark]);
 
   const onEvents = useMemo(
     () => ({
       click: (params: {
         seriesType?: string;
         name?: string;
-        data?: { countryCode?: string; giItem?: GICartographyItem };
+        data?: { countryCode?: string; giItem?: GICartographyItem; hubStat?: HubStatSummary };
       }) => {
-        if (params.seriesType === 'scatter' && params.data?.giItem) {
-          setSelectedGiItem(params.data.giItem);
-          const cc = params.data.giItem.country_code;
-          if (COUNTRY_PROFILES[cc]) {
+        if (params.seriesType === 'scatter' || params.seriesType === 'effectScatter') {
+          if (params.data?.giItem) {
+            setSelectedGiItem(params.data.giItem);
+          }
+          const cc = params.data?.hubStat?.countryCode || params.data?.giItem?.country_code;
+          if (cc && COUNTRY_PROFILES[cc]) {
             onSelectCountry(cc);
           }
-          return;
+          if (params.data?.giItem || params.data?.hubStat) {
+            return;
+          }
         }
         const code = params.data?.countryCode || (params.name ? nameToCodeMap[params.name] : undefined);
         if (code && COUNTRY_PROFILES[code]) {
@@ -770,12 +1086,41 @@ export function InteractiveChoroplethMap({
         </div>
       </div>
 
+      {/* GI Terroir Spatial Mode Bar (compact Overview toggle) */}
+      {showGiPins && compact && giRecords.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-2 px-2.5 py-1.5 almanac-well text-[11px]">
+          <span className="font-semibold text-[var(--color-ink)]">GI Overlay Mode:</span>
+          <div className="flex flex-wrap items-center gap-1">
+            {(
+              [
+                ['constellation', '✦ Terroir Constellation'],
+                ['hubs', '◎ National Terroir Hubs'],
+                ['carbon', '⚖ Carbon-Weighted Pins'],
+              ] as const
+            ).map(([modeKey, label]) => (
+              <button
+                key={modeKey}
+                type="button"
+                onClick={() => setGiVisualMode(modeKey)}
+                className={`px-2 py-0.5 rounded border text-[11px] font-mono cursor-pointer transition-colors ${
+                  giVisualMode === modeKey
+                    ? 'bg-[var(--color-ink)] text-[var(--color-sheet)] border-[var(--color-ink)] font-semibold'
+                    : 'border-[var(--color-rule)] text-[var(--color-ink)] hover:border-[var(--color-ink)]'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* GI Terroir Spatial Filter Bar when GI Pins are enabled */}
       {showGiPins && !compact && (
         <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 almanac-well text-xs">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <span className="font-semibold flex items-center gap-1 text-[var(--color-ink)]">
-              <Filter className="w-3.5 h-3.5" /> GI Terroir Spatial Layer:
+              <Filter className="w-3.5 h-3.5" /> GI Terroir Layer:
             </span>
             <select
               value={giSectorFilter}
@@ -799,23 +1144,53 @@ export function InteractiveChoroplethMap({
               <option value="OLIVE_OIL">Extra-Virgin Olive Oils (Class 1.5)</option>
               <option value="CHEESE_MEAT">Traditional Cheeses & Meats (Class 1.1–1.3)</option>
             </select>
+
+            <div className="flex flex-wrap items-center gap-1">
+              {(
+                [
+                  ['constellation', '✦ Terroir Constellation'],
+                  ['hubs', '◎ National Terroir Hubs'],
+                  ['carbon', '⚖ Carbon-Weighted Pins'],
+                ] as const
+              ).map(([modeKey, label]) => (
+                <button
+                  key={modeKey}
+                  type="button"
+                  onClick={() => setGiVisualMode(modeKey)}
+                  className={`px-2 py-0.5 rounded border text-[11px] font-mono cursor-pointer transition-colors ${
+                    giVisualMode === modeKey
+                      ? 'bg-[var(--color-ink)] text-[var(--color-sheet)] border-[var(--color-ink)] font-semibold'
+                      : 'border-[var(--color-rule)] text-[var(--color-ink)] hover:border-[var(--color-ink)]'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-3 font-mono-num text-[11px]">
             <span className="inline-flex items-center gap-1">
-              <span className="w-2.5 h-2.5 inline-block rounded-full bg-[#163d4a]" /> Plant & Olive Oil GI (NOVA 1–2)
+              <span className="w-2.5 h-2.5 inline-block rounded-full bg-[#0d9488] ring-1 ring-white" /> Plant &amp; Olive Oil (NOVA 1–2)
             </span>
             <span className="inline-flex items-center gap-1">
-              <span className="w-2.5 h-2.5 inline-block rounded-full bg-[#8a1253]" /> Cheese & Meat GI (NOVA 1–3)
+              <span className="w-2.5 h-2.5 inline-block rounded-full bg-[#d97706] ring-1 ring-white" /> Cheese &amp; Meat
             </span>
             <span className="inline-flex items-center gap-1">
-              <span className="w-2.5 h-2.5 inline-block rounded-full bg-[#6b4c1b]" /> Wine & Spirit GI
+              <span className="w-2.5 h-2.5 inline-block rounded-full bg-[#7c3aed] ring-1 ring-white" /> Wine &amp; Spirit
             </span>
           </div>
         </div>
       )}
 
-      <div className={`${compact ? 'h-80' : 'h-[520px]'} w-full relative almanac-well`}>
+      <div
+        className={`${compact ? 'h-80' : 'h-[520px]'} w-full relative almanac-well overflow-hidden`}
+        style={{
+          background: isDark
+            ? 'radial-gradient(circle at 50% 45%, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.9) 100%)'
+            : 'radial-gradient(circle at 50% 45%, rgba(214, 224, 236, 0.45) 0%, rgba(186, 201, 218, 0.65) 100%)',
+        }}
+      >
         {geoLoaded ? (
           <ReactECharts
             option={mapOption}
@@ -826,6 +1201,51 @@ export function InteractiveChoroplethMap({
         ) : (
           <div className="h-full flex items-center justify-center almanac-label">
             Loading vector cartography...
+          </div>
+        )}
+
+        {geoLoaded && showGiPins && giRecords.length > 0 && (
+          <div
+            className={`pointer-events-none absolute z-10 flex flex-wrap items-center gap-2 rounded-md border px-2.5 py-1 backdrop-blur-sm ${
+              compact ? 'left-2 top-2' : 'left-2.5 bottom-2.5'
+            } ${
+              isDark
+                ? 'bg-slate-900/80 border-slate-700/80 text-slate-100'
+                : 'bg-[#eaedf2]/88 border-[#aeb6c4] text-[#111827]'
+            } ${compact ? 'text-[10px]' : 'text-[11px]'}`}
+          >
+            <span className="font-mono font-semibold opacity-85">
+              {giVisualMode === 'constellation'
+                ? '✦ Constellation'
+                : giVisualMode === 'hubs'
+                ? '◎ Hubs'
+                : '⚖ Carbon Scale'}
+            </span>
+            {giVisualMode === 'hubs' ? (
+              <>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#0d9488]" /> ≥50% Plant
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#163d4a]" /> 30–50% Plant
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#8a1253]" /> &lt;30% Plant
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#0d9488]" /> Plant &amp; Oil
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#d97706]" /> Cheese &amp; Meat
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#7c3aed]" /> Wine &amp; Spirit
+                </span>
+              </>
+            )}
           </div>
         )}
       </div>

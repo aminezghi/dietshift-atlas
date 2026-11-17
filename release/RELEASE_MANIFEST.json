@@ -3,8 +3,8 @@
   "release_candidate_version": "1.0.0",
   "analytical_baseline_tag": "v5.2.0-phase5c",
   "documentation_baseline_tag": "v6.0.0-phase6a",
-  "git_head_short": "4676913",
-  "generated_at_utc": "2026-11-17T14:15:57.913230+00:00",
+  "git_head_short": "176cbd7",
+  "generated_at_utc": "2026-11-17T14:35:08.322869+00:00",
   "regeneration_command": "python scripts/build_release_manifest.py",
   "staging_command": "python scripts/build_release_manifest.py --stage-track-a",
   "summary_counts": {
@@ -650,8 +650,8 @@
     },
     {
       "relative_path": "src/components/InteractiveChoroplethMap.tsx",
-      "size_bytes": 39253,
-      "sha256": "5940688b7a5060d59c3d36225b1b5737276d63587da43d6ad1ccd6c3ae49144c",
+      "size_bytes": 55241,
+      "sha256": "bdde1eb54e234c7d91f32e6e2f6d0991bd3c3b572e2994e1391342114d6dad4b",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
