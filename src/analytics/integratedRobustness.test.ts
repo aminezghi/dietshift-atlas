@@ -23,6 +23,7 @@ import {
   serializeIntegratedRobustnessCsv,
 } from './integratedRobustness';
 import type { AgribalyseItem, EurostatCountryData, OFFProduct } from '../types/research';
+import { FIXTURE_GI_ITEMS } from '../test/fixtures/atlasFixtures';
 
 describe('integratedRobustness (Phase 4D)', () => {
   it('blocks hicp_inflation_pct and incompatible denominator grain subtraction', () => {
@@ -101,9 +102,10 @@ describe('integratedRobustness (Phase 4D)', () => {
         unaffordable_pct: number | null;
       }>;
     };
-    const giBundle = JSON.parse(
-      fs.readFileSync(path.join(baseDir, 'gi_terroir_bundle.json'), 'utf-8')
-    ) as { gi_terroir_records: GITerroirInput[] };
+    const giPath = path.join(baseDir, 'gi_terroir_bundle.json');
+    const giBundle = fs.existsSync(giPath)
+      ? (JSON.parse(fs.readFileSync(giPath, 'utf-8')) as { gi_terroir_records: GITerroirInput[] })
+      : { gi_terroir_records: FIXTURE_GI_ITEMS };
     const scraplingRaw = JSON.parse(
       fs.readFileSync(path.join(baseDir, 'scrapling_retail_claims.json'), 'utf-8')
     ) as OpenPricesSkuInput[];

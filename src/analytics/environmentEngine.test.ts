@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
+import { FIXTURE_GI_ITEMS } from '../test/fixtures/atlasFixtures';
 import type { AgribalyseItem } from '../types/research';
 import {
   ENVIRONMENT_ENGINE_VERSION,
@@ -221,8 +222,18 @@ describe('environmentEngine (Phase 3C)', () => {
     expect(protAgg.data[0].validDenominator).toBe(32); // 13 genuine NULLs preserved
     expect(protAgg.data[0].missingCount).toBe(13);
 
+    const giPath = path.resolve(process.cwd(), 'public/data/gi_terroir_bundle.json');
+    if (!fs.existsSync(giPath)) {
+      // In Track A open-source release, gi_terroir_bundle.json is excluded (Track B).
+      // Test GI filtering logic using FIXTURE_GI_ITEMS
+      const allGi = FIXTURE_GI_ITEMS.map(fromGITerroirItem);
+      const giFilter = filterFoodEligibleEnvironmentRecords(allGi, false);
+      expect(giFilter.eligibleRecords.length).toBeGreaterThan(0);
+      return;
+    }
+
     const giBundle = JSON.parse(
-      fs.readFileSync(path.resolve(process.cwd(), 'public/data/gi_terroir_bundle.json'), 'utf-8')
+      fs.readFileSync(giPath, 'utf-8')
     ) as { gi_terroir_records: GITerroirInput[] };
     const allGi = giBundle.gi_terroir_records.map(fromGITerroirItem);
     const giFilter = filterFoodEligibleEnvironmentRecords(allGi, false);

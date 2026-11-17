@@ -17,8 +17,6 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 STAGE_DIR = ROOT / "dist-release" / "track-a-1.0.0"
-if not STAGE_DIR.exists():
-    STAGE_DIR = ROOT / "dist-release" / "track-a-1.0.0-rc.1"
 TRACK_A_DIST = STAGE_DIR / "dist"
 TRACK_A_PORT = int(os.environ.get("DIETSHIFT_TRACK_A_E2E_PORT", "4195"))
 TRACK_A_URL = f"http://127.0.0.1:{TRACK_A_PORT}/"
@@ -37,6 +35,7 @@ EXPECTED_TRACK_B_FILENAMES = {
     "time_use_cooking_friction.parquet",
     "cultural_climate_inertia.parquet",
     "social_discourse_velocity.parquet",
+    "consumer_behavior_pulse.parquet",
 }
 
 
