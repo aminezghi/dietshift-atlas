@@ -1,7 +1,7 @@
 {
   "release_version": "1.0.0",
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-17T14:34:23.557518+00:00",
+  "generated_at_utc": "2026-11-17T14:47:01.103442+00:00",
   "summary": {
     "track_a_open_data_files": 33,
     "track_a_parquet_tables": 13,
@@ -655,8 +655,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/InteractiveChoroplethMap.tsx": {
-      "sha256": "bdde1eb54e234c7d91f32e6e2f6d0991bd3c3b572e2994e1391342114d6dad4b",
-      "size_bytes": 55241,
+      "sha256": "51147afc928c3276472fa796183f8e5b8fbf22596aa9ec3f7a8f5a9c147eef9d",
+      "size_bytes": 54999,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },

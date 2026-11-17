@@ -11,6 +11,12 @@ import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
 
 export type GiVisualMode = 'constellation' | 'hubs' | 'carbon';
 
+const GI_VISUAL_MODES: ReadonlyArray<readonly [GiVisualMode, string]> = [
+  ['hubs', '◎ National Terroir Hubs'],
+  ['constellation', '✦ Terroir Constellation'],
+  ['carbon', '⚖ Carbon-Weighted Pins'],
+];
+
 interface HubStatSummary {
   countryCode: string;
   count: number;
@@ -182,7 +188,7 @@ export function InteractiveChoroplethMap({
   const [giRecords, setGiRecords] = useState<GICartographyItem[]>([]);
   const [cohdRecords, setCohdRecords] = useState<CohdCountryRecord[]>([]);
   const [showGiPins, setShowGiPins] = useState<boolean>(!compact);
-  const [giVisualMode, setGiVisualMode] = useState<GiVisualMode>('constellation');
+  const [giVisualMode, setGiVisualMode] = useState<GiVisualMode>('hubs');
   const [giSectorFilter, setGiSectorFilter] = useState<string>('FOOD');
   const [giRoleFilter, setGiRoleFilter] = useState<string>('ALL');
   const [selectedGiItem, setSelectedGiItem] = useState<GICartographyItem | null>(null);
@@ -1091,13 +1097,7 @@ export function InteractiveChoroplethMap({
         <div className="flex flex-wrap items-center justify-between gap-2 px-2.5 py-1.5 almanac-well text-[11px]">
           <span className="font-semibold text-[var(--color-ink)]">GI Overlay Mode:</span>
           <div className="flex flex-wrap items-center gap-1">
-            {(
-              [
-                ['constellation', '✦ Terroir Constellation'],
-                ['hubs', '◎ National Terroir Hubs'],
-                ['carbon', '⚖ Carbon-Weighted Pins'],
-              ] as const
-            ).map(([modeKey, label]) => (
+            {GI_VISUAL_MODES.map(([modeKey, label]) => (
               <button
                 key={modeKey}
                 type="button"
@@ -1146,13 +1146,7 @@ export function InteractiveChoroplethMap({
             </select>
 
             <div className="flex flex-wrap items-center gap-1">
-              {(
-                [
-                  ['constellation', '✦ Terroir Constellation'],
-                  ['hubs', '◎ National Terroir Hubs'],
-                  ['carbon', '⚖ Carbon-Weighted Pins'],
-                ] as const
-              ).map(([modeKey, label]) => (
+              {GI_VISUAL_MODES.map(([modeKey, label]) => (
                 <button
                   key={modeKey}
                   type="button"
