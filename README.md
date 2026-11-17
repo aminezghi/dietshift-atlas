@@ -109,32 +109,32 @@ DietShift Atlas uses an optimized dual-path client-side data delivery architectu
 
 ```mermaid
 flowchart TD
-    subgraph Browser Client [Client-Side Browser Environment]
-        subgraph Delivery [Data Ingestion & Routing]
-            DP[dataProvider.ts<br/>Deduplicated In-Memory JSON Bundles]
-            DB[duckdbEngine.ts<br/>WebAssembly SQL Engine]
+    subgraph BrowserClient ["Client-Side Browser Environment"]
+        subgraph Delivery ["Data Ingestion & Routing"]
+            DP["dataProvider.ts<br/>Deduplicated In-Memory JSON Bundles"]
+            DB["duckdbEngine.ts<br/>WebAssembly SQL Engine"]
         end
 
-        subgraph CoreEngines [Analytical Engines (src/analytics/)]
-            NE[Nutrition Engine]
-            EE[Environment Engine]
-            AE[Affordability Engine]
-            SE[Sensitivity Engine 4C]
-            RE[Integrated Robustness 4D]
-            FE[Forecasting Engine ETS]
+        subgraph CoreEngines ["Analytical Engines (src/analytics/)"]
+            NE["Nutrition Engine"]
+            EE["Environment Engine"]
+            AE["Affordability Engine"]
+            SE["Sensitivity Engine 4C"]
+            RE["Integrated Robustness 4D"]
+            FE["Forecasting Engine ETS"]
         end
 
-        subgraph UI [Interactive User Interface]
-            Views[13 Observatories & Workbenches]
-            Export[exportDownload.ts<br/>Parity-Checked CSV / JSON / SQL]
-            Banner[ResourceDisclosureBanner.tsx<br/>Track A / Track B Status]
+        subgraph UI ["Interactive User Interface"]
+            Views["13 Observatories & Workbenches"]
+            Export["exportDownload.ts<br/>Parity-Checked CSV / JSON / SQL"]
+            Banner["ResourceDisclosureBanner.tsx<br/>Track A / Track B Status"]
         end
     end
 
-    subgraph StaticStorage [Static HTTP Distribution (public/data/)]
-        P_JSON[(19 JSON Caches)]
-        P_PARQUET[(19 ZSTD Parquet Tables)]
-        P_GEO[(world.geojson)]
+    subgraph StaticStorage ["Static HTTP Distribution (public/data/)"]
+        P_JSON[("19 JSON Caches")]
+        P_PARQUET[("19 ZSTD Parquet Tables")]
+        P_GEO[("world.geojson")]
     end
 
     P_JSON -->|fetch on demand| DP
