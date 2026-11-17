@@ -12,6 +12,15 @@ node_modules
 dist
 dist-ssr
 dist-release
+dist-release/
+.archify/
+paper/
+PHASE5A_IMPLEMENTATION_REPORT.md
+PHASE5B_IMPLEMENTATION_REPORT.md
+PHASE5C_QA_IMPLEMENTATION_REPORT.md
+PHASE5_SYSTEM_VALIDATION_AUDIT.md
+docs/phase6/FINAL_PUBLIC_RESTORATION_READINESS_AUDIT.md
+docs/phase6/SCOPED_RELEASE_PACKAGE_REPORT.md
 *.local
 .tools
 .venv

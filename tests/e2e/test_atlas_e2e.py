@@ -75,31 +75,6 @@ def preview_url():
             proc.wait(timeout=5)
 
 
-EXPECTED_TRACK_B_FILENAMES = {
-    "gi_terroir_bundle.json",
-    "consumer_behavior_pulse.json",
-    "empirical_microdata_bundle.json",
-    "gs1_immagino_bundle.json",
-    "pan_eu_retail_bundle.json",
-    "time_use_cooking_friction.json",
-    "cultural_climate_inertia.json",
-    "gi_terroir_registry.parquet",
-    "gs1_immagino_observatory.parquet",
-    "pan_eu_retail_scanner.parquet",
-    "time_use_cooking_friction.parquet",
-    "cultural_climate_inertia.parquet",
-    "social_discourse_velocity.parquet",
-    "consumer_behavior_pulse.parquet",
-}
-
-
-def _is_expected_track_b_404(status: int, url: str) -> bool:
-    if status != 404:
-        return False
-    fname = url.split("/")[-1].split("?")[0]
-    return fname in EXPECTED_TRACK_B_FILENAMES
-
-
 def test_all_13_sections_dedup_accessibility_fallbacks_and_exports(preview_url, tmp_path):
     """Comprehensive Phase 5C CI verification across all 13 sections, controls, and downloads."""
     with sync_playwright() as p:
@@ -118,9 +93,7 @@ def test_all_13_sections_dedup_accessibility_fallbacks_and_exports(preview_url, 
             "response",
             lambda res: (
                 data_requests.append(res.url.split("/")[-1]) if "/data/" in res.url else None,
-                http_errors.append((res.status, res.url))
-                if res.status >= 400 and not _is_expected_track_b_404(res.status, res.url)
-                else None,
+                http_errors.append((res.status, res.url)) if res.status >= 400 else None,
             ),
         )
 

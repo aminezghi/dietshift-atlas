@@ -109,7 +109,7 @@ python -m pip install git-filter-repo
 
 ### Step 2: Create a Clean Backup Clone
 ```bash
-git clone c:/Users/azoua/Documents/Visualization ../dietshift-atlas-clean-publish
+git clone <LOCAL_USER_HOME>/Documents/Visualization ../dietshift-atlas-clean-publish
 cd ../dietshift-atlas-clean-publish
 ```
 

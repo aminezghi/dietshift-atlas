@@ -3,25 +3,25 @@
   "release_candidate_version": "1.0.0",
   "analytical_baseline_tag": "v5.2.0-phase5c",
   "documentation_baseline_tag": "v6.0.0-phase6a",
-  "git_head_short": "d9f4b8b",
-  "generated_at_utc": "2026-11-17T11:05:22.667506+00:00",
+  "git_head_short": "4676913",
+  "generated_at_utc": "2026-11-17T14:15:57.913230+00:00",
   "regeneration_command": "python scripts/build_release_manifest.py",
   "staging_command": "python scripts/build_release_manifest.py --stage-track-a",
   "summary_counts": {
-    "software_source_and_docs_files": 148,
-    "track_a_open_data_files": 32,
-    "track_a_parquet_tables": 12,
-    "track_b_excluded_data_files": 1,
-    "track_b_excluded_parquet_tables": 0,
-    "excluded_unapproved_manuscript_files": 0,
-    "track_a_total_bytes": 9971856,
-    "track_b_excluded_total_bytes": 275429
+    "software_source_and_docs_files": 153,
+    "track_a_open_data_files": 33,
+    "track_a_parquet_tables": 13,
+    "track_b_excluded_data_files": 14,
+    "track_b_excluded_parquet_tables": 6,
+    "excluded_unapproved_manuscript_files": 5,
+    "track_a_total_bytes": 9976923,
+    "track_b_excluded_total_bytes": 13747912
   },
   "software_source_and_docs": [
     {
       "relative_path": ".gitignore",
-      "size_bytes": 521,
-      "sha256": "242cea471f8cf13384d8bfef4bbe87a63dcb1bf122bf873cdb48ae53cb0d4508",
+      "size_bytes": 789,
+      "sha256": "7143298f1bc954e006f8cdafc75ac9c4819e18861326c10c02128fd9dc47e876",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -160,8 +160,8 @@
     },
     {
       "relative_path": "README.md",
-      "size_bytes": 23242,
-      "sha256": "610321550153c7f3cd3379d4d115519c332c757c65fed6985397c43f09c7d2b2",
+      "size_bytes": 26441,
+      "sha256": "5f53d6408d204e3693436c558702a1ba8bbb27d978ba17222454dd3fc87a1b1b",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -200,8 +200,8 @@
     },
     {
       "relative_path": "public/floorplan.html",
-      "size_bytes": 2198949,
-      "sha256": "8cc28e143c8999d8615a2eb2cd04b520f5ae6a9e1504af5689cf132edb4979ac",
+      "size_bytes": 2198937,
+      "sha256": "eb6c90995f87e018f78940ed9699117396ae1b54a511df9944fc3f9dd3fd010c",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -550,8 +550,8 @@
     },
     {
       "relative_path": "src/components/ConsumerBehaviorPulse.tsx",
-      "size_bytes": 54001,
-      "sha256": "92467e7fa0aa9e49fe526908c4f4be857004cd4f7538a9d429d5b1c90fae5d31",
+      "size_bytes": 54461,
+      "sha256": "f8b679478e4613e0f0e89d190121ad0a7dbffbe6b3b756f0413c495ec8d1faf8",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -630,8 +630,8 @@
     },
     {
       "relative_path": "src/components/GS1ImmaginoObservatory.tsx",
-      "size_bytes": 77788,
-      "sha256": "f48749b0825b0a5ae94c1a075801e6892453698626d30f700fbf3ba7f83eaf14",
+      "size_bytes": 78246,
+      "sha256": "8a7193b6d260b30bd709636435eb762b08711bc18bc9fff2af849b4aa3ea195d",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1171,8 +1171,8 @@
     },
     {
       "relative_path": "tests/e2e/test_atlas_e2e.py",
-      "size_bytes": 17998,
-      "sha256": "a825f3adce867053289230824022786a6c8f87a958effa456ed1e9f7dd516cc8",
+      "size_bytes": 17161,
+      "sha256": "929cb0b4b90d7ca5ceae260d853dcd8dcad6d7fd54c1e0369a289c3c08af21db",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1181,8 +1181,8 @@
     },
     {
       "relative_path": "tests/e2e/test_track_a_archive_e2e.py",
-      "size_bytes": 12160,
-      "sha256": "6d8096c5f03bc280a5b1b0b8f5dfcea5b023b02f844568f9c3e1432c5c489946",
+      "size_bytes": 12121,
+      "sha256": "decef0c90b0886ba28b33497c2e922bd5a195136a51d18380358cd23eb1b8cdd",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1193,6 +1193,26 @@
       "relative_path": "tests/test_empirical_pipeline.py",
       "size_bytes": 16808,
       "sha256": "b2e56a92d91dd46a9c9fa81a51d6abedb27b673afa902d6e786af79cba0383d6",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
+      "relative_path": "docs/assets/architecture-dual-path-dark.png",
+      "size_bytes": 262278,
+      "sha256": "91df94ad70be57c28124562d8e2e49ffbf853e91be4627f4fcdca33e810aea1c",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
+      "relative_path": "docs/assets/architecture-dual-path-light.png",
+      "size_bytes": 246611,
+      "sha256": "491d955de60ff877fbce60260aa5e50ecca57b6695a81f48f360b9fb87bc219d",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1221,8 +1241,8 @@
     },
     {
       "relative_path": "docs/development/CHANGELOG.md",
-      "size_bytes": 39749,
-      "sha256": "926c342951fdccc56a600b189fb9411933f7949229bcc41793d409bb922d0ad0",
+      "size_bytes": 40703,
+      "sha256": "812e9916fa25974d926837fd83d8bcacaae40f3a127dd6f5f24602e3a4e66485",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1283,6 +1303,16 @@
       "relative_path": "docs/LIMITATIONS_AND_RESPONSIBLE_USE.md",
       "size_bytes": 13816,
       "sha256": "a59e32c7bebca412f9060cc4232fcf42ad634d54d5a00ed95d95b838242e5b14",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
+      "relative_path": "docs/phase6/FINAL_PUBLIC_RESTORATION_READINESS_AUDIT.md",
+      "size_bytes": 8434,
+      "sha256": "ce50592c5c182c899353f60c4251b7b160c8fc2c83ebb68bbe1e698bf2f34be1",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1430,9 +1460,29 @@
       "classification": "Software Source & Docs"
     },
     {
+      "relative_path": "docs/phase6/PRIVATE_CLEANUP_AND_PUBLIC_RESTORATION.md",
+      "size_bytes": 20990,
+      "sha256": "3769481fa4dce0c43b606159dc0dc2c332ad06f0af53f2d1884cf64afb734ba3",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
       "relative_path": "docs/phase6/PUBLIC_DISTRIBUTION_POLICY.md",
-      "size_bytes": 8007,
-      "sha256": "e6dd0e1923d4e3ba764df94d6715a93148c0900941158b164805ae2f53b88bbe",
+      "size_bytes": 8010,
+      "sha256": "35e753e349d407ab5c00ccbd3e2b52ad5908d1078a01f5d7cf6c3bb53485e8a8",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
+      "relative_path": "docs/phase6/SCOPED_RELEASE_PACKAGE_REPORT.md",
+      "size_bytes": 8604,
+      "sha256": "18b6221d33a0b263dea8bdab8268766952c436eb49c1c10656b9fb013f22038d",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1481,8 +1531,8 @@
     },
     {
       "relative_path": ".github/workflows/deploy.yml",
-      "size_bytes": 1781,
-      "sha256": "c16527353530d423064d2fc57893512d5286fa205c25b6a6b071b1075b3fca44",
+      "size_bytes": 1822,
+      "sha256": "402992e21c3010893361dc9b74e0a78bb32f1983ba91fb25eb691155aa91011d",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1536,6 +1586,18 @@
       "attribution": "CDC / NCHS NHANES 2021\u20132023 (WTDRD1 survey-weighted) (Public Domain (US Government))",
       "track": "Track A",
       "governance_status": "VERIFIED \u2014 REDISTRIBUTION PERMITTED"
+    },
+    {
+      "relative_path": "public/data/parquet/consumer_behavior_pulse.parquet",
+      "distribution_path": "public/data/parquet/consumer_behavior_pulse.parquet",
+      "size_bytes": 5067,
+      "sha256": "36bbd62e97905fe71e1e8bc1b3c024a4cf844f47eab9bc2aabb0df9aef1515fb",
+      "dataset_version": "3.5",
+      "source": "Eurobarometer / BEUC / NSI / Wikimedia Synthesis",
+      "license": "CC-BY 4.0",
+      "attribution": "Eurobarometer / BEUC / NSI / Wikimedia Synthesis (CC-BY 4.0)",
+      "track": "Track A",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
     },
     {
       "relative_path": "public/data/parquet/crosswalk_rosetta.parquet",
@@ -1888,6 +1950,149 @@
   ],
   "track_b_excluded_assets": [
     {
+      "relative_path": "public/data/parquet/cultural_climate_inertia.parquet",
+      "size_bytes": 2192,
+      "sha256": "5da1944e3f5adf8c45387a1657b0a286acc3ec68181b9eab7583e50a9d114d72",
+      "dataset_version": "1.0",
+      "source": "European Social Survey (ESS ERIC) + TISP (Nature Sci Data 2024)",
+      "license": "CC-BY 4.0",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED",
+      "track": "Track B",
+      "reason": "ESS ERIC data licensed CC BY-NC-SA 4.0 (Non-Commercial ShareAlike), incompatible with permissive MIT/CC-BY redistribution."
+    },
+    {
+      "relative_path": "public/data/parquet/gi_terroir_registry.parquet",
+      "size_bytes": 404856,
+      "sha256": "5557289521e26f6b0d19c3f3d649b9655fc52f5f6641e76aaa155ccb8bed2879",
+      "dataset_version": "2026-11-09",
+      "source": "EUIPO GIview + Fondazione Qualivita Qualigeo",
+      "license": "EU Open Data / Public Registry",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Embeds Fondazione Qualivita Qualigeo copyrighted descriptions/titles/URLs alongside EUIPO GIview."
+    },
+    {
+      "relative_path": "public/data/parquet/gs1_immagino_observatory.parquet",
+      "size_bytes": 14697,
+      "sha256": "a50227e8b96d5b54aabbc56bb205e56bb5e8ff77f6f6fc7308031d0eb0fa67fb",
+      "dataset_version": "19th Edition (2026-1)",
+      "source": "GS1 Italy Osservatorio Immagino (19th Ed. 2026-1)",
+      "license": "Published report summary metrics (citation required)",
+      "governance_status": "PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Transcribed GS1 Italy Osservatorio Immagino 19th Ed. copyright report summaries; underlying NielsenIQ microdata proprietary."
+    },
+    {
+      "relative_path": "public/data/parquet/pan_eu_retail_scanner.parquet",
+      "size_bytes": 9988,
+      "sha256": "de26ff76187e61dcf457ebc7d28dafafcab7631823efca92b56e54ff2d80c33c",
+      "dataset_version": "3.5",
+      "source": "GS1 Immagino Methodology Extrapolation",
+      "license": "Research benchmark compilation",
+      "governance_status": "PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Anchored on GS1 Italy report metrics + synthesized pan-EU extensions."
+    },
+    {
+      "relative_path": "public/data/parquet/social_discourse_velocity.parquet",
+      "size_bytes": 26808,
+      "sha256": "c36a2412278b0607a522302e4c5a0ad0fbe408d3c5ad326ef88c1457d47a2a65",
+      "dataset_version": "2026-11-09",
+      "source": "Hacker News Algolia API & Google News RSS",
+      "license": "Public API metadata",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED",
+      "track": "Track B",
+      "reason": "Y Combinator Hacker News TOS, Google News RSS personal-use terms, and third-party publisher headline copyrights."
+    },
+    {
+      "relative_path": "public/data/parquet/time_use_cooking_friction.parquet",
+      "size_bytes": 4605,
+      "sha256": "aea52660a38f5b827a14a9b24f41b91ade357a2ce8f7aa53088e6e72e5cf39e0",
+      "dataset_version": "1.0-stylized",
+      "source": "MTUS / IPUMS Time Use Reference (v1.0-stylized)",
+      "license": "Academic registration required for raw microdata",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "IPUMS MTUS terms forbid third-party redistribution and non-scholarly extract sharing."
+    },
+    {
+      "relative_path": "public/data/consumer_behavior_pulse.json",
+      "size_bytes": 6487011,
+      "sha256": "0a13fcddd251e546691c02b2d59ad39e37a5a90e04de139d72e0ecd448bc834f",
+      "dataset_version": "bundle",
+      "source": "Composite bundle (Eurobarometer/Wikimedia + Qualigeo/GIview + HN/RSS)",
+      "license": "Restricted / Permission Required",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "6.49 MB composite JSON embeds 6,845 gi_terroir_records (Qualigeo) and 129 social_discourse_posts (HN/RSS). Track A open slice is isolated in consumer_pulse_rows.json."
+    },
+    {
+      "relative_path": "public/data/cultural_climate_inertia.json",
+      "size_bytes": 4165,
+      "sha256": "d35f8afe7e1cd932f0aacfa555c1b80a7c2f27c0ab337260a3e582a444913990",
+      "dataset_version": "bundle",
+      "source": "European Social Survey (ESS ERIC) + TISP",
+      "license": "Restricted / Permission Required",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED",
+      "track": "Track B",
+      "reason": "Mirrors cultural_climate_inertia (ESS CC BY-NC-SA 4.0)."
+    },
+    {
+      "relative_path": "public/data/empirical_microdata_bundle.json",
+      "size_bytes": 53395,
+      "sha256": "a6fe6a1f1fbd21eed0eded157d5fb920618433c4e1ed15b6cb766cfa61d7849e",
+      "dataset_version": "bundle",
+      "source": "Composite bundle (CDC NHANES + Eurostat + GCNF + MTUS + ESS)",
+      "license": "Restricted / Permission Required",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Composite bundle embeds MTUS/IPUMS time_use (60 rows) and ESS CC BY-NC-SA cultural_climate (11 rows). Open components exist independently in clinical_biomarker_grounding.json, school_meals_procurement.json, and econometric_calibration.json."
+    },
+    {
+      "relative_path": "public/data/gi_terroir_bundle.json",
+      "size_bytes": 6385413,
+      "sha256": "9bf0b6c042c715966910a45bbf92bdd893998553ca560b27ceea8cb64f704c65",
+      "dataset_version": "bundle",
+      "source": "EUIPO GIview + Fondazione Qualivita Qualigeo",
+      "license": "Restricted / Permission Required",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Mirrors 6,845 gi_terroir_registry rows including Qualigeo copyrighted fields."
+    },
+    {
+      "relative_path": "public/data/gs1_immagino_bundle.json",
+      "size_bytes": 20039,
+      "sha256": "5410a9f7ae4107092d03289914fae9f85a02e116537b0a2d67f16a311f5b5fd8",
+      "dataset_version": "bundle",
+      "source": "GS1 Italy Osservatorio Immagino (19th Ed. 2026-1)",
+      "license": "Restricted / Permission Required",
+      "governance_status": "PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Mirrors GS1 Italy Osservatorio Immagino copyright report summary."
+    },
+    {
+      "relative_path": "public/data/pan_eu_retail_bundle.json",
+      "size_bytes": 28508,
+      "sha256": "1685fd6f1481370853ae3bf1cfef192002b15ca96b74e1c77836b9f44f5a6428",
+      "dataset_version": "bundle",
+      "source": "GS1 Immagino Methodology Extrapolation",
+      "license": "Restricted / Permission Required",
+      "governance_status": "PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Mirrors pan_eu_retail_scanner anchored on GS1 Italy report summaries."
+    },
+    {
+      "relative_path": "public/data/time_use_cooking_friction.json",
+      "size_bytes": 30806,
+      "sha256": "43825cdcbeff78032e3f417538f01146400f7eccd192069843bea4395dfdd455",
+      "dataset_version": "bundle",
+      "source": "MTUS / IPUMS Time Use Reference (v1.0-stylized)",
+      "license": "Restricted / Permission Required",
+      "governance_status": "VERIFIED \u2014 REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED",
+      "track": "Track B",
+      "reason": "Mirrors time_use_cooking_friction (IPUMS/MTUS restricted terms)."
+    },
+    {
       "relative_path": "public/data/world.geojson",
       "size_bytes": 275429,
       "sha256": "fd3d4c3c381b61a28019ac282a01c6ee48d1a46a63c5b008989e704f079ea1b1",
@@ -1899,5 +2104,46 @@
       "reason": "Unpinned commit/SHA and upstream shapefile caveat; superseded in Track A archive by pinned Natural Earth v5.1.1."
     }
   ],
-  "excluded_unapproved_manuscripts": []
+  "excluded_unapproved_manuscripts": [
+    {
+      "relative_path": "paper/DietShift_Atlas_Academic_Paper.docx",
+      "size_bytes": 41969,
+      "sha256": "f0d3da7fbadd909e52458508dc0b421881029e355cba7dbeb125061193fcf59d",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/DIETSHIFT_ATLAS_ACADEMIC_PAPER.html",
+      "size_bytes": 61040,
+      "sha256": "6d471f4b0553badf0bfac1b0ceb8ec073f2d20efc6a2462f3bfa14377eacd470",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/DIETSHIFT_ATLAS_ACADEMIC_PAPER.md",
+      "size_bytes": 43415,
+      "sha256": "70e1a040ec3e3b71bf77e69fb026fdcfdad66eb8c5c2b3e5aeb20b638a2daaf7",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/main.tex",
+      "size_bytes": 15656,
+      "sha256": "c9ef58efe0d21f06eec2c516f55a45392c698a6cb2a4a3cd4e62e924d68de835",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/references.bib",
+      "size_bytes": 4453,
+      "sha256": "8904074c9ed0be379687d7fe828cfed1cc201994b0da775c4ed1d13b25768441",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    }
+  ]
 }

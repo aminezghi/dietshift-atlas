@@ -1,0 +1,35 @@
+{
+  "generated_at_utc": "2026-11-17T09:27:26.418936+00:00",
+  "upstream_version": "v5.1.1",
+  "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.1/geojson/ne_110m_admin_0_countries.geojson",
+  "license": "Public Domain (Natural Earth Terms of Use)",
+  "license_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.1/LICENSE.md",
+  "raw_license_sha256": "2631b5b39b6d1acc56de75235109b5af2dbb4b0ac5a127b6f06185977247fd4b",
+  "raw_geojson_bytes": 838726,
+  "raw_geojson_sha256": "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f",
+  "compatible_output_path": "release/geo/world.naturalearth.110m.compatible.geojson",
+  "compatible_output_bytes": 266815,
+  "compatible_output_sha256": "ea535fc8eba86b0ee2f19235b68e6bd2cd373ea435b84d7c2b17a928a0d83baf",
+  "feature_count": 177,
+  "geometry_invalid_count": 0,
+  "name_aliases_mapped": 24,
+  "compatibility_checks": {
+    "legacy_world_geojson_feature_count": 177,
+    "legacy_names_covered_count": 177,
+    "legacy_names_missing": [],
+    "additional_features_in_ne": [],
+    "legacy_ids_missing": [
+      "-99",
+      "ABV",
+      "OSA",
+      "SDS"
+    ],
+    "country_profiles_covered_count": 24,
+    "country_profiles_not_polygons": [
+      "European Union"
+    ],
+    "cohd_names_matched_legacy": 151,
+    "cohd_names_matched_ne_compatible": 151
+  },
+  "note": "Non-destructive release candidate replacement asset. public/data/world.geojson remains untouched pending Phase 6C sign-off or explicit Track A staging swap."
+}

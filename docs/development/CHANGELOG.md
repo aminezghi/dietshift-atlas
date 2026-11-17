@@ -1,5 +1,14 @@
 # DietShift Atlas — Development Changelog
 
+## v1.0.0 — DietShift Atlas v1.0.0: MIT Source Code + Track A Open Data (2026-11-17)
+
+### Official Release Summary
+- **Tag:** `v1.0.0` (commit `a74bb6bf37fd44c8c370839f93936d725997b504`)
+- **Published GitHub Release:** [https://github.com/aminezghi/dietshift-atlas/releases/tag/v1.0.0](https://github.com/aminezghi/dietshift-atlas/releases/tag/v1.0.0)
+- **Live Production URL:** [https://aminezghi.github.io/dietshift-atlas/](https://aminezghi.github.io/dietshift-atlas/)
+- **Distribution Model:** Permissive MIT Source Code + 33 Track A Open Data Assets (12 Parquet tables, 19 clean JSON analytical bundles, 1 Natural Earth Admin 0 GeoJSON).
+- **Security & Data Hygiene:** 100% of Track B restricted datasets and unpublished academic manuscripts purged from Git history and release trees. All 5 automated CI verification tiers (Oxlint, Vitest 87/87, Vite bundle build, Pytest empirical 14/14, Playwright Chromium E2E 2/2) passing with zero failures.
+
 ## v6.3.0-phase6d / 1.0.0-rc.1 — Phase 6D: Track A Resilience & Final Research Release Validation (2026-11-17)
 
 ### Hardened & Verified (Zero Analytical Formula, Dataset, or Country-Profile Mutations)

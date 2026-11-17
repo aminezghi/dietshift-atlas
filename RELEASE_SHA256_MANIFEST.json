@@ -1,11 +1,11 @@
 {
   "release_version": "1.0.0",
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-17T10:32:56.924958+00:00",
+  "generated_at_utc": "2026-11-17T14:15:11.927158+00:00",
   "summary": {
     "track_a_open_data_files": 33,
     "track_a_parquet_tables": 13,
-    "software_and_docs_files": 148,
+    "software_and_docs_files": 153,
     "track_b_excluded_files": 14,
     "track_a_total_bytes": 9976923
   },
@@ -277,8 +277,8 @@
   },
   "software_and_documentation": {
     ".gitignore": {
-      "sha256": "242cea471f8cf13384d8bfef4bbe87a63dcb1bf122bf873cdb48ae53cb0d4508",
-      "size_bytes": 521,
+      "sha256": "7143298f1bc954e006f8cdafc75ac9c4819e18861326c10c02128fd9dc47e876",
+      "size_bytes": 789,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -361,8 +361,8 @@
       "classification": "Software Source & Docs"
     },
     "README.md": {
-      "sha256": "610321550153c7f3cd3379d4d115519c332c757c65fed6985397c43f09c7d2b2",
-      "size_bytes": 23242,
+      "sha256": "5f53d6408d204e3693436c558702a1ba8bbb27d978ba17222454dd3fc87a1b1b",
+      "size_bytes": 26441,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -385,8 +385,8 @@
       "classification": "Software Source & Docs"
     },
     "public/floorplan.html": {
-      "sha256": "8cc28e143c8999d8615a2eb2cd04b520f5ae6a9e1504af5689cf132edb4979ac",
-      "size_bytes": 2198949,
+      "sha256": "eb6c90995f87e018f78940ed9699117396ae1b54a511df9944fc3f9dd3fd010c",
+      "size_bytes": 2198937,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -439,14 +439,14 @@
       "classification": "Software Source & Docs"
     },
     "src/analytics/crossEngineParity.test.ts": {
-      "sha256": "3d36258409267856bc038201e397995860c9ff73ce01b5921cd438fe6b322c68",
-      "size_bytes": 20360,
+      "sha256": "7a7982ec8ca0674f161bf3c582f1c0d6d3c5d8f33b9f5715fd680b0087f46537",
+      "size_bytes": 20911,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
     "src/analytics/environmentEngine.test.ts": {
-      "sha256": "ec91fd9717f1368ff8f8d5ee85177e3f58ad63b66ef4592e182243bd4b1744e4",
-      "size_bytes": 11074,
+      "sha256": "d9755ff09f6f419c5548513b854f413c852552e2df03222ad31780c83ca1b98e",
+      "size_bytes": 11568,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -481,8 +481,8 @@
       "classification": "Software Source & Docs"
     },
     "src/analytics/integratedRobustness.test.ts": {
-      "sha256": "5295205f5d14b127afd5ab38dd10eae6fe0a59eec89601c7558d6420a39cd850",
-      "size_bytes": 17081,
+      "sha256": "511fbf220d51fd157761233513e828e9a942fd09e7c092941d47534af402a778",
+      "size_bytes": 17244,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -529,8 +529,8 @@
       "classification": "Software Source & Docs"
     },
     "src/analytics/sensitivityEngine.test.ts": {
-      "sha256": "0993926adf6e729d0999837ad6d10a430b7cf568f383f931b513b70b7c40c6eb",
-      "size_bytes": 18025,
+      "sha256": "212afc926e1bbd9af91c87a4ac03dffca70ed98ca0dc2216b2dd8b3b817169ee",
+      "size_bytes": 18768,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -595,8 +595,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/ConsumerBehaviorPulse.tsx": {
-      "sha256": "92467e7fa0aa9e49fe526908c4f4be857004cd4f7538a9d429d5b1c90fae5d31",
-      "size_bytes": 54001,
+      "sha256": "f8b679478e4613e0f0e89d190121ad0a7dbffbe6b3b756f0413c495ec8d1faf8",
+      "size_bytes": 54461,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -643,8 +643,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/GS1ImmaginoObservatory.tsx": {
-      "sha256": "f48749b0825b0a5ae94c1a075801e6892453698626d30f700fbf3ba7f83eaf14",
-      "size_bytes": 77788,
+      "sha256": "8a7193b6d260b30bd709636435eb762b08711bc18bc9fff2af849b4aa3ea195d",
+      "size_bytes": 78246,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -967,20 +967,32 @@
       "classification": "Software Source & Docs"
     },
     "tests/e2e/test_atlas_e2e.py": {
-      "sha256": "8a6b4e523efb2f9040d3a32fbfde1e8b81ba7214611aeb0dadcd627caebecc42",
-      "size_bytes": 16771,
+      "sha256": "929cb0b4b90d7ca5ceae260d853dcd8dcad6d7fd54c1e0369a289c3c08af21db",
+      "size_bytes": 17161,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
     "tests/e2e/test_track_a_archive_e2e.py": {
-      "sha256": "e18cbefd0305dad59e2d8db7f764bc45923d9523484def976de6d0abbc68072e",
-      "size_bytes": 12209,
+      "sha256": "decef0c90b0886ba28b33497c2e922bd5a195136a51d18380358cd23eb1b8cdd",
+      "size_bytes": 12121,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
     "tests/test_empirical_pipeline.py": {
-      "sha256": "c6b1fa1adddba8125d5908d5783b55e123c65fbc0b1e3d2bf36ddca68138f29e",
-      "size_bytes": 16221,
+      "sha256": "b2e56a92d91dd46a9c9fa81a51d6abedb27b673afa902d6e786af79cba0383d6",
+      "size_bytes": 16808,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
+    "docs/assets/architecture-dual-path-dark.png": {
+      "sha256": "91df94ad70be57c28124562d8e2e49ffbf853e91be4627f4fcdca33e810aea1c",
+      "size_bytes": 262278,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
+    "docs/assets/architecture-dual-path-light.png": {
+      "sha256": "491d955de60ff877fbce60260aa5e50ecca57b6695a81f48f360b9fb87bc219d",
+      "size_bytes": 246611,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -997,8 +1009,8 @@
       "classification": "Software Source & Docs"
     },
     "docs/development/CHANGELOG.md": {
-      "sha256": "926c342951fdccc56a600b189fb9411933f7949229bcc41793d409bb922d0ad0",
-      "size_bytes": 39749,
+      "sha256": "812e9916fa25974d926837fd83d8bcacaae40f3a127dd6f5f24602e3a4e66485",
+      "size_bytes": 40703,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1035,6 +1047,12 @@
     "docs/LIMITATIONS_AND_RESPONSIBLE_USE.md": {
       "sha256": "a59e32c7bebca412f9060cc4232fcf42ad634d54d5a00ed95d95b838242e5b14",
       "size_bytes": 13816,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
+    "docs/phase6/FINAL_PUBLIC_RESTORATION_READINESS_AUDIT.md": {
+      "sha256": "ce50592c5c182c899353f60c4251b7b160c8fc2c83ebb68bbe1e698bf2f34be1",
+      "size_bytes": 8434,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1122,9 +1140,21 @@
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
+    "docs/phase6/PRIVATE_CLEANUP_AND_PUBLIC_RESTORATION.md": {
+      "sha256": "3769481fa4dce0c43b606159dc0dc2c332ad06f0af53f2d1884cf64afb734ba3",
+      "size_bytes": 20990,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
     "docs/phase6/PUBLIC_DISTRIBUTION_POLICY.md": {
-      "sha256": "e6dd0e1923d4e3ba764df94d6715a93148c0900941158b164805ae2f53b88bbe",
-      "size_bytes": 8007,
+      "sha256": "35e753e349d407ab5c00ccbd3e2b52ad5908d1078a01f5d7cf6c3bb53485e8a8",
+      "size_bytes": 8010,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
+    "docs/phase6/SCOPED_RELEASE_PACKAGE_REPORT.md": {
+      "sha256": "18b6221d33a0b263dea8bdab8268766952c436eb49c1c10656b9fb013f22038d",
+      "size_bytes": 8604,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1153,8 +1183,8 @@
       "classification": "Software Source & Docs"
     },
     ".github/workflows/deploy.yml": {
-      "sha256": "c16527353530d423064d2fc57893512d5286fa205c25b6a6b071b1075b3fca44",
-      "size_bytes": 1781,
+      "sha256": "402992e21c3010893361dc9b74e0a78bb32f1983ba91fb25eb691155aa91011d",
+      "size_bytes": 1822,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },

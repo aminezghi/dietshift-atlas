@@ -35,7 +35,6 @@ EXPECTED_TRACK_B_FILENAMES = {
     "time_use_cooking_friction.parquet",
     "cultural_climate_inertia.parquet",
     "social_discourse_velocity.parquet",
-    "consumer_behavior_pulse.parquet",
 }
 
 

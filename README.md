@@ -107,46 +107,92 @@ To protect researchers from confusing raw empirical data with synthetic model pr
 
 DietShift Atlas uses an optimized dual-path client-side data delivery architecture:
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/architecture-dual-path-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/architecture-dual-path-light.png">
+    <img alt="DietShift Atlas — Dual-Path Client-Side Data Delivery Architecture" src="docs/assets/architecture-dual-path-dark.png" width="100%">
+  </picture>
+</p>
+<p align="center">
+  <em>Figure 4: Client-side dual-path execution architecture. Explore the <a href="https://aminezghi.github.io/dietshift-atlas/architecture.html">interactive diagram with path tracing and dynamic inspections</a>.</em>
+</p>
+
+<details>
+<summary><b>📐 View Mermaid Diagram Source</b></summary>
+
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'ui-sans-serif, system-ui, sans-serif', 'fontSize': '13px', 'lineColor': '#64748b', 'textColor': '#f8fafc' }}}%%
 flowchart TD
-    subgraph BrowserClient ["Client-Side Browser Environment"]
-        subgraph Delivery ["Data Ingestion & Routing"]
-            DP["dataProvider.ts<br/>Deduplicated In-Memory JSON Bundles"]
-            DB["duckdbEngine.ts<br/>WebAssembly SQL Engine"]
+    subgraph StaticStorage [" 🌐 Static HTTP Distribution (GitHub Pages / public/data/) "]
+        P_PARQUET[("<b>12 Parquet Tables</b><br/><code>*.parquet (ZSTD)</code>")]
+        P_JSON[("<b>19 JSON Caches</b><br/><code>*.json (Pre-indexed)</code>")]
+        P_GEO[("<b>Cartography</b><br/><code>world.geojson</code>")]
+    end
+
+    subgraph Client [" 💻 Client-Side Browser Sandbox (Zero Server Round-Trips) "]
+        subgraph Ingestion [" ⚡ Data Ingestion & Storage Virtualization "]
+            DB["<b>DuckDB-Wasm Engine</b><br/><code>duckdbEngine.ts</code><br/><i>Web Worker + SIMD</i>"]
+            DP["<b>Analytical Data Provider</b><br/><code>dataProvider.ts</code><br/><i>Single-Flight Memoized</i>"]
         end
 
-        subgraph CoreEngines ["Analytical Engines (src/analytics/)"]
-            NE["Nutrition Engine"]
-            EE["Environment Engine"]
-            AE["Affordability Engine"]
-            SE["Sensitivity Engine 4C"]
-            RE["Integrated Robustness 4D"]
-            FE["Forecasting Engine ETS"]
+        subgraph CoreEngines [" ⚙️ Core Analytical Engines (src/analytics/) "]
+            direction TB
+            subgraph E_Row1 ["Biophysical & Environmental Models"]
+                NE["<b>Nutrition Engine</b><br/>Macro/Micro Nutrients"]
+                EE["<b>Environment Engine</b><br/>Poore & Agribalyse LCA"]
+                AE["<b>Affordability Engine</b><br/>CoHD World Bank Benchmarks"]
+            end
+            subgraph E_Row2 ["Econometric & Stress-Testing Models"]
+                FE["<b>Forecasting Engine</b><br/>Expanding-Origin ETS"]
+                SE["<b>Sensitivity Engine</b><br/>Phase 4C Parameter Sweeps"]
+                RE["<b>Robustness Engine</b><br/>Phase 4D Multi-Criteria"]
+            end
         end
 
-        subgraph UI ["Interactive User Interface"]
-            Views["13 Observatories & Workbenches"]
-            Export["exportDownload.ts<br/>Parity-Checked CSV / JSON / SQL"]
-            Banner["ResourceDisclosureBanner.tsx<br/>Track A / Track B Status"]
+        subgraph UI [" 📊 User Interface & Export Layer "]
+            Views["<b>13 Observatories & Workbenches</b><br/><i>Plates I–IV · Radar · SQL Console · Map</i>"]
+            Banner["<b>Resource Disclosure Guard</b><br/><code>ResourceDisclosureBanner.tsx</code>"]
+            Export["<b>Export & Audit Subsystem</b><br/><code>exportDownload.ts (CSV/JSON/SQL)</code>"]
         end
     end
 
-    subgraph StaticStorage ["Static HTTP Distribution (public/data/)"]
-        P_JSON[("19 JSON Caches")]
-        P_PARQUET[("19 ZSTD Parquet Tables")]
-        P_GEO[("world.geojson")]
-    end
+    P_PARQUET ==>|HTTP Range Requests| DB
+    P_JSON ==>|On-Demand Fetch| DP
+    P_GEO -.->|TopoJSON / Admin-0| Views
 
-    P_JSON -->|fetch on demand| DP
-    P_PARQUET -->|HTTP Range Requests| DB
-    P_GEO -->|GeoJSON fetch| Views
+    DB ==>|Virtual Views: v_agribalyse, etc.| Views
+    DP ==>|Memoized Typed Models| CoreEngines
+    DP -.->|404 Fallback / Resilience| Banner
+    CoreEngines ==>|Reactive Indicators & Radar| Views
+    Views -->|Generate Dossiers| Export
 
-    DP --> CoreEngines
-    DB --> Views
-    CoreEngines --> Views
-    Views --> Export
-    DP -.->|Missing Track B Asset| Banner
+    classDef storage fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#e0e7ff;
+    classDef sqlPath fill:#082f49,stroke:#38bdf8,stroke-width:2px,color:#f0f9ff;
+    classDef analyticalPath fill:#022c22,stroke:#34d399,stroke-width:2px,color:#ecfdf5;
+    classDef engine fill:#14532d,stroke:#4ade80,stroke-width:1.5px,color:#f0fdf4;
+    classDef ui fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#faf5ff;
+    classDef guard fill:#4c0519,stroke:#fb7185,stroke-width:1.5px,color:#fff1f2;
+    classDef export fill:#451a03,stroke:#fb923c,stroke-width:1.5px,color:#fff7ed;
+
+    class P_PARQUET,P_JSON,P_GEO storage;
+    class DB sqlPath;
+    class DP analyticalPath;
+    class NE,EE,AE,FE,SE,RE engine;
+    class Views ui;
+    class Banner guard;
+    class Export export;
+
+    style StaticStorage fill:#0f172a,stroke:#334155,stroke-width:1.5px,color:#94a3b8;
+    style Client fill:#020617,stroke:#1e293b,stroke-width:2px,color:#94a3b8;
+    style Ingestion fill:#0b132b,stroke:#1e293b,stroke-width:1px,color:#94a3b8;
+    style CoreEngines fill:#0b132b,stroke:#1e293b,stroke-width:1px,color:#94a3b8;
+    style E_Row1 fill:#0f172a,stroke:#1e293b,stroke-width:1px,color:#64748b;
+    style E_Row2 fill:#0f172a,stroke:#1e293b,stroke-width:1px,color:#64748b;
+    style UI fill:#0b132b,stroke:#1e293b,stroke-width:1px,color:#94a3b8;
 ```
+
+</details>
 
 1. **Analytical Path (`src/services/dataProvider.ts`):** High-speed in-memory analytical operations (sensitivity sweeps, counterfactual diets, radar comparisons) execute directly against pre-indexed JSON caches. Requests are single-flight deduplicated, memoized, and protected by resilient 404 handlers.
 2. **Columnar SQL Path (`src/services/duckdbEngine.ts`):** Deep analytical exploration executes inside DuckDB-Wasm via Web Workers. All 19 Parquet tables are registered as virtual views (`v_agribalyse`, `v_poore_nemecek`, `v_off`, etc.), allowing arbitrary user SQL queries with zero server round-trips.

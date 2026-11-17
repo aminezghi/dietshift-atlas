@@ -1057,15 +1057,20 @@ x_feed  = Fetcher.get('https://news.google.com/rss/search?q=site:x.com+("ultra-p
           <div className="almanac-sheet p-5">
             <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-3 rule-firm">
               <div>
-                <h3 className="text-base font-semibold flex items-center gap-2">
+                <h3 className="text-base font-semibold flex flex-wrap items-center gap-2">
                   <Award className="w-4 h-4" />
                   Unified EUIPO GIview (6,029) &amp; Qualigeo (3,692) Registry —{' '}
                   {filteredGIRecords.length.toLocaleString()} shown of{' '}
                   {(pulseData.gi_terroir_records.length || 6845).toLocaleString()} total GIs (3,037 Food)
+                  <DataNatureBadge nature="Observed" label="EUIPO GIview Union Register" />
+                  <DataNatureBadge nature="Estimated" label="Category-Matched LCA Proxies" />
                 </h3>
                 <p className="almanac-label">
-                  Defaults to Agro-Foodstuffs (<code>FOOD</code>: 3,037 records) to avoid mixing Wine (3,198), Spirits
-                  (499) &amp; Craft (111) into dietary denominators; switch sector filter to browse all 6,845 records.
+                  Official registration identifiers from the EUIPO GIview Union Register (EU Open Data); environmental
+                  (CO₂, water, land) and nutritional attributes are category-matched FoodEx2/Agribalyse proxies
+                  (Estimated). Defaults to Agro-Foodstuffs (<code>FOOD</code>: 3,037 records) to avoid mixing Wine
+                  (3,198), Spirits (499) &amp; Craft (111) into dietary denominators; switch sector filter to browse all
+                  6,845 records.
                 </p>
               </div>
 

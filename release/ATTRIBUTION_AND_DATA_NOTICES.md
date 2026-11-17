@@ -7,6 +7,7 @@
 | `public/data/parquet/agribalyse_31.parquet` | `3.1.1` | Licence Ouverte / Open Licence v2.0 (Etalab) | ADEME / INRAE Agribalyse 3.1.1 (Licence Ouverte / Open Licence v2.0 (Etalab)) |
 | `public/data/parquet/classification_mappings.parquet` | `3.0.0-phase3a` | CC-BY 4.0 / ODbL 1.0 | ADEME Agribalyse 3.1.1 × EFSA FoodEx2 × Open Food Facts × Eurostat COICOP 2018 (CC-BY 4.0 / ODbL 1.0) |
 | `public/data/parquet/clinical_biomarker_grounding.parquet` | `2021-2023` | Public Domain (US Government) | CDC / NCHS NHANES 2021–2023 (WTDRD1 survey-weighted) (Public Domain (US Government)) |
+| `public/data/parquet/consumer_behavior_pulse.parquet` | `3.5` | CC-BY 4.0 | Eurobarometer / BEUC / NSI / Wikimedia Synthesis (CC-BY 4.0) |
 | `public/data/parquet/crosswalk_rosetta.parquet` | `2.0.0` | CC-BY 4.0 | Eurostat COICOP × EFSA FoodEx2 × ADEME Agribalyse 3.1.1 (CC-BY 4.0) |
 | `public/data/parquet/efsa_foodex2_surveys.parquet` | `2.0-stylized` | CC-BY 4.0 (Reference taxonomy) | EFSA FoodEx2 Hierarchy + Country/Age Scaling Factors (CC-BY 4.0 (Reference taxonomy)) |
 | `public/data/parquet/global_healthy_diet_affordability.parquet` | `2017–2024` | CC-BY 4.0 | World Bank & FAO Food Prices for Nutrition (CC-BY 4.0) |
@@ -41,4 +42,17 @@
 
 | Original Repo Path | Governance Status | Exclusion Reason |
 | :--- | :--- | :--- |
+| `public/data/parquet/cultural_climate_inertia.parquet` | **VERIFIED — REDISTRIBUTION RESTRICTED** | ESS ERIC data licensed CC BY-NC-SA 4.0 (Non-Commercial ShareAlike), incompatible with permissive MIT/CC-BY redistribution. |
+| `public/data/parquet/gi_terroir_registry.parquet` | **VERIFIED — REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED** | Embeds Fondazione Qualivita Qualigeo copyrighted descriptions/titles/URLs alongside EUIPO GIview. |
+| `public/data/parquet/gs1_immagino_observatory.parquet` | **PERMISSION REQUIRED** | Transcribed GS1 Italy Osservatorio Immagino 19th Ed. copyright report summaries; underlying NielsenIQ microdata proprietary. |
+| `public/data/parquet/pan_eu_retail_scanner.parquet` | **PERMISSION REQUIRED** | Anchored on GS1 Italy report metrics + synthesized pan-EU extensions. |
+| `public/data/parquet/social_discourse_velocity.parquet` | **VERIFIED — REDISTRIBUTION RESTRICTED** | Y Combinator Hacker News TOS, Google News RSS personal-use terms, and third-party publisher headline copyrights. |
+| `public/data/parquet/time_use_cooking_friction.parquet` | **VERIFIED — REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED** | IPUMS MTUS terms forbid third-party redistribution and non-scholarly extract sharing. |
+| `public/data/consumer_behavior_pulse.json` | **VERIFIED — REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED** | 6.49 MB composite JSON embeds 6,845 gi_terroir_records (Qualigeo) and 129 social_discourse_posts (HN/RSS). Track A open slice is isolated in consumer_pulse_rows.json. |
+| `public/data/cultural_climate_inertia.json` | **VERIFIED — REDISTRIBUTION RESTRICTED** | Mirrors cultural_climate_inertia (ESS CC BY-NC-SA 4.0). |
+| `public/data/empirical_microdata_bundle.json` | **VERIFIED — REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED** | Composite bundle embeds MTUS/IPUMS time_use (60 rows) and ESS CC BY-NC-SA cultural_climate (11 rows). Open components exist independently in clinical_biomarker_grounding.json, school_meals_procurement.json, and econometric_calibration.json. |
+| `public/data/gi_terroir_bundle.json` | **VERIFIED — REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED** | Mirrors 6,845 gi_terroir_registry rows including Qualigeo copyrighted fields. |
+| `public/data/gs1_immagino_bundle.json` | **PERMISSION REQUIRED** | Mirrors GS1 Italy Osservatorio Immagino copyright report summary. |
+| `public/data/pan_eu_retail_bundle.json` | **PERMISSION REQUIRED** | Mirrors pan_eu_retail_scanner anchored on GS1 Italy report summaries. |
+| `public/data/time_use_cooking_friction.json` | **VERIFIED — REDISTRIBUTION RESTRICTED / PERMISSION REQUIRED** | Mirrors time_use_cooking_friction (IPUMS/MTUS restricted terms). |
 | `public/data/world.geojson` | **UNVERIFIED — DO NOT REDISTRIBUTE** | Unpinned commit/SHA and upstream shapefile caveat; superseded in Track A archive by pinned Natural Earth v5.1.1. |

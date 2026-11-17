@@ -918,6 +918,9 @@ export const GS1ImmaginoObservatory: React.FC<GS1ImmaginoObservatoryProps> = ({
             <p className="text-sm font-sans text-stone-600 mt-1 max-w-3xl">
               Cross-border econometric and nutritional benchmarking harmonizing <b>{activeCountryData ? activeCountryData.food_skus_tracked.toLocaleString() : '151,203'} FMCG products</b>, <b>{activeCountryData ? activeCountryData.nutritional_tables_tracked.toLocaleString() : '84,817'} nutritional tables</b>, and <b>€{activeCountryData ? activeCountryData.retail_market_size_eur_billion : '57.3'} Billion</b> in retail sell-out, powered by <i>D4Vinci Scrapling</i> and client-side <i>DuckDB-Wasm</i>.
             </p>
+            <p className="text-[11px] font-mono text-stone-500 mt-1.5 max-w-3xl">
+              Provenance &amp; Citation: Italian aggregate category indicators compiled from published summary tables in GS1 Italy <i>Osservatorio Immagino</i> (19th Ed., 2026-1; Manually Compiled); multi-country benchmarks represent modeled cross-border extrapolations (Estimated); live SKU feed derives from Open Prices EU &amp; Open Food Facts (Observed).
+            </p>
           </div>
 
           <div className="flex flex-wrap gap-2">
