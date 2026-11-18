@@ -211,12 +211,19 @@ export function GiStatutoryZonesPlate({ data, selectedCountry }: GiStatutoryZone
       },
       legend: {
         top: 0,
-        textStyle: { color: '#111827', fontSize: 11, fontFamily: 'IBM Plex Mono, monospace' },
+        left: 'center',
+        itemWidth: 12,
+        itemHeight: 10,
+        itemGap: 16,
+        textStyle: { color: '#111827', fontSize: 10, fontFamily: 'IBM Plex Mono, monospace' },
       },
-      grid: { top: 28, right: 24, bottom: 26, left: 175 },
+      grid: { top: 48, right: 24, bottom: 38, left: 190 },
       xAxis: {
         type: 'value',
         name: 'Food GIs',
+        nameLocation: 'middle',
+        nameGap: 24,
+        nameTextStyle: { color: '#3d4654', fontFamily: 'IBM Plex Mono, monospace', fontSize: 10 },
         axisLabel: { color: '#3d4654', fontFamily: 'IBM Plex Mono, monospace', fontSize: 10 },
         splitLine: { lineStyle: { color: '#aeb6c4' } },
       },
@@ -228,7 +235,7 @@ export function GiStatutoryZonesPlate({ data, selectedCountry }: GiStatutoryZone
       },
       series: [
         {
-          name: 'Plant & Olive Oil Food GIs (1.5–1.6)',
+          name: 'Plant & Olive Oil (1.5–1.6)',
           type: 'bar',
           stack: 'food',
           barMaxWidth: 16,
@@ -236,7 +243,7 @@ export function GiStatutoryZonesPlate({ data, selectedCountry }: GiStatutoryZone
           data: top16.map((r) => r.plant_food_gis),
         },
         {
-          name: 'Animal & Composite Food GIs (1.1–1.4, 2.x)',
+          name: 'Animal & Composite (1.1–1.4, 2.x)',
           type: 'bar',
           stack: 'food',
           barMaxWidth: 16,
@@ -393,7 +400,7 @@ export function GiStatutoryZonesPlate({ data, selectedCountry }: GiStatutoryZone
                 Top NUTS-2 Regions by Statutory Agro-Food GI Count &amp; Plant-Origin Share
               </h4>
             </div>
-            <div className="h-72 w-full">
+            <div className="h-80 w-full">
               <ReactECharts option={nuts2ChartOption} style={{ height: '100%', width: '100%' }} notMerge={true} />
             </div>
           </div>
@@ -404,7 +411,7 @@ export function GiStatutoryZonesPlate({ data, selectedCountry }: GiStatutoryZone
                 All Delineated NUTS-2 Regions ({filteredNuts2.length} regions)
               </h4>
             </div>
-            <div className="overflow-x-auto max-h-72">
+            <div className="overflow-x-auto max-h-80">
               <table className="almanac-table">
                 <thead>
                   <tr>

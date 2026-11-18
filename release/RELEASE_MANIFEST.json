@@ -3,8 +3,8 @@
   "release_candidate_version": "1.0.0",
   "analytical_baseline_tag": "v5.2.0-phase5c",
   "documentation_baseline_tag": "v6.0.0-phase6a",
-  "git_head_short": "477f5f4",
-  "generated_at_utc": "2026-11-18T10:50:02.791284+00:00",
+  "git_head_short": "173ff96",
+  "generated_at_utc": "2026-11-18T11:02:21.597242+00:00",
   "regeneration_command": "python scripts/build_release_manifest.py",
   "staging_command": "python scripts/build_release_manifest.py --stage-track-a",
   "summary_counts": {
@@ -630,8 +630,8 @@
     },
     {
       "relative_path": "src/components/GiStatutoryZonesPlate.tsx",
-      "size_bytes": 21722,
-      "sha256": "a75435527a85b1972a7a4b952cd4be4ac2d1641557dd68b8e2ccb2f2f7a4c7c3",
+      "size_bytes": 21948,
+      "sha256": "1c53590b23a6bc7258948fd1f2aa3c324c257a9a283fe3743bbe30d125172aa7",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",

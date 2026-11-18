@@ -1,7 +1,7 @@
 {
   "release_version": "1.0.0",
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-18T10:50:02.887351+00:00",
+  "generated_at_utc": "2026-11-18T11:02:21.697231+00:00",
   "summary": {
     "track_a_open_data_files": 36,
     "track_a_parquet_tables": 15,
@@ -667,8 +667,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/GiStatutoryZonesPlate.tsx": {
-      "sha256": "a75435527a85b1972a7a4b952cd4be4ac2d1641557dd68b8e2ccb2f2f7a4c7c3",
-      "size_bytes": 21722,
+      "sha256": "1c53590b23a6bc7258948fd1f2aa3c324c257a9a283fe3743bbe30d125172aa7",
+      "size_bytes": 21948,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
