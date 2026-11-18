@@ -3,8 +3,8 @@
   "release_candidate_version": "1.0.0",
   "analytical_baseline_tag": "v5.2.0-phase5c",
   "documentation_baseline_tag": "v6.0.0-phase6a",
-  "git_head_short": "b9168b6",
-  "generated_at_utc": "2026-11-18T10:09:28.497631+00:00",
+  "git_head_short": "8e68992",
+  "generated_at_utc": "2026-11-18T10:26:32.935823+00:00",
   "regeneration_command": "python scripts/build_release_manifest.py",
   "staging_command": "python scripts/build_release_manifest.py --stage-track-a",
   "summary_counts": {
@@ -730,8 +730,8 @@
     },
     {
       "relative_path": "src/components/trackAResilience.test.tsx",
-      "size_bytes": 19616,
-      "sha256": "493812c408d80489e19420dfbf11b78cb3c047c7bb45436c7f3d2c79bf7583de",
+      "size_bytes": 19621,
+      "sha256": "716ed25eb68cd63d7a531223c5acc0818f323e0215f3f02a8c1cc086a8262242",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1552,7 +1552,7 @@
     {
       "relative_path": ".github/workflows/deploy.yml",
       "size_bytes": 1822,
-      "sha256": "402992e21c3010893361dc9b74e0a78bb32f1983ba91fb25eb691155aa91011d",
+      "sha256": "60db427023cf65652065b0160bdefe59410eea0e68e4088a3a33f39bd6d4c719",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1562,7 +1562,7 @@
     {
       "relative_path": ".github/workflows/qa-gate.yml",
       "size_bytes": 906,
-      "sha256": "dd4feb77672d560019bcbe78bda4bdb4e7b85ea6d44a9202669ef57e72fe5640",
+      "sha256": "81d0fcdad160f06cca51dfe9a8ae224b6895ab47311526270fbcb21aefb6fa94",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",

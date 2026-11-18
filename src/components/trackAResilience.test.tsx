@@ -506,11 +506,10 @@ describe('Phase 6D Track A Resilience & Graceful Degradation Regression Suite', 
     const gs1View = render(<GS1ImmaginoObservatory selectedCountry="IT" />);
     await waitFor(() => {
       expect(screen.getByText(/Pan-European Retail Scanner & Claim Observatory/i)).toBeInTheDocument();
+      expect(screen.getByText(/GS1 Italy Osservatorio Immagino \(19th Ed\.\) retail dataset/i)).toBeInTheDocument();
+      expect(screen.getByText(/Pan-EU GS1 Retail Scanner extrapolation dataset/i)).toBeInTheDocument();
+      expect(gs1View.container.textContent).toContain(FIXTURE_SCRAPLING_SKUS[0].product_name);
     });
-
-    expect(screen.getByText(/GS1 Italy Osservatorio Immagino \(19th Ed\.\) retail dataset/i)).toBeInTheDocument();
-    expect(screen.getByText(/Pan-EU GS1 Retail Scanner extrapolation dataset/i)).toBeInTheDocument();
-    expect(gs1View.container.textContent).toContain(FIXTURE_SCRAPLING_SKUS[0].product_name);
     gs1View.unmount();
   });
 });

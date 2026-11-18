@@ -1,7 +1,7 @@
 {
   "release_version": "1.0.0",
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-18T10:08:39.241814+00:00",
+  "generated_at_utc": "2026-11-18T10:26:33.071153+00:00",
   "summary": {
     "track_a_open_data_files": 36,
     "track_a_parquet_tables": 15,
@@ -727,8 +727,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/trackAResilience.test.tsx": {
-      "sha256": "493812c408d80489e19420dfbf11b78cb3c047c7bb45436c7f3d2c79bf7583de",
-      "size_bytes": 19616,
+      "sha256": "716ed25eb68cd63d7a531223c5acc0818f323e0215f3f02a8c1cc086a8262242",
+      "size_bytes": 19621,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1219,13 +1219,13 @@
       "classification": "Software Source & Docs"
     },
     ".github/workflows/deploy.yml": {
-      "sha256": "402992e21c3010893361dc9b74e0a78bb32f1983ba91fb25eb691155aa91011d",
+      "sha256": "60db427023cf65652065b0160bdefe59410eea0e68e4088a3a33f39bd6d4c719",
       "size_bytes": 1822,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
     ".github/workflows/qa-gate.yml": {
-      "sha256": "dd4feb77672d560019bcbe78bda4bdb4e7b85ea6d44a9202669ef57e72fe5640",
+      "sha256": "81d0fcdad160f06cca51dfe9a8ae224b6895ab47311526270fbcb21aefb6fa94",
       "size_bytes": 906,
       "license": "MIT",
       "classification": "Software Source & Docs"
