@@ -361,4 +361,21 @@ def test_gi_statutory_zones_and_municipality_parquet_invariants():
     assert pq.ParquetFile(prod_pq).metadata.num_rows == 2109
     assert pq.ParquetFile(muni_pq).metadata.num_rows == 50763
 
+    # Verify Qualigeo country attribution & spatial bounds when Track B GI bundle is present
+    gi_bundle_path = DATA_DIR / "gi_terroir_bundle.json"
+    if gi_bundle_path.exists():
+        gi_recs = {
+            r["file_number"]: r
+            for r in json.loads(gi_bundle_path.read_text(encoding="utf-8"))["gi_terroir_records"]
+        }
+        r688 = gi_recs["QG-PDO-0688"]
+        assert "Throumpa Ampadias Rethymnis Kritis" in r688["product_name"]
+        assert r688["country_code"] == "GR"
+        assert 36.0 <= r688["lat"] <= 41.5
+        assert 19.5 <= r688["lon"] <= 26.5
+
+        assert gi_recs["QG-PDO-0048"]["country_code"] == "CY"
+        assert gi_recs["QG-PDO-0008"]["country_code"] == "BG"
+        assert gi_recs["QG-PDO-0003"]["country_code"] == "ES"
+
 

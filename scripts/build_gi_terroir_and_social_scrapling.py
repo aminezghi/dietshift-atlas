@@ -21,9 +21,22 @@ import os
 import re
 import time
 import urllib.parse
+from pathlib import Path
 import duckdb
 import curl_cffi.requests as creq
 from scrapling.fetchers import Fetcher
+
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from fix_qualigeo_country_codes import (
+    COUNTRY_BOXES,
+    choose_best_candidate,
+    compute_country_summary,
+    exact_keys,
+    infer_fallback_country,
+    phonetic_keys,
+)
 
 os.makedirs("public/data", exist_ok=True)
 os.makedirs("public/data/parquet", exist_ok=True)
@@ -361,16 +374,31 @@ for page_num in range(1, 14):
 
 print(f"   -> Harvested {len(gi_records)} total EUIPO GIview Union Register records ({len(matched_qualigeo_norms)} cross-linked with Qualigeo).")
 
-# Now append any remaining Qualigeo DOP/IGP/STG records from the 3,692 Qualigeo catalog that weren't matched by exact normalized name!
+# Build canonical + Greek/Cyrillic transliteration lookup across harvested GIview records
+giv_exact = {}
+giv_phon = {}
+for rec in gi_records:
+    info = (
+        rec["country_code"],
+        rec.get("product_sector", ""),
+        rec.get("gi_scheme", ""),
+        rec.get("file_number", ""),
+        rec.get("giview_url", ""),
+    )
+    for part in re.split(r"[;/|()]", rec["product_name"]) + [rec["product_name"]]:
+        for k in exact_keys(part):
+            giv_exact.setdefault(k, []).append(info)
+        for k in phonetic_keys(part):
+            giv_phon.setdefault(k, []).append(info)
+
+# Append any remaining Qualigeo DOP/IGP/STG records from the Qualigeo catalog with accurate country resolution
 qualigeo_extra_count = 0
 for norm_key, qg_item in qualigeo_by_norm.items():
     if norm_key in matched_qualigeo_norms:
         continue
     ptitle = qg_item["qualigeo_title"]
-    pslug = qg_item["qualigeo_slug"]
     tl = ptitle.lower()
     scheme = "PDO" if (" dop" in tl or tl.endswith("dop")) else ("TSG" if (" stg" in tl or tl.endswith("stg")) else "PGI")
-    # Infer sector from title
     if any(w in tl for w in ["vino", "wine", "champagne", "prosecco", "chianti", "barolo", "amarone", "franciacorta", "brunello", "asti", "soave", "valpolicella", "lambrusco", "cava", "bordeaux", "bourgogne", "côtes", "coteaux", "crémant", "cremant", "mosel", "rioja"]):
         sector_hint = "WINE"
     elif any(w in tl for w in ["grappa", "whisky", "cognac", "armagnac", "calvados", "vodka", "gin", "rum", "brandy", "liquore", "amaro", "nocino", "limoncello", "genepì", "mirto"]):
@@ -378,16 +406,22 @@ for norm_key, qg_item in qualigeo_by_norm.items():
     else:
         sector_hint = "FOOD"
 
-    # Infer country from Italian/French/Spanish/German naming patterns
-    if any(w in tl for w in [" di ", " del ", " della ", " delle ", " dei ", " degli ", " d'asti", " d'alba", " toscano", " sicilia", " calabria", " puglia", " campania", " veneto", " piemonte", " lombardia", " sardegna", " emilia", " romagna", " abruzzo", " umbria"]):
-        cc_inferred = "IT"
-    elif any(w in tl for w in [" de ", " du ", " des ", " d'auvergne", " de bourgogne", " de savoie", " de provence", " de corse", " du périgord", " du quercy"]):
-        cc_inferred = "FR"
-    elif any(w in tl for w in [" de la ", " del ", " ibérico", " iberico", " manchego", " rioja", " navarra", " andalucía", " galicia", " asturias", " extremadura"]):
-        cc_inferred = "ES"
-    else:
-        cc_inferred = "IT"
+    cands = []
+    for part in re.split(r"[;/|()]", ptitle) + [ptitle]:
+        for k in exact_keys(part):
+            cands.extend(giv_exact.get(k, []))
+    if not cands:
+        for part in re.split(r"[;/|()]", ptitle) + [ptitle]:
+            for k in phonetic_keys(part):
+                cands.extend(giv_phon.get(k, []))
 
+    if cands:
+        cc_inferred, matched_giview_url = choose_best_candidate(cands, scheme)
+    else:
+        cc_inferred = infer_fallback_country(ptitle)
+        matched_giview_url = "https://www.tmdn.org/giview/"
+
+    base_lat, base_lon, *_ = COUNTRY_BOXES.get(cc_inferred, (42.8, 12.5, 1.5, 1.8))
     rich_note = qualigeo_rich_notes.get(norm_key, "")
     cls_info = classify_gi_full(ptitle, sector_hint, [], rich_note)
     qualigeo_extra_count += 1
@@ -409,11 +443,11 @@ for norm_key, qg_item in qualigeo_by_norm.items():
         "land_m2_per_kg": cls_info["land_m2_per_kg"],
         "price_premium_pct": cls_info["price_premium_pct"],
         "foodex2_code": cls_info["foodex2_code"],
-        "lat": 42.8,
-        "lon": 12.5,
+        "lat": round(base_lat, 4),
+        "lon": round(base_lon, 4),
         "data_source": "Qualigeo Fondazione Qualivita (qualigeo.eu)",
         "source_url": qg_item["qualigeo_url"],
-        "giview_url": "https://www.tmdn.org/giview/",
+        "giview_url": matched_giview_url or "https://www.tmdn.org/giview/",
         "qualigeo_url": qg_item["qualigeo_url"],
         "disciplinare_note": rich_note[:220] if rich_note else f"Official Qualigeo {scheme} product sheet ({qg_item['qualigeo_slug']}); traditional NOVA {cls_info['nova_group']} specification.",
     })
@@ -424,51 +458,7 @@ print(f"   -> Added {qualigeo_extra_count} additional Qualigeo records -> COMBIN
 # STEP 4: Compute Real Country Summary Statistics Directly from the Combined Registry
 # ---------------------------------------------------------------------------
 print("4. Computing exact country-level GI Terroir statistics from the full registry...")
-
-target_countries = [
-    ("IT", "Italy", 8.95, 0.74, "Lenticchia di Altamura PGI / Olio Toscano PGI", "Parmigiano Reggiano PDO / Prosciutto di Parma PDO"),
-    ("FR", "France", 6.40, 0.61, "Lentille verte du Puy PDO / Haricot Tarbais PGI", "Comté PDO / Roquefort PDO"),
-    ("ES", "Spain", 3.45, 0.78, "Lenteja de La Armuña PGI / Judión de La Granja PGI", "Jamón de Jabugo PDO / Queso Manchego PDO"),
-    ("GR", "Greece", 1.65, 0.81, "Fava Santorinis PDO / Kalamata Olives PDO", "Feta PDO / Graviera Kritis PDO"),
-    ("PT", "Portugal", 1.18, 0.72, "Azeite de Moura PDO / Maçã de Alcobaça PGI", "Queijo Serra da Estrela PDO / Presunto de Barrancos PDO"),
-    ("DE", "Germany", 1.92, 0.52, "Alb-Leisa / Schrobenhausener Spargel PGI", "Allgäuer Bergkäse PDO / Nürnberger Bratwürste PGI"),
-    ("GBR", "United Kingdom", 1.45, 0.39, "Jersey Royal Potatoes PDO / Yorkshire Forced Rhubarb PDO", "West Country Farmhouse Cheddar PDO / Scotch Beef PGI"),
-    ("PL", "Poland", 0.54, 0.49, "Fasola Korczyńska PGI / Jabłka Grójeckie PGI", "Oscypek PDO / Bryndza Podhalańska PDO"),
-    ("NL", "Netherlands", 0.88, 0.44, "Opperdoezer Ronde PDO / Brabantse Wal Asperges PDO", "Gouda Holland PGI / Boeren-Leidse PDO"),
-]
-
-gi_country_summary = []
-for c_code, c_name, turnover, corr_r, flag_plant, flag_anim in target_countries:
-    c_recs = [r for r in gi_records if r["country_code"] == c_code]
-    c_food = [r for r in c_recs if r["product_sector"] == "FOOD"]
-    c_wine = [r for r in c_recs if r["product_sector"] == "WINE"]
-    c_spirit = [r for r in c_recs if r["product_sector"] == "SPIRIT"]
-
-    plant_cnt = sum(1 for r in c_food if "Pulses" in r["eu_class"] or "Fruits" in r["eu_class"] or "Grains" in r["eu_class"])
-    oil_cnt = sum(1 for r in c_food if "Olive Oils" in r["eu_class"])
-    cheese_cnt = sum(1 for r in c_food if "Cheeses" in r["eu_class"])
-    meat_cnt = sum(1 for r in c_food if "Meats" in r["eu_class"])
-
-    total_food = max(1, len(c_food))
-    plant_share = round(((plant_cnt + oil_cnt) / total_food) * 100.0, 1)
-
-    gi_country_summary.append({
-        "country_code": c_code,
-        "country_name": c_name,
-        "total_all_gis": len(c_recs),
-        "total_registered_food_gis": len(c_food),
-        "wine_gis_count": len(c_wine),
-        "spirit_gis_count": len(c_spirit),
-        "plant_heritage_gis_count": plant_cnt,
-        "olive_oil_gis_count": oil_cnt,
-        "cheese_dairy_gis_count": cheese_cnt,
-        "meat_charcuterie_gis_count": meat_cnt,
-        "plant_gi_share_pct": plant_share,
-        "gi_turnover_eur_billion": turnover,
-        "nuts2_gi_diet_adherence_corr_r": corr_r,
-        "flagship_plant_gi": flag_plant,
-        "flagship_animal_gi": flag_anim,
-    })
+gi_country_summary = compute_country_summary(gi_records)
 
 # ---------------------------------------------------------------------------
 # STEP 5: Update Consumer Behavior Pulse Bundle & Build Full Parquet Tables

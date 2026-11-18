@@ -1,13 +1,13 @@
 {
   "release_version": "1.0.0",
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-18T10:26:33.071153+00:00",
+  "generated_at_utc": "2026-11-18T10:50:02.887351+00:00",
   "summary": {
     "track_a_open_data_files": 36,
     "track_a_parquet_tables": 15,
-    "software_and_docs_files": 155,
+    "software_and_docs_files": 156,
     "track_b_excluded_files": 14,
-    "track_a_total_bytes": 13212208
+    "track_a_total_bytes": 13212210
   },
   "track_a_data_assets": {
     "public/data/parquet/agribalyse_31.parquet": {
@@ -259,8 +259,8 @@
       "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
     },
     "public/data/provenance_manifest.json": {
-      "sha256": "680a9bc63683061efd7cf86a1c84a68537a1065c4a880d97fc4fd949a4b473c4",
-      "size_bytes": 6745,
+      "sha256": "5d38356c379d6637ed90646b03db2bb18397e18c3243df7bac3e1cbefde6e40d",
+      "size_bytes": 6747,
       "dataset_version": "1.0.0",
       "license": "MIT",
       "source": "DietShift Atlas Build Provenance Checksums",
@@ -883,8 +883,8 @@
       "classification": "Software Source & Docs"
     },
     "scripts/build_gi_terroir_and_social_scrapling.py": {
-      "sha256": "716f87e697c10fb4225711eb131f46e14b410f8fd28dd4233eed87bf81ce20e0",
-      "size_bytes": 27267,
+      "sha256": "49361b223e636185625f91ab3ddd959caf6c871952ffd427476c5e3bacbea414",
+      "size_bytes": 25323,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -931,14 +931,20 @@
       "classification": "Software Source & Docs"
     },
     "scripts/enrich_gi_coordinates.py": {
-      "sha256": "1399f5390d54b7aff455801c54cfca161139ce4431c8acf60f4331dc90f30d92",
-      "size_bytes": 3432,
+      "sha256": "ff05ad27ac13363290aded531befa0f8201b641061ca910df06656de1c76913e",
+      "size_bytes": 2489,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
     "scripts/fetch_live_data.py": {
       "sha256": "dfe4ddf8d3960702d86138bfa6275f80385ddd50343c5b97e4bd26641b961581",
       "size_bytes": 9054,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
+    "scripts/fix_qualigeo_country_codes.py": {
+      "sha256": "05a7eedc86399f3011d4e401a8494558a11fb52214a30c47ee1d1cdec55a3510",
+      "size_bytes": 19760,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1015,8 +1021,8 @@
       "classification": "Software Source & Docs"
     },
     "tests/test_empirical_pipeline.py": {
-      "sha256": "d9adfe9084f16165cf340b988e92132eb1710564ea7f10c9a798fc14c5eb37a9",
-      "size_bytes": 17833,
+      "sha256": "9d989e06b48929566b547e9b56393f912e74cd7debfc2773a5d0fe577624e243",
+      "size_bytes": 18607,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },

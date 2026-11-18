@@ -3,19 +3,19 @@
   "release_candidate_version": "1.0.0",
   "analytical_baseline_tag": "v5.2.0-phase5c",
   "documentation_baseline_tag": "v6.0.0-phase6a",
-  "git_head_short": "8e68992",
-  "generated_at_utc": "2026-11-18T10:26:32.935823+00:00",
+  "git_head_short": "477f5f4",
+  "generated_at_utc": "2026-11-18T10:50:02.791284+00:00",
   "regeneration_command": "python scripts/build_release_manifest.py",
   "staging_command": "python scripts/build_release_manifest.py --stage-track-a",
   "summary_counts": {
-    "software_source_and_docs_files": 155,
+    "software_source_and_docs_files": 156,
     "track_a_open_data_files": 36,
     "track_a_parquet_tables": 15,
     "track_b_excluded_data_files": 14,
     "track_b_excluded_parquet_tables": 6,
     "excluded_unapproved_manuscript_files": 23,
-    "track_a_total_bytes": 13212208,
-    "track_b_excluded_total_bytes": 13747912
+    "track_a_total_bytes": 13212210,
+    "track_b_excluded_total_bytes": 13773342
   },
   "software_source_and_docs": [
     {
@@ -991,8 +991,8 @@
     },
     {
       "relative_path": "scripts/build_gi_terroir_and_social_scrapling.py",
-      "size_bytes": 27267,
-      "sha256": "716f87e697c10fb4225711eb131f46e14b410f8fd28dd4233eed87bf81ce20e0",
+      "size_bytes": 25323,
+      "sha256": "49361b223e636185625f91ab3ddd959caf6c871952ffd427476c5e3bacbea414",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1071,8 +1071,8 @@
     },
     {
       "relative_path": "scripts/enrich_gi_coordinates.py",
-      "size_bytes": 3432,
-      "sha256": "1399f5390d54b7aff455801c54cfca161139ce4431c8acf60f4331dc90f30d92",
+      "size_bytes": 2489,
+      "sha256": "ff05ad27ac13363290aded531befa0f8201b641061ca910df06656de1c76913e",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1083,6 +1083,16 @@
       "relative_path": "scripts/fetch_live_data.py",
       "size_bytes": 9054,
       "sha256": "dfe4ddf8d3960702d86138bfa6275f80385ddd50343c5b97e4bd26641b961581",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
+      "relative_path": "scripts/fix_qualigeo_country_codes.py",
+      "size_bytes": 19760,
+      "sha256": "05a7eedc86399f3011d4e401a8494558a11fb52214a30c47ee1d1cdec55a3510",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1211,8 +1221,8 @@
     },
     {
       "relative_path": "tests/test_empirical_pipeline.py",
-      "size_bytes": 17833,
-      "sha256": "d9adfe9084f16165cf340b988e92132eb1710564ea7f10c9a798fc14c5eb37a9",
+      "size_bytes": 18607,
+      "sha256": "9d989e06b48929566b547e9b56393f912e74cd7debfc2773a5d0fe577624e243",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1946,8 +1956,8 @@
     {
       "relative_path": "public/data/provenance_manifest.json",
       "distribution_path": "public/data/provenance_manifest.json",
-      "size_bytes": 6745,
-      "sha256": "680a9bc63683061efd7cf86a1c84a68537a1065c4a880d97fc4fd949a4b473c4",
+      "size_bytes": 6747,
+      "sha256": "5d38356c379d6637ed90646b03db2bb18397e18c3243df7bac3e1cbefde6e40d",
       "dataset_version": "1.0.0",
       "source": "DietShift Atlas Build Provenance Checksums",
       "license": "MIT",
@@ -2018,8 +2028,8 @@
     },
     {
       "relative_path": "public/data/parquet/gi_terroir_registry.parquet",
-      "size_bytes": 404856,
-      "sha256": "5557289521e26f6b0d19c3f3d649b9655fc52f5f6641e76aaa155ccb8bed2879",
+      "size_bytes": 407874,
+      "sha256": "d6d8047853109069cf9a9988dbbe50364ee512f41562fa87e1f2097abf6796ec",
       "dataset_version": "2026-11-09",
       "source": "EUIPO GIview + Fondazione Qualivita Qualigeo",
       "license": "EU Open Data / Public Registry",
@@ -2073,8 +2083,8 @@
     },
     {
       "relative_path": "public/data/consumer_behavior_pulse.json",
-      "size_bytes": 6487011,
-      "sha256": "0a13fcddd251e546691c02b2d59ad39e37a5a90e04de139d72e0ecd448bc834f",
+      "size_bytes": 6498217,
+      "sha256": "47d030e7c28d1f37331c5c390f028c7486663c80421bf1ac03f97202252aa0a7",
       "dataset_version": "bundle",
       "source": "Composite bundle (Eurobarometer/Wikimedia + Qualigeo/GIview + HN/RSS)",
       "license": "Restricted / Permission Required",
@@ -2106,8 +2116,8 @@
     },
     {
       "relative_path": "public/data/gi_terroir_bundle.json",
-      "size_bytes": 6385413,
-      "sha256": "9bf0b6c042c715966910a45bbf92bdd893998553ca560b27ceea8cb64f704c65",
+      "size_bytes": 6396619,
+      "sha256": "1366cabb6b6128c7b89573d31e4bacac8384ed5fa06d9c801f8106581324ee7c",
       "dataset_version": "bundle",
       "source": "EUIPO GIview + Fondazione Qualivita Qualigeo",
       "license": "Restricted / Permission Required",

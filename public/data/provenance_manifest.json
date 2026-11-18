@@ -74,8 +74,8 @@
     "gi_terroir_registry.parquet": {
       "rows": 6845,
       "columns": 24,
-      "bytes": 404856,
-      "sha256": "5557289521e26f6b0d19c3f3d649b9655fc52f5f6641e76aaa155ccb8bed2879"
+      "bytes": 407874,
+      "sha256": "d6d8047853109069cf9a9988dbbe50364ee512f41562fa87e1f2097abf6796ec"
     },
     "global_healthy_diet_affordability.parquet": {
       "rows": 1399,
