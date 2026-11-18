@@ -3,25 +3,25 @@
   "release_candidate_version": "1.0.0",
   "analytical_baseline_tag": "v5.2.0-phase5c",
   "documentation_baseline_tag": "v6.0.0-phase6a",
-  "git_head_short": "b11af51",
-  "generated_at_utc": "2026-11-17T14:47:00.994060+00:00",
+  "git_head_short": "b9168b6",
+  "generated_at_utc": "2026-11-18T10:09:28.497631+00:00",
   "regeneration_command": "python scripts/build_release_manifest.py",
   "staging_command": "python scripts/build_release_manifest.py --stage-track-a",
   "summary_counts": {
-    "software_source_and_docs_files": 153,
-    "track_a_open_data_files": 33,
-    "track_a_parquet_tables": 13,
+    "software_source_and_docs_files": 155,
+    "track_a_open_data_files": 36,
+    "track_a_parquet_tables": 15,
     "track_b_excluded_data_files": 14,
     "track_b_excluded_parquet_tables": 6,
-    "excluded_unapproved_manuscript_files": 5,
-    "track_a_total_bytes": 9976923,
+    "excluded_unapproved_manuscript_files": 23,
+    "track_a_total_bytes": 13212208,
     "track_b_excluded_total_bytes": 13747912
   },
   "software_source_and_docs": [
     {
       "relative_path": ".gitignore",
-      "size_bytes": 789,
-      "sha256": "7143298f1bc954e006f8cdafc75ac9c4819e18861326c10c02128fd9dc47e876",
+      "size_bytes": 806,
+      "sha256": "d4e8b8613782730ec4fc12da8d9d7862dcc983caa90fff4b04aedf6ccc990dc1",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -600,8 +600,8 @@
     },
     {
       "relative_path": "src/components/DuckDBParquetWorkbench.tsx",
-      "size_bytes": 23732,
-      "sha256": "fb0cc19651537de96d4a17864fec373ad0829a39203043f5f86cbbbac23b512d",
+      "size_bytes": 24581,
+      "sha256": "f50b759db6ee18f7e273eb3af8d72e13f315ed163557be693806ff9d6b4568fe",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -622,6 +622,16 @@
       "relative_path": "src/components/EnvironmentComparisonPanel.tsx",
       "size_bytes": 22075,
       "sha256": "d0773fe0828837e00fb86e90467a84b1ca80a958f1738bf48e7f39f034ea2148",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
+      "relative_path": "src/components/GiStatutoryZonesPlate.tsx",
+      "size_bytes": 21722,
+      "sha256": "a75435527a85b1972a7a4b952cd4be4ac2d1641557dd68b8e2ccb2f2f7a4c7c3",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -650,8 +660,8 @@
     },
     {
       "relative_path": "src/components/InteractiveChoroplethMap.tsx",
-      "size_bytes": 54999,
-      "sha256": "51147afc928c3276472fa796183f8e5b8fbf22596aa9ec3f7a8f5a9c147eef9d",
+      "size_bytes": 60091,
+      "sha256": "faeaacb8e3da041a891748b85684ac81cb31783335e6b9a7c583f050fc9a3c0a",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -760,8 +770,8 @@
     },
     {
       "relative_path": "src/services/dataProvider.ts",
-      "size_bytes": 8047,
-      "sha256": "90ebb870fcc3d9dd2029beb33013020edd6a186eab5959932a0d3a8cce3a1d9e",
+      "size_bytes": 8231,
+      "sha256": "efaa3e2f8d77e2208a73584a2c67547fd44f5383065a586f9d96c5a6369e9ecd",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -770,8 +780,8 @@
     },
     {
       "relative_path": "src/services/duckdbEngine.ts",
-      "size_bytes": 4286,
-      "sha256": "91c2b98bdf9dc20fe4762fbad4976a48e8cd9d2885c5e4f321dc999c6260b684",
+      "size_bytes": 4519,
+      "sha256": "b5ae82fc1335e9cd145cd99921f6515b79cd0970f422838f690f7c5c943bf33d",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -970,6 +980,16 @@
       "classification": "Software Source & Docs"
     },
     {
+      "relative_path": "scripts/build_gi_statutory_zones.py",
+      "size_bytes": 22981,
+      "sha256": "38bac5069eb9b3e0afcbadbadb7a501d681e77148e79201050c6ebac34f3cd34",
+      "version": "1.0.0",
+      "source": "DietShift Atlas repository",
+      "license": "MIT",
+      "attribution": "Amine Zouaghi (DietShift Atlas Contributors)",
+      "classification": "Software Source & Docs"
+    },
+    {
       "relative_path": "scripts/build_gi_terroir_and_social_scrapling.py",
       "size_bytes": 27267,
       "sha256": "716f87e697c10fb4225711eb131f46e14b410f8fd28dd4233eed87bf81ce20e0",
@@ -1041,8 +1061,8 @@
     },
     {
       "relative_path": "scripts/build_release_manifest.py",
-      "size_bytes": 23493,
-      "sha256": "9d3303c70ed9b4e302b784133ef5eb1237499cec04d25cc62ee4f0e64955b39d",
+      "size_bytes": 24724,
+      "sha256": "6daaaaeef360d3539284acb72c738fc0ad695666e20682da64f9d5223f916a61",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1191,8 +1211,8 @@
     },
     {
       "relative_path": "tests/test_empirical_pipeline.py",
-      "size_bytes": 16808,
-      "sha256": "b2e56a92d91dd46a9c9fa81a51d6abedb27b673afa902d6e786af79cba0383d6",
+      "size_bytes": 17833,
+      "sha256": "d9adfe9084f16165cf340b988e92132eb1710564ea7f10c9a798fc14c5eb37a9",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1301,8 +1321,8 @@
     },
     {
       "relative_path": "docs/LIMITATIONS_AND_RESPONSIBLE_USE.md",
-      "size_bytes": 13816,
-      "sha256": "a59e32c7bebca412f9060cc4232fcf42ad634d54d5a00ed95d95b838242e5b14",
+      "size_bytes": 14039,
+      "sha256": "1223f0cd0d5d52154520184b2e0aa4d3b9f18e5c21a668533065bb286c9358af",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1501,8 +1521,8 @@
     },
     {
       "relative_path": "docs/REPRODUCIBILITY.md",
-      "size_bytes": 10151,
-      "sha256": "bf348e73afbe1be05cf48933888677863e8f34aa45fdaf9270ffe65b09ce95d7",
+      "size_bytes": 14427,
+      "sha256": "df6284549cec92d39237be271f2e81be8f9b9543fd849a25538ce4a612a6a3d3",
       "version": "1.0.0",
       "source": "DietShift Atlas repository",
       "license": "MIT",
@@ -1708,6 +1728,30 @@
       "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
     },
     {
+      "relative_path": "public/data/parquet_statutory/gi_municipality_index.parquet",
+      "distribution_path": "public/data/parquet_statutory/gi_municipality_index.parquet",
+      "size_bytes": 1040257,
+      "sha256": "450e5a61fa5f922d2594b0045f23462645094471d6571a2f4ba80d46840d5038",
+      "dataset_version": "1.0.0-statutory",
+      "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
+      "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+      "attribution": "Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers",
+      "track": "Track A",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
+    },
+    {
+      "relative_path": "public/data/parquet_statutory/gi_statutory_products.parquet",
+      "distribution_path": "public/data/parquet_statutory/gi_statutory_products.parquet",
+      "size_bytes": 244170,
+      "sha256": "54712b535ed8651c054b583b746a6f33491d114fad75bae99c0a6fe41687a816",
+      "dataset_version": "1.0.0-statutory",
+      "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
+      "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+      "attribution": "Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers",
+      "track": "Track A",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
+    },
+    {
       "relative_path": "public/data/agribalyse_full.json",
       "distribution_path": "public/data/agribalyse_full.json",
       "size_bytes": 1179631,
@@ -1812,6 +1856,18 @@
       "source": "Eurostat prc_hicp_aind & UK ONS MM23 Statistical CV",
       "license": "CC-BY 4.0 (Eurostat) / OGL v3.0 (ONS)",
       "attribution": "Credit Eurostat & UK Office for National Statistics",
+      "track": "Track A",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
+    },
+    {
+      "relative_path": "public/data/gi_statutory_zones.json",
+      "distribution_path": "public/data/gi_statutory_zones.json",
+      "size_bytes": 1950858,
+      "sha256": "88abd1d7d5b344df17595b209915f8f15ee0d92e40444c1195d16fc88348eb61",
+      "dataset_version": "1.0.0-statutory",
+      "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
+      "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+      "attribution": "Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers",
       "track": "Track A",
       "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
     },
@@ -2107,40 +2163,184 @@
   "excluded_unapproved_manuscripts": [
     {
       "relative_path": "paper/DietShift_Atlas_Academic_Paper.docx",
-      "size_bytes": 41969,
-      "sha256": "f0d3da7fbadd909e52458508dc0b421881029e355cba7dbeb125061193fcf59d",
+      "size_bytes": 1356908,
+      "sha256": "cc566c004fc52ebcd123b339081479ee2de846704d929d5cead70400cc7b6e41",
       "track": "Track B (Pending Author Revision \u2014 B-01)",
       "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
       "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
     },
     {
       "relative_path": "paper/DIETSHIFT_ATLAS_ACADEMIC_PAPER.html",
-      "size_bytes": 61040,
-      "sha256": "6d471f4b0553badf0bfac1b0ceb8ec073f2d20efc6a2462f3bfa14377eacd470",
+      "size_bytes": 119585,
+      "sha256": "67619399db05f13bb4d96aded91b64490e47221ed0a661546442f8f2514ef3ca",
       "track": "Track B (Pending Author Revision \u2014 B-01)",
       "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
       "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
     },
     {
       "relative_path": "paper/DIETSHIFT_ATLAS_ACADEMIC_PAPER.md",
-      "size_bytes": 43415,
-      "sha256": "70e1a040ec3e3b71bf77e69fb026fdcfdad66eb8c5c2b3e5aeb20b638a2daaf7",
+      "size_bytes": 68556,
+      "sha256": "09b880c764225c00481d2586159aeead68715a6ef65e26f5ba735d492149698d",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_architecture_and_concordance.pdf",
+      "size_bytes": 69016,
+      "sha256": "8dacc5d660dfdb4d0f92bc88f93d8fff1f36113beeb5742a610a3ba0258eeea0",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_architecture_and_concordance.png",
+      "size_bytes": 322511,
+      "sha256": "19a2669b50f1f78233636c0c8326baed8bc4d4d0cc000a2f4b1f7e25c5e87cce",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_behavioral_cascade_and_policy.pdf",
+      "size_bytes": 69361,
+      "sha256": "1e81efd792d603562c5cd6677d845192f647feb5d039e6073f9d1b282cc6b46b",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_behavioral_cascade_and_policy.png",
+      "size_bytes": 361882,
+      "sha256": "7aae3a9454af80d3946a4f04c3170041c1f55896aab8aa545e32bb7fed495bc4",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_inflation_backtest_and_coverage.pdf",
+      "size_bytes": 58986,
+      "sha256": "d6ad028c19cb897823873c3435d542aaf5ef073b19af2d49725947739e1f16ce",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_inflation_backtest_and_coverage.png",
+      "size_bytes": 215406,
+      "sha256": "c7143445414f23ef81d383f733a58fb61b704909fb3398bb10e1f6686606f7b4",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_nsi_socioeconomic_archetypes.pdf",
+      "size_bytes": 62565,
+      "sha256": "016ad19b83f9ee7130239864933b1f28ff4f7668dda3f24d9cd6a46bab65f0f2",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_nsi_socioeconomic_archetypes.png",
+      "size_bytes": 231047,
+      "sha256": "72b287cf522e9e4cac3780997c082907ef14e0a6fb5fb4d12683dd6c6f075a89",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_sensitivity_and_grain_robustness.pdf",
+      "size_bytes": 60479,
+      "sha256": "5b370eafb4e7ca57c883ed710fce480e5eb63eeb8517365395e023f530fbfa3c",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/fig_sensitivity_and_grain_robustness.png",
+      "size_bytes": 287595,
+      "sha256": "e184b40bc8b1ab3ccdafb364c5c82ba6d2bf5aa2426a1c985ada32331081b178",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/figures/info.json",
+      "size_bytes": 4254,
+      "sha256": "c9e860615aab79220fad7134abc05a2c453558f6437741935499abcba5f57ce1",
       "track": "Track B (Pending Author Revision \u2014 B-01)",
       "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
       "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
     },
     {
       "relative_path": "paper/main.tex",
-      "size_bytes": 15656,
-      "sha256": "c9ef58efe0d21f06eec2c516f55a45392c698a6cb2a4a3cd4e62e924d68de835",
+      "size_bytes": 33513,
+      "sha256": "99147ca4c353b5d17d19f5b23f15f190bf33a72d388e4d85246a4a318cf8beae",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/agent_review.json",
+      "size_bytes": 5150,
+      "sha256": "aef06522f4882e15bdca17506a9dfb6db49aaf089263401d2a61c3a48d5dd616",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/citation_map.json",
+      "size_bytes": 4373,
+      "sha256": "1590288987f5801d6b5f72391d2d493286ff809bce08209d9422adcab612294e",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/guidelines.md",
+      "size_bytes": 3301,
+      "sha256": "c7e537d668c6bb9a53190bbe5d6d02bfea316aa1d194a138fdb9e5d9f2a6a74d",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/outline.json",
+      "size_bytes": 5219,
+      "sha256": "ecb593121b913c613e99202b9debba61ebbf62717eaca9de7e474f66478687e0",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/raw_materials/experimental_log.md",
+      "size_bytes": 11721,
+      "sha256": "f489bb1c2d569a5110645f4f594f9161616627773f24d791fb1ce5192a21be37",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/raw_materials/idea_dense.md",
+      "size_bytes": 4213,
+      "sha256": "8fa70cce38a400714fa9ddc3c6b9d9e438cbe6a99e1e143b968b51f835b53ae9",
+      "track": "Track B (Pending Author Revision \u2014 B-01)",
+      "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
+      "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
+    },
+    {
+      "relative_path": "paper/orchestra_artifacts/worklog.json",
+      "size_bytes": 2993,
+      "sha256": "c437024b41012ac72619f54b6c1d52479725d0c03ab22c755ed66c2c7cd76a21",
       "track": "Track B (Pending Author Revision \u2014 B-01)",
       "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
       "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."
     },
     {
       "relative_path": "paper/references.bib",
-      "size_bytes": 4453,
-      "sha256": "8904074c9ed0be379687d7fe828cfed1cc201994b0da775c4ed1d13b25768441",
+      "size_bytes": 10151,
+      "sha256": "ff969b8552077950df1d160c873a8212b73da68d1f10834285de2a14ea38d6d6",
       "track": "Track B (Pending Author Revision \u2014 B-01)",
       "classification": "UNAPPROVED MANUSCRIPT \u2014 DO NOT DISTRIBUTE AS v1.0",
       "reason": "Contains retracted TimesFM / leakage-era metrics flagged in PHASE6B_MANUSCRIPT_REMEDIATION.md."

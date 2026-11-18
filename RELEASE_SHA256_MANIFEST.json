@@ -1,13 +1,13 @@
 {
   "release_version": "1.0.0",
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-17T14:47:01.103442+00:00",
+  "generated_at_utc": "2026-11-18T10:08:39.241814+00:00",
   "summary": {
-    "track_a_open_data_files": 33,
-    "track_a_parquet_tables": 13,
-    "software_and_docs_files": 153,
+    "track_a_open_data_files": 36,
+    "track_a_parquet_tables": 15,
+    "software_and_docs_files": 155,
     "track_b_excluded_files": 14,
-    "track_a_total_bytes": 9976923
+    "track_a_total_bytes": 13212208
   },
   "track_a_data_assets": {
     "public/data/parquet/agribalyse_31.parquet": {
@@ -114,6 +114,22 @@
       "source": "Eurostat prc_hicp_aind & ONS MM23 (Damped ETS / Holt ETS / Ridge / Drift)",
       "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
     },
+    "public/data/parquet_statutory/gi_municipality_index.parquet": {
+      "sha256": "450e5a61fa5f922d2594b0045f23462645094471d6571a2f4ba80d46840d5038",
+      "size_bytes": 1040257,
+      "dataset_version": "1.0.0-statutory",
+      "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+      "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
+    },
+    "public/data/parquet_statutory/gi_statutory_products.parquet": {
+      "sha256": "54712b535ed8651c054b583b746a6f33491d114fad75bae99c0a6fe41687a816",
+      "size_bytes": 244170,
+      "dataset_version": "1.0.0-statutory",
+      "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+      "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
+    },
     "public/data/agribalyse_full.json": {
       "sha256": "f2707d32f8055c49268a307551ec7f058dc3bfb33be81bdf30ecec6226df9cac",
       "size_bytes": 1179631,
@@ -184,6 +200,14 @@
       "dataset_version": "4.0.0-leakfree",
       "license": "CC-BY 4.0 (Eurostat) / OGL v3.0 (ONS)",
       "source": "Eurostat prc_hicp_aind & UK ONS MM23 Statistical CV",
+      "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
+    },
+    "public/data/gi_statutory_zones.json": {
+      "sha256": "88abd1d7d5b344df17595b209915f8f15ee0d92e40444c1195d16fc88348eb61",
+      "size_bytes": 1950858,
+      "dataset_version": "1.0.0-statutory",
+      "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+      "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
       "governance_status": "VERIFIED \u2014 ATTRIBUTION REQUIRED"
     },
     "public/data/global_benchmarks.json": {
@@ -277,8 +301,8 @@
   },
   "software_and_documentation": {
     ".gitignore": {
-      "sha256": "7143298f1bc954e006f8cdafc75ac9c4819e18861326c10c02128fd9dc47e876",
-      "size_bytes": 789,
+      "sha256": "d4e8b8613782730ec4fc12da8d9d7862dcc983caa90fff4b04aedf6ccc990dc1",
+      "size_bytes": 806,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -625,8 +649,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/DuckDBParquetWorkbench.tsx": {
-      "sha256": "fb0cc19651537de96d4a17864fec373ad0829a39203043f5f86cbbbac23b512d",
-      "size_bytes": 23732,
+      "sha256": "f50b759db6ee18f7e273eb3af8d72e13f315ed163557be693806ff9d6b4568fe",
+      "size_bytes": 24581,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -639,6 +663,12 @@
     "src/components/EnvironmentComparisonPanel.tsx": {
       "sha256": "d0773fe0828837e00fb86e90467a84b1ca80a958f1738bf48e7f39f034ea2148",
       "size_bytes": 22075,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
+    "src/components/GiStatutoryZonesPlate.tsx": {
+      "sha256": "a75435527a85b1972a7a4b952cd4be4ac2d1641557dd68b8e2ccb2f2f7a4c7c3",
+      "size_bytes": 21722,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -655,8 +685,8 @@
       "classification": "Software Source & Docs"
     },
     "src/components/InteractiveChoroplethMap.tsx": {
-      "sha256": "51147afc928c3276472fa796183f8e5b8fbf22596aa9ec3f7a8f5a9c147eef9d",
-      "size_bytes": 54999,
+      "sha256": "faeaacb8e3da041a891748b85684ac81cb31783335e6b9a7c583f050fc9a3c0a",
+      "size_bytes": 60091,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -721,14 +751,14 @@
       "classification": "Software Source & Docs"
     },
     "src/services/dataProvider.ts": {
-      "sha256": "90ebb870fcc3d9dd2029beb33013020edd6a186eab5959932a0d3a8cce3a1d9e",
-      "size_bytes": 8047,
+      "sha256": "efaa3e2f8d77e2208a73584a2c67547fd44f5383065a586f9d96c5a6369e9ecd",
+      "size_bytes": 8231,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
     "src/services/duckdbEngine.ts": {
-      "sha256": "91c2b98bdf9dc20fe4762fbad4976a48e8cd9d2885c5e4f321dc999c6260b684",
-      "size_bytes": 4286,
+      "sha256": "b5ae82fc1335e9cd145cd99921f6515b79cd0970f422838f690f7c5c943bf33d",
+      "size_bytes": 4519,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -846,6 +876,12 @@
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
+    "scripts/build_gi_statutory_zones.py": {
+      "sha256": "38bac5069eb9b3e0afcbadbadb7a501d681e77148e79201050c6ebac34f3cd34",
+      "size_bytes": 22981,
+      "license": "MIT",
+      "classification": "Software Source & Docs"
+    },
     "scripts/build_gi_terroir_and_social_scrapling.py": {
       "sha256": "716f87e697c10fb4225711eb131f46e14b410f8fd28dd4233eed87bf81ce20e0",
       "size_bytes": 27267,
@@ -889,8 +925,8 @@
       "classification": "Software Source & Docs"
     },
     "scripts/build_release_manifest.py": {
-      "sha256": "9d3303c70ed9b4e302b784133ef5eb1237499cec04d25cc62ee4f0e64955b39d",
-      "size_bytes": 23493,
+      "sha256": "6daaaaeef360d3539284acb72c738fc0ad695666e20682da64f9d5223f916a61",
+      "size_bytes": 24724,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -979,8 +1015,8 @@
       "classification": "Software Source & Docs"
     },
     "tests/test_empirical_pipeline.py": {
-      "sha256": "b2e56a92d91dd46a9c9fa81a51d6abedb27b673afa902d6e786af79cba0383d6",
-      "size_bytes": 16808,
+      "sha256": "d9adfe9084f16165cf340b988e92132eb1710564ea7f10c9a798fc14c5eb37a9",
+      "size_bytes": 17833,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1045,8 +1081,8 @@
       "classification": "Software Source & Docs"
     },
     "docs/LIMITATIONS_AND_RESPONSIBLE_USE.md": {
-      "sha256": "a59e32c7bebca412f9060cc4232fcf42ad634d54d5a00ed95d95b838242e5b14",
-      "size_bytes": 13816,
+      "sha256": "1223f0cd0d5d52154520184b2e0aa4d3b9f18e5c21a668533065bb286c9358af",
+      "size_bytes": 14039,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },
@@ -1165,8 +1201,8 @@
       "classification": "Software Source & Docs"
     },
     "docs/REPRODUCIBILITY.md": {
-      "sha256": "bf348e73afbe1be05cf48933888677863e8f34aa45fdaf9270ffe65b09ce95d7",
-      "size_bytes": 10151,
+      "sha256": "df6284549cec92d39237be271f2e81be8f9b9543fd849a25538ce4a612a6a3d3",
+      "size_bytes": 14427,
       "license": "MIT",
       "classification": "Software Source & Docs"
     },

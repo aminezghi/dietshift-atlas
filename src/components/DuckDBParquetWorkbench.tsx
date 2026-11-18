@@ -237,6 +237,25 @@ FROM classification_mappings
 GROUP BY source_system, target_system, mapping_type
 ORDER BY source_system, Mapping_Rules DESC;`,
   },
+  {
+    id: 'gi_statutory_municipalities',
+    title: '13. Statutory Municipality GI Index (50,763 LAU)',
+    badge: 'parquet_statutory/gi_municipality_index.parquet',
+    description:
+      'Ranks top NUTS-3 provinces/départements across France (36,239 communes), Italy (7,893 comuni), and Spain (6,631 municipios) by statutory GI density and plant-terroir share.',
+    sql: `SELECT
+  country_code AS Country,
+  province_or_dept AS Province_Dept,
+  COUNT(*) AS Municipalities,
+  ROUND(AVG(gi_product_count), 2) AS Mean_GIs_Per_Municipality,
+  MAX(gi_product_count) AS Max_GIs_In_Single_LAU,
+  ROUND(AVG(CASE WHEN has_plant_gi THEN 100.0 ELSE 0.0 END), 1) AS Plant_GI_Coverage_Pct
+FROM gi_municipality_index
+GROUP BY country_code, province_or_dept
+HAVING COUNT(*) >= 10
+ORDER BY Mean_GIs_Per_Municipality DESC, Municipalities DESC
+LIMIT 25;`,
+  },
 ];
 
 export function DuckDBParquetWorkbench({ selectedCountry }: { selectedCountry: string }) {

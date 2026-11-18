@@ -341,3 +341,24 @@ def test_json_parquet_parity_audit(manifest):
     assert len(lrb["agribalyse"]) == 500
     assert pq.ParquetFile(PARQUET_DIR / "agribalyse_31.parquet").metadata.num_rows == 2451
 
+
+def test_gi_statutory_zones_and_municipality_parquet_invariants():
+    zones_json = DATA_DIR / "gi_statutory_zones.json"
+    stat_pq_dir = DATA_DIR / "parquet_statutory"
+    prod_pq = stat_pq_dir / "gi_statutory_products.parquet"
+    muni_pq = stat_pq_dir / "gi_municipality_index.parquet"
+
+    assert zones_json.exists(), "gi_statutory_zones.json is missing"
+    assert prod_pq.exists(), "gi_statutory_products.parquet is missing"
+    assert muni_pq.exists(), "gi_municipality_index.parquet is missing"
+
+    z = json.loads(zones_json.read_text(encoding="utf-8"))
+    assert z["metadata"]["total_products"] == 2109
+    assert z["metadata"]["total_municipalities"] == 50763
+    assert z["metadata"]["country_counts"]["FR"]["municipalities"] == 36239
+    assert z["metadata"]["country_counts"]["IT"]["municipalities"] == 7893
+    assert z["metadata"]["country_counts"]["ES"]["municipalities"] == 6631
+    assert pq.ParquetFile(prod_pq).metadata.num_rows == 2109
+    assert pq.ParquetFile(muni_pq).metadata.num_rows == 50763
+
+

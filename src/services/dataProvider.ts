@@ -231,3 +231,9 @@ export async function fetchFullAgribalyse(
 ): Promise<AgribalyseItem[]> {
   return fetchCachedJson<AgribalyseItem[]>('data/agribalyse_full.json', options);
 }
+
+export async function fetchGiStatutoryZones<T = unknown>(
+  options?: { forceRetry?: boolean }
+): Promise<T> {
+  return fetchCachedJson<T>('data/gi_statutory_zones.json', options);
+}

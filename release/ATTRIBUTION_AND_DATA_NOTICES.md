@@ -17,6 +17,8 @@
 | `public/data/parquet/school_meals_procurement.parquet` | `2026` | CC-BY 4.0 | Global Child Nutrition Foundation (GCNF) & National Ministries (CC-BY 4.0) |
 | `public/data/parquet/scrapling_retail_claims.parquet` | `2026-11-16` | ODbL 1.0 | Open Food Facts Open Prices API + Open Food Facts (ODbL 1.0) |
 | `public/data/parquet/statistical_price_forecasts.parquet` | `4.0.0-leakfree` | CC-BY 4.0 (Eurostat) / OGL v3 (ONS) | Eurostat prc_hicp_aind & ONS MM23 (Damped ETS / Holt ETS / Ridge / Drift) (CC-BY 4.0 (Eurostat) / OGL v3 (ONS)) |
+| `public/data/parquet_statutory/gi_municipality_index.parquet` | `1.0.0-statutory` | EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0 | Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers |
+| `public/data/parquet_statutory/gi_statutory_products.parquet` | `1.0.0-statutory` | EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0 | Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers |
 | `public/data/agribalyse_full.json` | `3.1.1` | Licence Ouverte / Open Licence v2.0 (Etalab) | Credit ADEME / INRAE Agribalyse 3.1.1 |
 | `public/data/classification_mappings.json` | `3.0.0-phase3a` | CC-BY 4.0 / ODbL 1.0 | Credit Agribalyse, EFSA, Eurostat; preserve ODbL 1.0 share-alike |
 | `public/data/clinical_biomarker_grounding.json` | `2021-2023` | Public Domain (US Government) | Cite CDC/NCHS NHANES 2021-2023; retain proxy-column disclaimer |
@@ -26,6 +28,7 @@
 | `public/data/econometric_calibration.json` | `2024` | CC-BY 4.0 (Eurostat) | Credit Eurostat statistical tables |
 | `public/data/efsa_foodex2.json` | `2.0-stylized` | CC-BY 4.0 (Reference taxonomy) | Credit EFSA FoodEx2 reference & disclose stylized multipliers |
 | `public/data/forecast_validation_summary.json` | `4.0.0-leakfree` | CC-BY 4.0 (Eurostat) / OGL v3.0 (ONS) | Credit Eurostat & UK Office for National Statistics |
+| `public/data/gi_statutory_zones.json` | `1.0.0-statutory` | EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0 | Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers |
 | `public/data/global_benchmarks.json` | `2018 / 2017-2024` | CC-BY 4.0 | Cite Poore & Nemecek (2018), World Bank/FAO, and Our World in Data |
 | `public/data/live_research_bundle.json` | `3.1.1 / 2026-11-16` | Etalab 2.0 / ODbL 1.0 / CC0 / CC-BY 4.0 | Preserve Open Food Facts ODbL 1.0, ADEME Etalab 2.0, Eurostat CC-BY 4.0 |
 | `public/data/nsi_rows_only.json` | `3.2-svd` | CC-BY 4.0 | Credit INE Spain & Eurostat; disclose NUTS-2 SVD modeling |

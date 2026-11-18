@@ -2,12 +2,17 @@ import { useEffect, useMemo, useState } from 'react';
 import ReactECharts from './ThemedEChart';
 import * as echarts from 'echarts';
 import { Award, ExternalLink, Filter, Globe2, Layers, MapPin, ZoomIn } from 'lucide-react';
-import { fetchCachedJson, fetchGiTerroirBundle } from '../services/dataProvider';
+import { fetchCachedJson, fetchGiStatutoryZones, fetchGiTerroirBundle } from '../services/dataProvider';
 import { COUNTRY_PROFILES, type CountryDietaryProfile } from '../types/research';
 import { classifyResourceError, type ResourceDisclosure } from '../utils/resourceAvailability';
 import { useDarkMode } from '../utils/chartTheme';
 import { DataNatureBadge } from './DataNatureBadge';
 import { ResourceDisclosureBanner } from './ResourceDisclosureBanner';
+import {
+  GiStatutoryZonesPlate,
+  type GiStatutoryProductMeta,
+  type GiStatutoryZonesBundle,
+} from './GiStatutoryZonesPlate';
 
 export type GiVisualMode = 'constellation' | 'hubs' | 'carbon';
 
@@ -186,6 +191,7 @@ export function InteractiveChoroplethMap({
   const [metric, setMetric] = useState<MapMetric>('dailyCarbonKg');
   const [focusView, setFocusView] = useState<'europe' | 'world'>('europe');
   const [giRecords, setGiRecords] = useState<GICartographyItem[]>([]);
+  const [statutoryData, setStatutoryData] = useState<GiStatutoryZonesBundle | null>(null);
   const [cohdRecords, setCohdRecords] = useState<CohdCountryRecord[]>([]);
   const [showGiPins, setShowGiPins] = useState<boolean>(!compact);
   const [giVisualMode, setGiVisualMode] = useState<GiVisualMode>('hubs');
@@ -267,6 +273,18 @@ export function InteractiveChoroplethMap({
               })
             );
           }
+        })
+    );
+
+    tasks.push(
+      fetchGiStatutoryZones<GiStatutoryZonesBundle>({ forceRetry })
+        .then((d) => {
+          if (!cancelled && d?.products_by_file_number) {
+            setStatutoryData(d);
+          }
+        })
+        .catch(() => {
+          // Optional statutory production-area overlay; degrade silently if unavailable
         })
     );
 
@@ -851,8 +869,9 @@ export function InteractiveChoroplethMap({
 
           if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter') && params.data?.giItem) {
             const gi = params.data.giItem;
+            const st = gi.file_number ? statutoryData?.products_by_file_number?.[gi.file_number] : undefined;
             return `
-              <div style="min-width:240px;max-width:310px;">
+              <div style="min-width:250px;max-width:340px;">
                 <div style="font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:13px;color:#111827;border-bottom:2px solid #2d3643;padding-bottom:3px;margin-bottom:5px;">
                   [${gi.country_code}] ${gi.product_name} (${gi.gi_scheme})
                 </div>
@@ -865,6 +884,20 @@ export function InteractiveChoroplethMap({
                   <span>Water (est. proxy): <b>${gi.water_L_per_kg} L/kg</b></span>
                   <span>Premium (est.): <b>+${gi.price_premium_pct}%</b></span>
                 </div>
+                ${
+                  st
+                    ? `<div style="border-top:1px solid #aeb6c4;padding-top:4px;margin-bottom:4px;font-size:10px;color:#163d4a;font-family:'IBM Plex Mono',monospace;">
+                        <div><b>Regions (NUTS-2):</b> ${st.regions || '—'}</div>
+                        <div><b>Provinces (NUTS-3):</b> ${st.provinces || '—'}</div>
+                        <div><b>Statutory Zone:</b> ${
+                          st.municipality_count > 0
+                            ? `${st.municipality_count.toLocaleString()} municipalities`
+                            : 'Provincial delineation'
+                        }</div>
+                        ${st.producer_group ? `<div><b>Producer Group:</b> ${st.producer_group}</div>` : ''}
+                      </div>`
+                    : ''
+                }
                 <div style="font-size:10px;color:#3d4654;font-family:'IBM Plex Mono',monospace;">
                   Source: ${gi.data_source} (Click pin to inspect dossier)
                 </div>
@@ -961,7 +994,7 @@ export function InteractiveChoroplethMap({
         ...pinScatterSeries,
       ],
     };
-  }, [geoLoaded, metric, focusView, selectedCountry, METRIC_META, giCountryStats, showGiPins, giVisualMode, filteredGiPins, compact, cohdRecords, cohdByGeoName, isDark]);
+  }, [geoLoaded, metric, focusView, selectedCountry, METRIC_META, giCountryStats, showGiPins, giVisualMode, filteredGiPins, statutoryData, compact, cohdRecords, cohdByGeoName, isDark]);
 
   const onEvents = useMemo(
     () => ({
@@ -1245,42 +1278,89 @@ export function InteractiveChoroplethMap({
       </div>
 
       {/* Selected GI Pin Inspector Banner */}
-      {selectedGiItem && !compact && (
-        <div className="p-3 almanac-well flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div>
-            <div className="font-semibold text-sm text-[var(--color-ink)] flex items-center gap-2">
-              <Award className="w-4 h-4 text-[var(--color-accent)]" />
-              [{selectedGiItem.country_code}] {selectedGiItem.product_name} ({selectedGiItem.gi_scheme} —{' '}
-              {selectedGiItem.file_number || selectedGiItem.gi_id})
+      {selectedGiItem && !compact && (() => {
+        const st: GiStatutoryProductMeta | undefined = selectedGiItem.file_number
+          ? statutoryData?.products_by_file_number?.[selectedGiItem.file_number]
+          : undefined;
+        return (
+          <div className="p-3.5 almanac-well space-y-2.5 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="font-semibold text-sm text-[var(--color-ink)] flex items-center gap-2">
+                  <Award className="w-4 h-4 text-[var(--color-accent)]" />
+                  [{selectedGiItem.country_code}] {selectedGiItem.product_name} ({selectedGiItem.gi_scheme} —{' '}
+                  {selectedGiItem.file_number || selectedGiItem.gi_id})
+                </div>
+                <div className="text-[var(--color-muted)] mt-0.5">
+                  {selectedGiItem.eu_class} | <b>NOVA {selectedGiItem.nova_group}</b> | Class Proxy Carbon (est.):{' '}
+                  <b className="font-mono-num">{selectedGiItem.co2_kg_per_kg} kg CO₂/kg</b> | Class Proxy Water (est.):{' '}
+                  <b className="font-mono-num">{selectedGiItem.water_L_per_kg} L/kg</b> | {selectedGiItem.disciplinare_note}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href={selectedGiItem.source_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="almanac-btn almanac-btn--primary flex items-center gap-1"
+                >
+                  Open Qualigeo / GIview Sheet <ExternalLink className="w-3 h-3" />
+                </a>
+                {selectedGiItem.giview_url && selectedGiItem.source_url !== selectedGiItem.giview_url && (
+                  <a
+                    href={selectedGiItem.giview_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="almanac-btn flex items-center gap-1"
+                  >
+                    EUIPO GIview Dossier <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
             </div>
-            <div className="text-[var(--color-muted)] mt-0.5">
-              {selectedGiItem.eu_class} | <b>NOVA {selectedGiItem.nova_group}</b> | Class Proxy Carbon (est.):{' '}
-              <b className="font-mono-num">{selectedGiItem.co2_kg_per_kg} kg CO₂/kg</b> | Class Proxy Water (est.):{' '}
-              <b className="font-mono-num">{selectedGiItem.water_L_per_kg} L/kg</b> | {selectedGiItem.disciplinare_note}
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <a
-              href={selectedGiItem.source_url}
-              target="_blank"
-              rel="noreferrer"
-              className="almanac-btn almanac-btn--primary flex items-center gap-1"
-            >
-              Open Qualigeo / GIview Sheet <ExternalLink className="w-3 h-3" />
-            </a>
-            {selectedGiItem.giview_url && selectedGiItem.source_url !== selectedGiItem.giview_url && (
-              <a
-                href={selectedGiItem.giview_url}
-                target="_blank"
-                rel="noreferrer"
-                className="almanac-btn flex items-center gap-1"
-              >
-                EUIPO GIview Dossier <ExternalLink className="w-3 h-3" />
-              </a>
+
+            {st && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2.5 border-t border-[var(--color-rule)] text-[11px]">
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-[var(--color-muted)]">
+                    NUTS-2 Regions &amp; NUTS-3 Provinces
+                  </div>
+                  <div className="font-semibold text-[var(--color-ink)] mt-0.5">
+                    {st.regions || '—'}
+                    {st.provinces ? ` · ${st.provinces}` : ''}
+                  </div>
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-[var(--color-muted)]">
+                    Delineated Municipalities ({st.municipality_count.toLocaleString()} LAU)
+                  </div>
+                  <div className="text-[var(--color-ink)] mt-0.5 line-clamp-2" title={st.municipalities_preview}>
+                    {st.municipalities_preview || 'Provincial-level designation'}
+                  </div>
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-[var(--color-muted)]">
+                    Producer Group &amp; Control Authority
+                  </div>
+                  <div className="text-[var(--color-ink)] mt-0.5">
+                    <b>{st.producer_group || '—'}</b>
+                    {st.control_authority ? ` · ${st.control_authority}` : ''}
+                  </div>
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-[var(--color-muted)]">
+                    EU CN Code &amp; Legal Instrument
+                  </div>
+                  <div className="font-mono-num text-[var(--color-ink)] mt-0.5 line-clamp-2" title={st.cn_code}>
+                    {st.cn_code || '—'}
+                    {st.legal_instrument ? ` (${st.legal_instrument})` : ''}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Full Cartography Sub-National GI Terroir Ledger for Selected Jurisdiction */}
       {!compact && giRecords.length > 0 && (
@@ -1364,54 +1444,72 @@ export function InteractiveChoroplethMap({
                       <th>Sector</th>
                       <th>Scheme</th>
                       <th>EU GI class</th>
+                      <th>Statutory Zone (NUTS-2 / LAU)</th>
                       <th className="text-right">NOVA</th>
                       <th className="text-right">CO₂ (kg)</th>
                       <th>Coords (Lat, Lon)</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedCountryGiList.slice((countryGiPage - 1) * 40, countryGiPage * 40).map((gi) => (
-                      <tr
-                        key={gi.gi_id}
-                        onClick={() => setSelectedGiItem(gi)}
-                        className={`cursor-pointer ${
-                          selectedGiItem?.gi_id === gi.gi_id
-                            ? 'bg-[var(--color-sheet)] font-semibold'
-                            : 'hover:bg-[var(--color-sheet)]'
-                        }`}
-                      >
-                        <td>
-                          <a
-                            href={gi.source_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)] hover:underline inline-flex items-center gap-1"
-                          >
-                            {gi.product_name}
-                            <ExternalLink className="w-3 h-3 shrink-0" />
-                          </a>
-                        </td>
-                        <td className="text-xs font-mono-num">{gi.product_sector || 'FOOD'}</td>
-                        <td>
-                          <span className="px-1 py-0.5 almanac-sheet font-mono-num text-[10px] font-semibold text-[var(--color-accent)]">
-                            {gi.gi_scheme}
-                          </span>
-                        </td>
-                        <td className="text-xs">{gi.eu_class}</td>
-                        <td className="num text-right">NOVA {gi.nova_group}</td>
-                        <td className="num text-right font-semibold">{gi.co2_kg_per_kg}</td>
-                        <td className="num text-xs text-[var(--color-muted)]">
-                          {gi.lat}°, {gi.lon}°
-                        </td>
-                      </tr>
-                    ))}
+                    {selectedCountryGiList.slice((countryGiPage - 1) * 40, countryGiPage * 40).map((gi) => {
+                      const st = gi.file_number ? statutoryData?.products_by_file_number?.[gi.file_number] : undefined;
+                      return (
+                        <tr
+                          key={gi.gi_id}
+                          onClick={() => setSelectedGiItem(gi)}
+                          className={`cursor-pointer ${
+                            selectedGiItem?.gi_id === gi.gi_id
+                              ? 'bg-[var(--color-sheet)] font-semibold'
+                              : 'hover:bg-[var(--color-sheet)]'
+                          }`}
+                        >
+                          <td>
+                            <a
+                              href={gi.source_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)] hover:underline inline-flex items-center gap-1"
+                            >
+                              {gi.product_name}
+                              <ExternalLink className="w-3 h-3 shrink-0" />
+                            </a>
+                          </td>
+                          <td className="text-xs font-mono-num">{gi.product_sector || 'FOOD'}</td>
+                          <td>
+                            <span className="px-1 py-0.5 almanac-sheet font-mono-num text-[10px] font-semibold text-[var(--color-accent)]">
+                              {gi.gi_scheme}
+                            </span>
+                          </td>
+                          <td className="text-xs">{gi.eu_class}</td>
+                          <td className="text-xs font-mono-num text-[var(--color-ink)]">
+                            {st ? (
+                              <span title={`${st.regions}${st.provinces ? ` (${st.provinces})` : ''}`}>
+                                {st.regions || st.provinces}
+                                {st.municipality_count > 0 ? ` · ${st.municipality_count.toLocaleString()} LAU` : ''}
+                              </span>
+                            ) : (
+                              <span className="text-[var(--color-muted)]">—</span>
+                            )}
+                          </td>
+                          <td className="num text-right">NOVA {gi.nova_group}</td>
+                          <td className="num text-right font-semibold">{gi.co2_kg_per_kg}</td>
+                          <td className="num text-xs text-[var(--color-muted)]">
+                            {gi.lat}°, {gi.lon}°
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {!compact && statutoryData && (
+        <GiStatutoryZonesPlate data={statutoryData} selectedCountry={selectedCountry} />
       )}
     </div>
   );

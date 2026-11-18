@@ -115,6 +115,7 @@ TRACK_A_JSON_META: dict[str, tuple[str, str, str, str]] = {
     "econometric_calibration.json": ("2024", "Eurostat HBS/EHIS/HICP/PPP Dissemination API", "CC-BY 4.0 (Eurostat)", "Credit Eurostat statistical tables"),
     "efsa_foodex2.json": ("2.0-stylized", "EFSA FoodEx2 Hierarchy + Stylized Scaling Multipliers", "CC-BY 4.0 (Reference taxonomy)", "Credit EFSA FoodEx2 reference & disclose stylized multipliers"),
     "forecast_validation_summary.json": ("4.0.0-leakfree", "Eurostat prc_hicp_aind & UK ONS MM23 Statistical CV", "CC-BY 4.0 (Eurostat) / OGL v3.0 (ONS)", "Credit Eurostat & UK Office for National Statistics"),
+    "gi_statutory_zones.json": ("1.0.0-statutory", "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026", "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0", "Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers"),
     "global_benchmarks.json": ("2018 / 2017-2024", "Poore & Nemecek (2018) + World Bank & FAO CoHD via OWID", "CC-BY 4.0", "Cite Poore & Nemecek (2018), World Bank/FAO, and Our World in Data"),
     "live_research_bundle.json": ("3.1.1 / 2026-11-16", "ADEME Agribalyse, Open Food Facts, OpenAlex, Eurostat HICP, EFSA ref", "Etalab 2.0 / ODbL 1.0 / CC0 / CC-BY 4.0", "Preserve Open Food Facts ODbL 1.0, ADEME Etalab 2.0, Eurostat CC-BY 4.0"),
     "nsi_rows_only.json": ("3.2-svd", "INE Spain, Eurostat HBS/EHIS/HICP + Modeled NUTS-2 SVD", "CC-BY 4.0", "Credit INE Spain & Eurostat; disclose NUTS-2 SVD modeling"),
@@ -277,6 +278,24 @@ def collect_data_tracks() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                     if "Public Domain" in str(meta.get("license", ""))
                     else "VERIFIED — ATTRIBUTION REQUIRED"
                 ),
+            })
+
+    # 1b. Statutory GI production zones & 50,763-municipality index under parquet_statutory/
+    statutory_pq_dir = DATA_DIR / "parquet_statutory"
+    if statutory_pq_dir.exists():
+        for sq_path in sorted(statutory_pq_dir.glob("*.parquet")):
+            rel_str = str(sq_path.relative_to(ROOT)).replace("\\", "/")
+            track_a.append({
+                "relative_path": rel_str,
+                "distribution_path": rel_str,
+                "size_bytes": sq_path.stat().st_size,
+                "sha256": sha256_file(sq_path),
+                "dataset_version": "1.0.0-statutory",
+                "source": "EU eAmbrosia + INAO/US-ODR + ISTAT 2026 + MAPA Register 06 + INE 2026",
+                "license": "EU Open Data / Etalab 2.0 / ISTAT CC-BY 4.0",
+                "attribution": "Credit EU eAmbrosia, INAO, ISTAT, MAPA & INE statutory registers",
+                "track": "Track A",
+                "governance_status": "VERIFIED — ATTRIBUTION REQUIRED",
             })
 
     # 2. All 26 JSON files under public/data/

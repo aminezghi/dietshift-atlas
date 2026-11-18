@@ -40,6 +40,8 @@ const VIEW_DEFINITIONS: Array<[string, string]> = [
   ['cultural_climate_inertia', 'cultural_climate_inertia.parquet'],
   ['global_poore_nemecek_lca', 'global_poore_nemecek_lca.parquet'],
   ['global_healthy_diet_affordability', 'global_healthy_diet_affordability.parquet'],
+  ['gi_statutory_products', 'parquet_statutory/gi_statutory_products.parquet'],
+  ['gi_municipality_index', 'parquet_statutory/gi_municipality_index.parquet'],
 ];
 
 const registeredViews = new Set<string>();
@@ -57,9 +59,10 @@ export async function getDuckDBConnection(): Promise<duckdb.AsyncDuckDBConnectio
     await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
     for (const [, file] of VIEW_DEFINITIONS) {
+      const assetPath = file.includes('/') ? `data/${file}` : `data/parquet/${file}`;
       await db.registerFileURL(
         file,
-        absoluteAssetUrl(`data/parquet/${file}`),
+        absoluteAssetUrl(assetPath),
         duckdb.DuckDBDataProtocol.HTTP,
         false
       );
